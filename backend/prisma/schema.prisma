@@ -1,0 +1,55 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+
+  profile   Profile?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  id                  Int      @id @default(autoincrement())
+  userId              Int      @unique
+  user                User     @relation(fields: [userId], references: [id])
+
+  // IDENTITAS
+  name                String?
+  gender              String?
+  tanggalLahir        DateTime?
+  provinsi            String?
+
+  // AKADEMIK
+  pendidikanTerakhir  String?
+  jurusan             String?
+
+  gradeType           String   // 'gpa' atau 'score'
+  gpa                 Float?
+  score               Float?
+
+  // OPTIONAL
+  pengalaman          Boolean?
+  skill               String?
+
+  // STATUS
+  isCompleted         Boolean  @default(false)
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
