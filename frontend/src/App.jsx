@@ -5,6 +5,8 @@ import LoginPage from "./pages/auth/LoginPage"
 import RegisterPage from "./pages/auth/RegisterPage"
 
 // Onboarding
+import OnboardingStart from "./pages/onboarding/OnboardingStart"
+import CVUpload from "./pages/onboarding/CVUpload"
 import OnboardingLayout from "./pages/onboarding/OnboardingLayout"
 import Step1Personal from "./pages/onboarding/Step1Personal"
 import Step2Academic from "./pages/onboarding/Step2Academic"
@@ -29,7 +31,8 @@ function App() {
 
         {/* Onboarding */}
         <Route path="/onboarding" element={<OnboardingLayout />}>
-          <Route index element={<Navigate to="step1" replace />} />
+          <Route index element={<OnboardingStart />} />
+          <Route path="cv-upload" element={<CVUpload />} />
           <Route path="step1" element={<Step1Personal />} />
           <Route path="step2" element={<Step2Academic />} />
           <Route path="step3" element={<Step3Skills />} />
