@@ -1,0 +1,85 @@
+/* ─── Scholarship Lab — Design Tokens ─────────────────────────────────────── */
+
+:root {
+  /* ── Primary Green Palette ─────────────────────────────────────────────── */
+  --green1: #ACE1AF;      /* border, badge, accent, nav icon bg              */
+  --green2: #B0EBB4;      /* gradient mid, section bg                        */
+  --green3: #BFF6C3;      /* gradient hero, hover state                      */
+  --green4: #E0FBE2;      /* background utama, button text                   */
+
+  /* ── Text & Content ────────────────────────────────────────────────────── */
+  --text:   #1A2E1A;      /* heading, body text utama                        */
+  --muted:  #4A6650;      /* subtext, placeholder, label                     */
+  --forest: #2D5016;      /* accent kuat, CTA button, link, icon             */
+  --white:  #F7FDF7;      /* card bg, form panel, section clean              */
+
+  /* ── Footer ────────────────────────────────────────────────────────────── */
+  --footer-bg:         #141F14;
+  --footer-border:     #2A4A2A;
+  --footer-text:       #E0FBE2;
+  --footer-icon-bg:    #1E3A1E;
+  --footer-body:       #4A6A4A;
+  --footer-heading:    #5A7A5A;
+  --footer-link:       #4A6A4A;
+  --footer-link-hover: #B0EBB4;
+  --footer-copy:       #3A5A3A;
+
+  /* ── Form / Input ───────────────────────────────────────────────────────── */
+  --input-bg:         #E8F5E9;
+  --input-bg-active:  #DCEFD8;
+  --input-border:     #B8DDB8;
+  --input-border-focus: #1A7A1A;
+  --input-text:       #1A3A1A;
+  --input-placeholder: #7AAA7A;
+
+  /* ── Card ───────────────────────────────────────────────────────────────── */
+  --card-bg:     #ffffff;
+  --card-border: #C8E6C8;
+  --card-radius: 12px;
+
+  /* ── Button ─────────────────────────────────────────────────────────────── */
+  --btn-primary-bg:    #253D10;
+  --btn-primary-text:  #E0FBE2;
+  --btn-ghost-bg:      #ffffff;
+  --btn-ghost-text:    #1A3A1A;
+  --btn-ghost-border:  #1A3A1A;
+
+  /* ── Section Backgrounds ─────────────────────────────────────────────────  */
+  --bg-page:       #F0F9F0;
+  --bg-hero-start: #BFF6C3;
+  --bg-hero-end:   #B0EBB4;
+  --bg-section-alt: #F7FDF7;
+
+  /* ── Navbar ──────────────────────────────────────────────────────────────── */
+  --nav-bg:        #E0FBE2;
+  --nav-border:    #B0EBB4;
+  --nav-logo-icon: #2D5016;
+  --nav-text:      #2D5016;
+  --nav-link:      #4A6650;
+
+  /* ── Status / Feedback ───────────────────────────────────────────────────── */
+  --success-bg:    #DCEFD8;
+  --success-text:  #1A7A1A;
+  --warning-bg:    #FFF8EC;
+  --warning-border:#F0D890;
+  --warning-text:  #92400E;
+  --score-high:    #2D5016;
+  --score-mid:     #4A8C5C;
+  --score-low:     #F0C070;
+
+  /* ── Typography ──────────────────────────────────────────────────────────── */
+  --font-sans:   'DM Sans', sans-serif;
+  --font-serif:  'Playfair Display', serif;
+
+  /* ── Spacing ─────────────────────────────────────────────────────────────── */
+  --radius-sm:  6px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-pill: 99px;
+
+  /* ── Shadow ──────────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 2px 8px rgba(45, 80, 22, 0.06);
+  --shadow-md: 0 4px 16px rgba(45, 80, 22, 0.10);
+  --shadow-lg: 0 8px 32px rgba(45, 80, 22, 0.14);
+}
