@@ -12,6 +12,7 @@ import Step1Personal from "./pages/onboarding/Step1Personal"
 import Step2Academic from "./pages/onboarding/Step2Academic"
 import Step3Skills from "./pages/onboarding/Step3Skills"
 import ReviewPage from "./pages/onboarding/ReviewPage"
+import ProcessingPage from "./pages/onboarding/ProcessingPage"
 
 // Main
 import LandingPage from "./pages/LandingPage"
@@ -37,6 +38,7 @@ function App() {
           <Route path="step2" element={<Step2Academic />} />
           <Route path="step3" element={<Step3Skills />} />
           <Route path="review" element={<ReviewPage />} />
+          <Route path="processing" element={<ProcessingPage />} />
         </Route>
 
         {/* App */}
