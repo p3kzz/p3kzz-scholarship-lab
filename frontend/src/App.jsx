@@ -19,6 +19,8 @@ import LandingPage from "./pages/LandingPage"
 import DashboardPage from "./pages/dashboard/DashboardPage"
 import ProfilePage from "./pages/profile/ProfilePage"
 import EditProfilePage from "./pages/profile/EditProfilePage"
+import EditProfileAcademic from './pages/profile/EditProfileAcademic'
+import EditProfileSkills   from './pages/profile/EditProfileSkills'
 import MatchResultPage from "./pages/matching/MatchResultPage"
 
 function App() {
@@ -45,6 +47,8 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/edit" element={<EditProfilePage />} />
+        <Route path="/profile/edit/academic" element={<EditProfileAcademic />} />
+        <Route path="/profile/edit/skills" element={<EditProfileSkills />} />
         <Route path="/match" element={<MatchResultPage />} />
 
         {/* Fallback */}
