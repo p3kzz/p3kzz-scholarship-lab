@@ -21,35 +21,47 @@ export default function Navbar({ variant = "light" }) {
       {/* menu */}
       <div className="navbar-menu">
 
-        <Link
-          to="/#about"
-          className="navbar-link"
-        >
-          About
-        </Link>
+  <button
+    onClick={() => {
+      document
+        .getElementById("about")
+        ?.scrollIntoView({ behavior: "smooth" })
+    }}
+    className="navbar-link"
+  >
+    About
+  </button>
 
-        <Link
-          to="/#scholarships"
-          className="navbar-link"
-        >
-          Scholarships
-        </Link>
+  <button
+    onClick={() => {
+      document
+        .getElementById("scholarships")
+        ?.scrollIntoView({ behavior: "smooth" })
+    }}
+    className="navbar-link"
+  >
+    Scholarships
+  </button>
 
-        <Link
-          to="/#how"
-          className="navbar-link"
-        >
-          How To Apply
-        </Link>
+  <button
+    onClick={() => {
+      document
+        .getElementById("how")
+        ?.scrollIntoView({ behavior: "smooth" })
+    }}
+    className="navbar-link"
+  >
+    How To Apply
+  </button>
 
-        <button
-          className="navbar-apply-btn"
-          onClick={() => navigate("/register")}
-        >
-          Apply Now
-        </button>
+  <button
+    className="navbar-apply-btn"
+    onClick={() => navigate("/register")}
+  >
+    Apply Now
+  </button>
 
-      </div>
+</div>
 
     </nav>
   )

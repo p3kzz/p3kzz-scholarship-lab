@@ -43,15 +43,29 @@ function LPHero() {
 
           <div className="lp-hero-buttons">
 
-            <button className="lp-browse-btn">
-              Browse Scholarships
-            </button>
+  <button
+    className="lp-browse-btn"
+    onClick={() =>
+      document
+        .getElementById("scholarships")
+        ?.scrollIntoView({ behavior: "smooth" })
+    }
+  >
+    Browse Scholarships
+  </button>
 
-            <button className="lp-works-btn">
-              How It Works
-            </button>
+  <button
+    className="lp-works-btn"
+    onClick={() =>
+      document
+        .getElementById("how")
+        ?.scrollIntoView({ behavior: "smooth" })
+    }
+  >
+    How It Works
+  </button>
 
-          </div>
+</div>
 
         </div>
 
