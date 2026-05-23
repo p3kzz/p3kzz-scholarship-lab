@@ -123,11 +123,12 @@ export default function LoginPage() {
 
             {/* GOOGLE BUTTON */}
             <button
-              type="button"
-              className="auth-btn-google"
-            >
-              Continue With Google
-            </button>
+  type="button"
+  className="auth-btn-google"
+  onClick={() => navigate("/dashboard")}
+>
+  Continue With Google
+</button>
 
             {/* TERMS */}
             <p className="login-terms">

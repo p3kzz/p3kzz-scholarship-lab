@@ -190,11 +190,12 @@ export default function RegisterPage() {
 
             {/* GOOGLE BUTTON */}
             <button
-              type="button"
-              className="register-google-btn"
-            >
-              Continue With Google
-            </button>
+  type="button"
+  className="register-google-btn"
+  onClick={() => navigate("/dashboard")}
+>
+  Continue With Google
+</button>
 
           </form>
         </div>

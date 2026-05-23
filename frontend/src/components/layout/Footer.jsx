@@ -28,91 +28,147 @@ export default function Footer() {
           </div>
 
           {/* scholarships */}
-          <div className="footer-col">
+<div className="footer-col">
 
-            <h4 className="footer-title">
-              SCHOLARSHIPS
-            </h4>
+  <h4 className="footer-title">
+    SCHOLARSHIPS
+  </h4>
 
-            <ul className="footer-list">
+  <ul className="footer-list">
 
-              <li>
-                <Link to="/#scholarships">
-                  Lund University
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("scholarships")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        Lund University
+      </button>
+    </li>
 
-              <li>
-                <Link to="/#scholarships">
-                  Singapore ASEAN
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("scholarships")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        Singapore ASEAN
+      </button>
+    </li>
 
-              <li>
-                <Link to="/#scholarships">
-                  CIMB ASEAN
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("scholarships")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        CIMB ASEAN
+      </button>
+    </li>
 
-              <li>
-                <Link to="/#scholarships">
-                  BJUT China
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("scholarships")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        BJUT China
+      </button>
+    </li>
 
-              <li>
-                <Link to="/#scholarships">
-                  GKS Korea
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("scholarships")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        GKS Korea
+      </button>
+    </li>
 
-            </ul>
+  </ul>
 
-          </div>
+</div>
 
-          {/* resources */}
-          <div className="footer-col">
+{/* resources */}
+<div className="footer-col">
 
-            <h4 className="footer-title">
-              RESOURCES
-            </h4>
+  <h4 className="footer-title">
+    RESOURCES
+  </h4>
 
-            <ul className="footer-list">
+  <ul className="footer-list">
 
-              <li>
-                <Link to="/#how">
-                  How it works
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("how")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        How it works
+      </button>
+    </li>
 
-              <li>
-                <Link to="/#how">
-                  Eligibility
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("how")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        Eligibility
+      </button>
+    </li>
 
-            </ul>
+  </ul>
 
-          </div>
+</div>
 
-          {/* company */}
-          <div className="footer-col">
+{/* company */}
+<div className="footer-col">
 
-            <h4 className="footer-title">
-              COMPANY
-            </h4>
+  <h4 className="footer-title">
+    COMPANY
+  </h4>
 
-            <ul className="footer-list">
+  <ul className="footer-list">
 
-              <li>
-                <Link to="/#about">
-                  About
-                </Link>
-              </li>
+    <li>
+      <button
+        onClick={() => {
+          document
+            .getElementById("about")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }}
+        className="footer-link-btn"
+      >
+        About
+      </button>
+    </li>
 
-            </ul>
+  </ul>
 
-          </div>
+</div>
 
         </div>
 

@@ -22,6 +22,7 @@ import EditProfilePage from "./pages/profile/EditProfilePage"
 import EditProfileAcademic from './pages/profile/EditProfileAcademic'
 import EditProfileSkills   from './pages/profile/EditProfileSkills'
 import MatchResultPage from "./pages/matching/MatchResultPage"
+import GapAnalysisPage from "./pages/matching/GapAnalysisPage"
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
         <Route path="/profile/edit/academic" element={<EditProfileAcademic />} />
         <Route path="/profile/edit/skills" element={<EditProfileSkills />} />
         <Route path="/match" element={<MatchResultPage />} />
+        <Route path="/gap-analysis" element={<GapAnalysisPage />} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
