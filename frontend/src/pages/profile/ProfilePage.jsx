@@ -49,9 +49,12 @@ export default function ProfilePage() {
 
       {/* top actions */}
       <div className="pf-topbar">
-        <button className="pf-top-btn">
-          Back to dashboard
-        </button>
+        <button
+  className="pf-top-btn"
+  onClick={() => navigate("/dashboard")}
+>
+  Back to dashboard
+</button>
 
         <button
           className="pf-top-btn"
