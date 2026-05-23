@@ -43,295 +43,650 @@ const CAREER_TRACKS = [
   "Public service",
 ]
 
-// ── reusable dropdown ──────────────────────────────────────────────────────
-function EPDropdown({ label, value, onChange, options, placeholder = "Select..." }) {
+/* ───────────────────────────────────────────────────────────── */
+/* DROPDOWN */
+/* ───────────────────────────────────────────────────────────── */
+
+function EPDropdown({
+  label,
+  value,
+  onChange,
+  options,
+  placeholder = "Select..."
+}) {
+
   const [open, setOpen] = useState(false)
   const ref = useRef()
 
   useEffect(() => {
+
     const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false)
+      }
     }
+
     document.addEventListener("mousedown", handler)
-    return () => document.removeEventListener("mousedown", handler)
+
+    return () => {
+      document.removeEventListener("mousedown", handler)
+    }
+
   }, [])
 
   return (
     <div className="ep-field">
-      {label && <label className="ep-label">{label}</label>}
-      <div className="ep-dropdown-wrap" ref={ref}>
+
+      <label className="ep-label">
+        {label}
+      </label>
+
+      <div
+        className="ep-dropdown-wrap"
+        ref={ref}
+      >
+
         <div
           className={`ep-dropdown-trigger ${open ? "open" : ""}`}
-          onClick={() => setOpen(o => !o)}
+          onClick={() => setOpen(!open)}
         >
-          <span style={{ color: value ? "#2d5016" : "#7aa16f" }}>
+
+          <span
+            style={{
+              color: value ? "#2d5016" : "#7aa16f"
+            }}
+          >
             {value || placeholder}
           </span>
-          <span>⌄</span>
+
+          <span
+            style={{
+              fontSize: 18,
+              fontWeight: 700,
+            }}
+          >
+            ⌄
+          </span>
+
         </div>
+
         {open && (
           <div className="ep-dropdown-list">
-            {options.map(opt => (
+
+            {options.map((opt) => (
               <div
                 key={opt}
-                className={`ep-dropdown-item ${value === opt ? "selected" : ""}`}
-                onClick={() => { onChange(opt); setOpen(false) }}
+                className={`ep-dropdown-item ${
+                  value === opt ? "selected" : ""
+                }`}
+                onClick={() => {
+                  onChange(opt)
+                  setOpen(false)
+                }}
               >
                 {opt}
               </div>
             ))}
+
           </div>
         )}
+
       </div>
+
     </div>
   )
 }
 
-// ── range slider with score display ───────────────────────────────────────
-function ScoreSlider({ label, value, onChange }) {
-  const pct = value || 0
-  const getLabel = (v) => {
-    if (v >= 90) return `${v} — Excellent`
-    if (v >= 75) return `${v} — Good`
-    if (v >= 60) return `${v} — Average`
-    return `${v} — Below average`
-  }
+/* ───────────────────────────────────────────────────────────── */
+/* SCORE SLIDER */
+/* ───────────────────────────────────────────────────────────── */
+
+function ScoreSlider({
+  label,
+  value,
+  onChange
+}) {
 
   return (
     <div className="ep-field">
-      <label className="ep-label">{label}</label>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-        <div style={{
-          display: "flex", alignItems: "center", gap: 0,
-          background: "#c8ddc4", borderRadius: 8, overflow: "hidden",
-          border: "1.5px solid #7aa16f",
-        }}>
+
+      <label className="ep-label">
+        {label}
+      </label>
+
+      {/* score input */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          marginBottom: 16,
+        }}
+      >
+
+        <div
+          style={{
+            width: 130,
+            height: 64,
+
+            border: "1.5px solid #90a58a",
+            borderRadius: 8,
+
+            background: "#c5d0c1",
+
+            display: "flex",
+            overflow: "hidden",
+          }}
+        >
+
           <input
             type="number"
-            min={0} max={100}
-            value={value || ""}
-            onChange={e => onChange(Math.min(100, Math.max(0, Number(e.target.value))))}
+            min={0}
+            max={100}
+            value={value}
+            onChange={(e) =>
+              onChange(Number(e.target.value))
+            }
             style={{
-              width: 72, height: 46, border: "none", background: "transparent",
-              fontSize: 18, color: "#2d5016", fontWeight: 600, textAlign: "right",
-              padding: "0 4px 0 10px", outline: "none", fontFamily: "DM Sans, sans-serif"
+              width: 70,
+              border: "none",
+              background: "transparent",
+
+              textAlign: "center",
+
+              fontSize: 20,
+              fontWeight: 500,
+              color: "#355021",
+
+              outline: "none",
+              fontFamily: "DM Sans, sans-serif",
             }}
           />
-          <span style={{ fontSize: 15, color: "#4a6a42", paddingRight: 10 }}>/100</span>
+
+          <div
+            style={{
+              width: 1,
+              background: "#8ea086",
+            }}
+          />
+
+          <div
+            style={{
+              flex: 1,
+
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+
+              fontSize: 16,
+              color: "#355021",
+            }}
+          >
+            /100
+          </div>
+
         </div>
+
       </div>
+
+      {/* slider */}
       <input
         type="range"
-        min={0} max={100}
-        value={pct}
-        onChange={e => onChange(Number(e.target.value))}
-        style={{ width: "100%", accentColor: "#2d5b0f", marginBottom: 4 }}
+        min={0}
+        max={100}
+        value={value}
+        onChange={(e) =>
+          onChange(Number(e.target.value))
+        }
+        style={{
+          width: "100%",
+          accentColor: "#28cc2f",
+          cursor: "pointer",
+        }}
       />
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#4a6a42" }}>
+
+      {/* bottom numbers */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+
+          marginTop: 8,
+
+          fontSize: 13,
+          color: "#5c7052",
+        }}
+      >
+
         <span>0</span>
-        <span style={{ color: "#2d5016", fontWeight: 600 }}>{getLabel(pct)}</span>
+
+        <span>
+          {value >= 90 ? "90 — Exellent" : value}
+        </span>
+
         <span>100</span>
+
       </div>
+
     </div>
   )
 }
 
+/* ───────────────────────────────────────────────────────────── */
+/* PAGE */
+/* ───────────────────────────────────────────────────────────── */
+
 export default function EditProfileAcademic() {
+
   const navigate = useNavigate()
-  const { profile, updateProfile } = useProfile()
+
+  const {
+    profile,
+    updateProfile
+  } = useProfile()
+
   const academic = profile.academic || {}
 
-  const [schoolLevel,    setSchoolLevel]    = useState(academic.schoolLevel    || "SMA")
-  const [major,          setMajor]          = useState(academic.major          || "IPA (science)")
-  const [grade,          setGrade]          = useState(academic.grade          || "Grade 12")
-  const [schoolName,     setSchoolName]     = useState(academic.schoolName     || "")
-  const [schoolTier,     setSchoolTier]     = useState(academic.schoolTier     || "")
-  const [gradYear,       setGradYear]       = useState(academic.graduationYear || "")
-  const [avgGrade,       setAvgGrade]       = useState(academic.avgGrade       ?? 0)
-  const [mathScore,      setMathScore]      = useState(academic.mathScore      ?? 0)
-  const [englishScore,   setEnglishScore]   = useState(academic.englishScore   ?? 0)
-  const [majorSubjAvg,   setMajorSubjAvg]   = useState(academic.majorSubjectAvg?? 0)
-  const [extracurricular,setExtracurricular]= useState(academic.extracurricular|| "")
-  const [olympiadLevel,  setOlympiadLevel]  = useState(academic.olympiadLevel  || "")
-  const [careerTrack,    setCareerTrack]    = useState(academic.careerTrack    || "")
-  const [willingReturn,  setWillingReturn]  = useState(academic.willingReturn  ?? null)
-  const [needsFunding,   setNeedsFunding]   = useState(academic.needsFullFunding ?? null)
+  const [schoolLevel, setSchoolLevel] =
+    useState(academic.schoolLevel || "SMA")
+
+  const [major, setMajor] =
+    useState(academic.major || "IPA (science)")
+
+  const [grade, setGrade] =
+    useState(academic.grade || "Grade 12")
+
+  const [schoolName, setSchoolName] =
+    useState(academic.schoolName || "SMAN 10 Kota Bandung")
+
+  const [schoolTier, setSchoolTier] =
+    useState(
+      academic.schoolTier ||
+      "Public School - Accredited A"
+    )
+
+  const [gradYear, setGradYear] =
+    useState(academic.graduationYear || "2026")
+
+  const [avgGrade, setAvgGrade] =
+    useState(academic.avgGrade ?? 90)
+
+  const [mathScore, setMathScore] =
+    useState(academic.mathScore ?? 80)
+
+  const [englishScore, setEnglishScore] =
+    useState(academic.englishScore ?? 90)
+
+  const [majorSubjAvg, setMajorSubjAvg] =
+    useState(academic.majorSubjectAvg ?? 80)
+
+  const [extracurricular, setExtracurricular] =
+    useState(
+      academic.extracurricular ||
+      "Ketua OSIS 2024–2025, Juara 1 OSN Matematika tingkat kota, anggota Paskibra, peserta LKIR tingkat provinsi"
+    )
+
+  const [olympiadLevel, setOlympiadLevel] =
+    useState(
+      academic.olympiadLevel || "City / District"
+    )
+
+  const [careerTrack, setCareerTrack] =
+    useState(
+      academic.careerTrack || "Industry / Tech"
+    )
 
   const handleTabChange = (tab) => {
-    if (tab === "personal") navigate("/profile/edit")
-    if (tab === "skills")   navigate("/profile/edit/skills")
-    window.scrollTo({ top: 0, behavior: "smooth" })
+
+    if (tab === "personal") {
+      navigate("/profile/edit")
+    }
+
+    if (tab === "skills") {
+      navigate("/profile/edit/skills")
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    })
   }
 
   const handleSave = () => {
+
     updateProfile("academic", {
-      schoolLevel, major, grade, schoolName, schoolTier,
+      schoolLevel,
+      major,
+      grade,
+      schoolName,
+      schoolTier,
       graduationYear: gradYear,
-      avgGrade, mathScore, englishScore, majorSubjectAvg: majorSubjAvg,
-      extracurricular, olympiadLevel, careerTrack,
-      willingReturn, needsFullFunding: needsFunding,
+      avgGrade,
+      mathScore,
+      englishScore,
+      majorSubjectAvg: majorSubjAvg,
+      extracurricular,
+      olympiadLevel,
+      careerTrack,
     })
+
     navigate("/profile")
   }
 
   return (
+
     <div className="ep-wrap">
 
-      {/* back */}
-      <button className="ep-back-btn" onClick={() => navigate("/profile")}>
+      {/* BACK */}
+      <button
+        className="ep-back-btn"
+        onClick={() => navigate("/profile")}
+      >
         Back to profile
       </button>
 
-      {/* tabs */}
+      {/* TABS */}
       <div className="ep-tabs">
-        <button className="ep-tab" onClick={() => handleTabChange("personal")} type="button">
+
+        <button
+          className="ep-tab"
+          onClick={() => handleTabChange("personal")}
+        >
           Personal information
         </button>
-        <button className="ep-tab active" type="button">
+
+        <button className="ep-tab active">
           Academic
         </button>
-        <button className="ep-tab" onClick={() => handleTabChange("skills")} type="button">
+
+        <button
+          className="ep-tab"
+          onClick={() => handleTabChange("skills")}
+        >
           Skills
         </button>
+
       </div>
 
-      {/* ── school info ── */}
-      <div className="ep-grid">
-        <EPDropdown label="School level"         value={schoolLevel}  onChange={setSchoolLevel}  options={SCHOOL_LEVELS} />
-        <EPDropdown label="Major / Program"       value={major}        onChange={setMajor}        options={MAJORS} />
-        <EPDropdown label="Grade / Class"         value={grade}        onChange={setGrade}        options={GRADES} />
+      {/* TOP FORM */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          columnGap: 28,
+          rowGap: 22,
+        }}
+      >
 
-        {/* school name — text input */}
-        <div className="ep-field">
-          <label className="ep-label">School name</label>
-          <input
-            className="ep-input"
-            type="text"
-            placeholder="Enter your school name"
-            value={schoolName}
-            onChange={e => setSchoolName(e.target.value)}
-          />
-        </div>
-
-        {/* full-width tier */}
-        <div className="ep-field" style={{ gridColumn: "1 / -1" }}>
-          <EPDropdown
-            label="School tier / Accreditation"
-            value={schoolTier}
-            onChange={setSchoolTier}
-            options={SCHOOL_TIERS}
-            placeholder="Select accreditation"
-          />
-        </div>
-
-        {/* graduation year — text input */}
-        <div className="ep-field">
-          <label className="ep-label">Expected graduation year</label>
-          <input
-            className="ep-input"
-            type="number"
-            placeholder="e.g. 2026"
-            min={2024} max={2030}
-            value={gradYear}
-            onChange={e => setGradYear(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* ── academic performance ── */}
-      <div style={{ margin: "32px 0 10px", borderTop: "1px solid #b5c8ae", paddingTop: 28 }}>
-        <p className="ep-label" style={{ marginBottom: 20 }}>Academic performance</p>
-        <div className="ep-grid">
-          <ScoreSlider label="Average grade (scale 100)" value={avgGrade}     onChange={setAvgGrade} />
-          <ScoreSlider label="Math score"                value={mathScore}    onChange={setMathScore} />
-          <ScoreSlider label="English score"             value={englishScore} onChange={setEnglishScore} />
-          <ScoreSlider label="Major subject average"     value={majorSubjAvg} onChange={setMajorSubjAvg} />
-        </div>
-      </div>
-
-      {/* ── extracurricular ── */}
-      <div style={{ margin: "28px 0 10px", borderTop: "1px solid #b5c8ae", paddingTop: 28 }}>
-        <label className="ep-label">Extracurricular & achievements</label>
-        <textarea
-          style={{
-            width: "100%", minHeight: 100, borderRadius: 10,
-            border: "1.5px solid #7aa16f", background: "#d9ecd5",
-            padding: "14px 16px", fontSize: 16, color: "#2d5016",
-            fontFamily: "DM Sans, sans-serif", resize: "vertical",
-            marginTop: 10, outline: "none",
-          }}
-          placeholder="e.g. Ketua OSIS, Juara OSN Matematika, anggota Paskibra..."
-          value={extracurricular}
-          onChange={e => setExtracurricular(e.target.value)}
+        <EPDropdown
+          label="SCHOOL LEVEL"
+          value={schoolLevel}
+          onChange={setSchoolLevel}
+          options={SCHOOL_LEVELS}
         />
-        <p style={{ fontSize: 14, color: "#4a6a42", marginTop: 6 }}>
-          List any relevant organisations, competitions, achievements, or experiences.
-        </p>
-      </div>
 
-      {/* ── olympiad + career ── */}
-      <div style={{ borderTop: "1px solid #b5c8ae", paddingTop: 28, marginTop: 8 }}>
-        <div className="ep-grid">
-          <EPDropdown label="Olympiad level"        value={olympiadLevel} onChange={setOlympiadLevel} options={OLYMPIAD_LEVELS} placeholder="Select level" />
-          <EPDropdown label="Intended career track" value={careerTrack}   onChange={setCareerTrack}   options={CAREER_TRACKS}   placeholder="Select track" />
+        <EPDropdown
+          label="MAJOR/PROGRAM"
+          value={major}
+          onChange={setMajor}
+          options={MAJORS}
+        />
 
-          {/* willing to return */}
-          <div className="ep-field">
-            <label className="ep-label">Willing to return home after study?</label>
-            <div className="ep-toggle-group" style={{ gridTemplateColumns: "1fr 1fr" }}>
-              {[true, false].map(v => (
-                <button
-                  key={String(v)}
-                  type="button"
-                  className={`ep-toggle-btn ${willingReturn === v ? "active" : ""}`}
-                  onClick={() => setWillingReturn(v)}
-                >
-                  {v ? "Yes" : "No"}
-                </button>
-              ))}
-            </div>
-          </div>
+        <EPDropdown
+          label="GRADE / CLASS"
+          value={grade}
+          onChange={setGrade}
+          options={GRADES}
+        />
 
-          {/* needs full funding */}
-          <div className="ep-field">
-            <label className="ep-label">Needs full funding?</label>
-            <div className="ep-toggle-group" style={{ gridTemplateColumns: "1fr 1fr" }}>
-              {[true, false].map(v => (
-                <button
-                  key={String(v)}
-                  type="button"
-                  className={`ep-toggle-btn ${needsFunding === v ? "active" : ""}`}
-                  onClick={() => setNeedsFunding(v)}
-                >
-                  {v ? "Yes" : "No"}
-                </button>
-              ))}
-            </div>
-          </div>
+        <div className="ep-field">
+
+          <label className="ep-label">
+            SCHOOL NAME
+          </label>
+
+          <input
+            className="ep-input"
+            value={schoolName}
+            onChange={(e) =>
+              setSchoolName(e.target.value)
+            }
+          />
+
         </div>
+
+        <EPDropdown
+          label="SCHOOL TIER / ACCREDITATION"
+          value={schoolTier}
+          onChange={setSchoolTier}
+          options={SCHOOL_TIERS}
+        />
+
+        <div className="ep-field">
+
+          <label className="ep-label">
+            EXPECTED GRADUATION YEAR
+          </label>
+
+          <input
+            className="ep-input"
+            value={gradYear}
+            onChange={(e) =>
+              setGradYear(e.target.value)
+            }
+          />
+
+        </div>
+
       </div>
 
-      {/* summary cards */}
-      <div className="ep-summary-card clickable" onClick={() => handleTabChange("personal")}>
-        <span>Personal info — {profile.personal?.fullName || "—"}, {profile.personal?.gender || "—"}, {profile.personal?.province || "—"}</span>
-        <button type="button">Edit →</button>
-      </div>
-      <div className="ep-summary-card clickable" onClick={() => handleTabChange("skills")}>
-        <span>Skills — {
-          ((profile.skills?.hardSkills?.length || 0) +
-           (profile.skills?.softSkills?.length || 0) +
-           (profile.skills?.languageSkills?.length || 0))
-        } selected</span>
-        <button type="button">Edit →</button>
+      {/* DIVIDER */}
+      <div
+        style={{
+          width: "100%",
+          height: 1,
+          background: "#c4d0be",
+
+          marginTop: 42,
+          marginBottom: 28,
+        }}
+      />
+
+      {/* PERFORMANCE */}
+      <div>
+
+        <p
+          style={{
+            fontSize: 18,
+            color: "#3e4f35",
+            marginBottom: 24,
+            textTransform: "uppercase",
+          }}
+        >
+          Academic performance
+        </p>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            columnGap: 48,
+            rowGap: 28,
+          }}
+        >
+
+          <ScoreSlider
+            label="AVERAGE GRADE (SCALE 100)"
+            value={avgGrade}
+            onChange={setAvgGrade}
+          />
+
+          <ScoreSlider
+            label="MATH SCORE"
+            value={mathScore}
+            onChange={setMathScore}
+          />
+
+          <ScoreSlider
+            label="ENGLISH SCORE"
+            value={englishScore}
+            onChange={setEnglishScore}
+          />
+
+          <ScoreSlider
+            label="MAJOR SUBJECT AVERAGE"
+            value={majorSubjAvg}
+            onChange={setMajorSubjAvg}
+          />
+
+        </div>
+
       </div>
 
-      {/* footer */}
-      <div className="ep-footer">
-        <button className="ep-cancel-btn" onClick={() => navigate("/profile")}>Cancel</button>
-        <button className="ep-save-btn"   onClick={handleSave}>Save Changes</button>
+      {/* DIVIDER */}
+      <div
+        style={{
+          width: "100%",
+          height: 1,
+          background: "#c4d0be",
+
+          marginTop: 28,
+          marginBottom: 26,
+        }}
+      />
+
+      {/* EXTRACURRICULAR */}
+      <div>
+
+        <label className="ep-label">
+          EXTRACURRICULAR & ACHIEVEMENTS
+        </label>
+
+        <textarea
+          value={extracurricular}
+          onChange={(e) =>
+            setExtracurricular(e.target.value)
+          }
+          style={{
+            width: "100%",
+            height: 170,
+
+            borderRadius: 10,
+            border: "1.5px solid #7ea071",
+
+            background: "#d9ecd5",
+
+            padding: "20px",
+
+            fontSize: 16,
+            color: "#355021",
+
+            fontFamily: "DM Sans, sans-serif",
+
+            resize: "none",
+            outline: "none",
+
+            marginTop: 12,
+          }}
+        />
+
+        <p
+          style={{
+            marginTop: 14,
+
+            fontSize: 16,
+            color: "#48623c",
+          }}
+        >
+          List any relevant organizations, competitions,
+          achievements, or experiences.
+        </p>
+
+      </div>
+
+      {/* BOTTOM */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 28,
+
+          marginTop: 26,
+        }}
+      >
+
+        <EPDropdown
+          label="OLYMPIAD LEVEL"
+          value={olympiadLevel}
+          onChange={setOlympiadLevel}
+          options={OLYMPIAD_LEVELS}
+        />
+
+        <EPDropdown
+          label="INTENDED CAREER BACK"
+          value={careerTrack}
+          onChange={setCareerTrack}
+          options={CAREER_TRACKS}
+        />
+
+      </div>
+
+      {/* SUMMARY */}
+      <div
+        className="ep-summary-card clickable"
+        style={{ marginTop: 56 }}
+        onClick={() => handleTabChange("personal")}
+      >
+
+        <span>
+          Personal info — Arunika, Female, Jawa Barat
+        </span>
+
+        <button type="button">
+          Edit →
+        </button>
+
+      </div>
+
+      <div
+        className="ep-summary-card clickable"
+        style={{ marginTop: 18 }}
+        onClick={() => handleTabChange("skills")}
+      >
+
+        <span>
+          Skills — 6 selected
+        </span>
+
+        <button type="button">
+          Edit →
+        </button>
+
+      </div>
+
+      {/* FOOTER */}
+      <div
+        className="ep-footer"
+        style={{
+          marginTop: 72,
+        }}
+      >
+
+        <button
+          className="ep-cancel-btn"
+          onClick={() => navigate("/profile")}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="ep-save-btn"
+          onClick={handleSave}
+        >
+          Save Canges
+        </button>
+
       </div>
 
     </div>
   )
 }
-
