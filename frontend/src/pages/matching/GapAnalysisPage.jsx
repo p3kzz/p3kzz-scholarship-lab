@@ -1,7 +1,17 @@
+import { useNavigate } from "react-router-dom"
 import Sidebar from "../../components/layout/Sidebar"
+import {
+  BookOpen,
+  Mail,
+  FileText,
+  GraduationCap
+} from "lucide-react"
+
 import "../../styles/gap-analysis.css"
 
 export default function GapAnalysisPage() {
+
+  const navigate = useNavigate()
 
   const eligibility = [
     {
@@ -27,10 +37,22 @@ export default function GapAnalysisPage() {
   ]
 
   const documents = [
-    "Personal Statement",
-    "Letter of Recommendation",
-    "Academic Transcript",
-    "TOPIK / IELTS Certificate"
+    {
+      name: "Personal Statement",
+      icon: <BookOpen size={24} strokeWidth={2.1} />
+    },
+    {
+      name: "Letter of Recommendation",
+      icon: <Mail size={24} strokeWidth={2.1} />
+    },
+    {
+      name: "Academic Transcript",
+      icon: <FileText size={24} strokeWidth={2.1} />
+    },
+    {
+      name: "TOPIK / IELTS Certificate",
+      icon: <GraduationCap size={24} strokeWidth={2.1} />
+    }
   ]
 
   const timeline = [
@@ -61,9 +83,12 @@ export default function GapAnalysisPage() {
       <div className="gap-main">
 
         {/* top */}
-        <div className="gap-back">
-          ← Back to Matching
-        </div>
+        <button
+  className="gap-back"
+  onClick={() => navigate("/match")}
+>
+  ← Back to Matching
+</button>
 
         {/* header */}
         <div className="gap-header">
@@ -170,18 +195,18 @@ export default function GapAnalysisPage() {
 
                 {documents.map((doc) => (
                   <div
-                    key={doc}
+                    key={doc.name}
                     className="gap-document-row"
                   >
 
                     <div className="gap-document-left">
 
                       <div className="gap-document-icon">
-                        ☐
+                        {doc.icon}
                       </div>
 
                       <div className="gap-document-name">
-                        {doc}
+                        {doc.name}
                       </div>
 
                     </div>
@@ -206,7 +231,7 @@ export default function GapAnalysisPage() {
             <div className="gap-ai-card">
 
               <div className="gap-ai-title">
-                ⚡ AI Optimization
+                AI Optimization
               </div>
 
               <p className="gap-ai-desc">
@@ -219,22 +244,26 @@ export default function GapAnalysisPage() {
               <div className="gap-ai-list">
 
                 <div className="gap-ai-item">
-                  • Upload TOPIK or IELTS certification results.
+                  Upload TOPIK or IELTS certification results.
                 </div>
 
                 <div className="gap-ai-item">
-                  • Add international leadership experiences.
+                  Add international leadership experiences.
                 </div>
 
                 <div className="gap-ai-item">
-                  • Highlight interest in Korean global innovation programs.
+                  Highlight interest in Korean global innovation programs.
                 </div>
 
               </div>
 
-              <button className="gap-update-btn">
-                Update Profile Now
-              </button>
+              <button
+  type="button"
+  className="gap-update-btn"
+  onClick={() => navigate("/profile")}
+>
+  Update Profile Now
+</button>
 
             </div>
 
