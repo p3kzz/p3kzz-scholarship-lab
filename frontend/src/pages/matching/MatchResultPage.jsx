@@ -144,7 +144,7 @@ export default function MatchResultPage() {
 
               <div className="match-progress-bar">
                 <div
-                  className="match-progress-fill green-fill"
+                  className="match-progress-fill red-fill"
                   style={{ width: "76%" }}
                 ></div>
               </div>
