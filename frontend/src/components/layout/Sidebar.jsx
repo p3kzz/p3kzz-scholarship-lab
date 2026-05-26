@@ -7,6 +7,8 @@ import {
   LogOut
 } from "lucide-react"
 
+import { useAuth } from "../../context/AuthContext"
+
 import logoLight from "../../assets/logo-light.png"
 
 function LogoutModal({ onClose, onLogout }) {
@@ -48,13 +50,21 @@ export default function Sidebar() {
 
   const navigate = useNavigate()
 
+  const { logout } = useAuth()
+
   const [showLogoutModal, setShowLogoutModal] = useState(false)
+
+  const handleLogout = () => {
+    logout()
+
+    navigate("/login")
+  }
 
   return (
     <>
       <aside className="sidebar">
 
-        {/* TOP */}
+        {/* top */}
         <div>
 
           {/* logo */}
@@ -118,15 +128,14 @@ export default function Sidebar() {
       </aside>
 
       {/* logout modal */}
-      {showLogoutModal && (
-        <LogoutModal
-          onClose={() => setShowLogoutModal(false)}
-          onLogout={() => {
-            localStorage.removeItem("token")
-            navigate("/login")
-          }}
-        />
-      )}
+      {
+        showLogoutModal && (
+          <LogoutModal
+            onClose={() => setShowLogoutModal(false)}
+            onLogout={handleLogout}
+          />
+        )
+      }
     </>
   )
 }

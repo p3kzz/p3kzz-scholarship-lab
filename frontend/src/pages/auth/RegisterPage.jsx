@@ -1,21 +1,73 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+
+import { registerUser } from "../../api/auth"
+
+import { GoogleLogin } from "@react-oauth/google"
+
+import { googleLogin } from "../../api/auth"
+
+import { useAuth } from "../../context/AuthContext"
+
 import "../../styles/globals.css"
 
 export default function RegisterPage() {
   const navigate = useNavigate()
-
+  const { login } = useAuth()
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
     agree: false,
   })
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false)
+
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    navigate("/onboarding/step1")
+
+    setError("")
+
+    // VALIDASI TERMS
+    if (!form.agree) {
+      setError("Please agree to Terms & Privacy Policy")
+      return
+    }
+
+    // VALIDASI PASSWORD
+    if (form.password !== form.confirmPassword) {
+      setError("Password confirmation does not match")
+      return
+    }
+
+    try {
+      setLoading(true)
+
+      const payload = {
+        name: `${form.firstName} ${form.lastName}`,
+        email: form.email,
+        password: form.password,
+      }
+
+      const data = await registerUser(payload)
+
+      console.log(data)
+
+      alert("Register berhasil!")
+
+      navigate("/login")
+
+    } catch (error) {
+      console.error(error)
+
+      setError(error.message)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -143,6 +195,26 @@ export default function RegisterPage() {
               />
             </div>
 
+            {/* CONFIRM PASSWORD */}
+            <div>
+              <label className="register-label">
+                Confirm Password
+              </label>
+
+              <input
+                type="password"
+                placeholder="********"
+                className="register-input"
+                value={form.confirmPassword}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    confirmPassword: e.target.value,
+                  })
+                }
+              />
+            </div>
+
             {/* CHECKBOX */}
             <div className="register-checkbox-wrapper">
 
@@ -171,12 +243,26 @@ export default function RegisterPage() {
 
             </div>
 
+            {/* ERROR */}
+            {
+              error && (
+                <p className="register-error">
+                  {error}
+                </p>
+              )
+            }
+
             {/* BUTTON */}
             <button
               type="submit"
               className="register-submit-btn"
+              disabled={loading}
             >
-              Create Account
+              {
+                loading
+                  ? "Loading..."
+                  : "Create Account"
+              }
             </button>
 
             {/* DIVIDER */}
@@ -189,13 +275,35 @@ export default function RegisterPage() {
             </div>
 
             {/* GOOGLE BUTTON */}
-            <button
-  type="button"
-  className="register-google-btn"
-  onClick={() => navigate("/dashboard")}
->
-  Continue With Google
-</button>
+            <div className="google-login-wrapper">
+
+              <GoogleLogin
+                onSuccess={async (credentialResponse) => {
+                  try {
+
+                    const data = await googleLogin(
+                      credentialResponse.credential
+                    )
+
+                    // SIMPAN JWT
+                    login(data.token)
+
+                    // REDIRECT
+                    navigate("/dashboard")
+
+                  } catch (error) {
+                    console.error(error)
+
+                    setError(error.message)
+                  }
+                }}
+
+                onError={() => {
+                  setError("Google login failed")
+                }}
+              />
+
+            </div>
 
           </form>
         </div>

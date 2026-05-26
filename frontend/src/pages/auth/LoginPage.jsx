@@ -1,18 +1,41 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+
+import { loginUser } from "../../api/auth"
+import { useAuth } from "../../context/AuthContext"
+
 import "../../styles/globals.css"
 
 export default function LoginPage() {
   const navigate = useNavigate()
+
+  const { login } = useAuth()
 
   const [form, setForm] = useState({
     email: "",
     password: "",
   })
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    navigate("/dashboard")
+
+    try {
+      const response = await loginUser(form)
+
+      if (response.token) {
+        login(response.token)
+
+        navigate("/dashboard")
+      } else {
+        setError(response.message || "Login gagal")
+      }
+    } catch (error) {
+      console.error(error)
+
+      setError("Terjadi kesalahan")
+    }
   }
 
   return (
@@ -70,6 +93,7 @@ export default function LoginPage() {
 
               <input
                 type="email"
+                name="email"
                 placeholder="Input your email"
                 className="auth-input"
                 value={form.email}
@@ -90,6 +114,7 @@ export default function LoginPage() {
 
               <input
                 type="password"
+                name="password"
                 placeholder="********"
                 className="auth-input"
                 value={form.password}
@@ -108,6 +133,13 @@ export default function LoginPage() {
               </div>
             </div>
 
+            {/* ERROR MESSAGE */}
+            {error && (
+              <p style={{ color: "red", marginBottom: "10px" }}>
+                {error}
+              </p>
+            )}
+
             {/* SIGN IN BUTTON */}
             <button
               type="submit"
@@ -123,12 +155,11 @@ export default function LoginPage() {
 
             {/* GOOGLE BUTTON */}
             <button
-  type="button"
-  className="auth-btn-google"
-  onClick={() => navigate("/dashboard")}
->
-  Continue With Google
-</button>
+              type="button"
+              className="auth-btn-google"
+            >
+              Continue With Google
+            </button>
 
             {/* TERMS */}
             <p className="login-terms">
