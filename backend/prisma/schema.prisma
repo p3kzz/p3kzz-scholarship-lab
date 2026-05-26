@@ -14,6 +14,7 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
+
   name      String
   email     String   @unique
   password  String
@@ -25,31 +26,81 @@ model User {
 }
 
 model Profile {
-  id                  Int      @id @default(autoincrement())
-  userId              Int      @unique
-  user                User     @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
 
-  // IDENTITAS
-  name                String?
-  gender              String?
-  tanggalLahir        DateTime?
-  provinsi            String?
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
 
-  // AKADEMIK
-  pendidikanTerakhir  String?
-  jurusan             String?
+  //  IDENTITAS 
+  fullName  String?
+  gender    String?
+  birthDate DateTime?
 
-  gradeType           String   // 'gpa' atau 'score'
-  gpa                 Float?
-  score               Float?
+  nationality String?
+  province    String?
 
-  // OPTIONAL
-  pengalaman          Boolean?
-  skill               String?
+  //  AKADEMIK 
+  currentDegreeLevel String? // high_school
+  targetDegreeLevel  String? // bachelors
 
-  // STATUS
-  isCompleted         Boolean  @default(false)
+  schoolName       String?
+  highSchoolTrack  String?
 
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  reportAverage       Float?
+  mathScore           Float?
+  englishScore        Float?
+  majorSubjectAverage Float?
+
+  expectedGraduationYear Int?
+
+  //  ACHIEVEMENTS 
+  olympiadLevel   String?
+
+  leadershipCount Int?
+  volunteerCount  Int?
+  competitionCount Int?
+
+  extracurricularText String? @db.Text
+
+  //  BACKGROUND 
+  familyIncomeCategory String?
+  schoolTier           String?
+
+  //  CAREER 
+  intendedCareerTrack String?
+
+  willingReturnHome Boolean?
+
+  //  AI TEXT FIELDS 
+  personalStatement      String? @db.Text
+  achievementsNarrative  String? @db.Text
+  futureGoals            String? @db.Text
+
+  //  STATUS 
+  isCompleted Boolean @default(false)
+
+  //  RELATIONS 
+  skills Skill[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Skill {
+  id        Int @id @default(autoincrement())
+
+  profileId Int
+  profile   Profile @relation(fields: [profileId], references: [id])
+
+  name      String
+
+  type      SkillType
+
+  createdAt DateTime @default(now())
+}
+
+enum SkillType {
+  HARD
+  SOFT
+  LANGUAGE
 }
