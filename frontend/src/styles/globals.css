@@ -388,7 +388,7 @@ select {
 .navbar {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 999;
 
   width: 100%;
   height: 78px;
@@ -402,25 +402,33 @@ select {
   justify-content: space-between;
 }
 
+/* LOGO */
+
 .navbar-logo {
   display: flex;
   align-items: center;
 
   text-decoration: none;
+
+  z-index: 1001;
 }
 
 .navbar-logo-img {
-  width: auto;
   height: 38px;
+  width: auto;
 
   object-fit: contain;
 }
+
+/* MENU */
 
 .navbar-menu {
   display: flex;
   align-items: center;
   gap: 34px;
 }
+
+/* LINKS */
 
 .navbar-link {
   background: none;
@@ -435,12 +443,14 @@ select {
 
   cursor: pointer;
 
-  transition: opacity 0.2s ease;
+  transition: .2s ease;
 }
 
 .navbar-link:hover {
-  opacity: 0.75;
+  opacity: .7;
 }
+
+/* APPLY BUTTON */
 
 .navbar-apply-btn {
   height: 46px;
@@ -453,19 +463,149 @@ select {
 
   font-family: "DM Sans", sans-serif;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
 
   color: #2D5016;
 
   cursor: pointer;
 
-  transition: transform 0.2s ease;
+  box-shadow:
+    0 6px 18px rgba(45,80,22,.18);
 
-  box-shadow: 0 6px 18px rgba(45, 80, 22, 0.25);
+  transition: .2s ease;
 }
 
 .navbar-apply-btn:hover {
   transform: translateY(-1px);
+}
+
+/* ===================================================
+   MOBILE NAVBAR WITH HAMBURGER
+=================================================== */
+
+.navbar-toggle{
+  display:none;
+}
+
+/* hamburger button */
+.navbar-hamburger{
+  display:none;
+
+  width:44px;
+  height:44px;
+
+  border:none;
+  border-radius:12px;
+
+  background:#B0EBB4;
+
+  align-items:center;
+  justify-content:center;
+
+  cursor:pointer;
+
+  box-shadow:0 6px 16px rgba(45,80,22,.18);
+}
+
+.navbar-hamburger svg{
+  width:20px;
+  height:20px;
+
+  fill:#2D5016;
+}
+
+/* =========================
+   TABLET & MOBILE
+========================= */
+
+@media (max-width:768px){
+
+  .navbar{
+    height:78px;
+
+    padding:0 18px;
+
+    position:sticky;
+
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .navbar-logo-img{
+    height:30px;
+  }
+
+  /* show hamburger */
+  .navbar-hamburger{
+    display:flex;
+  }
+
+  /* MOBILE MENU */
+  .navbar-menu{
+    position:absolute;
+
+    top:88px;
+    right:18px;
+
+    width:240px;
+
+    padding:18px;
+
+    border-radius:22px;
+
+    background:#E0FBE2;
+
+    border:1px solid rgba(45,80,22,.12);
+
+    box-shadow:
+      0 18px 40px rgba(0,0,0,.12);
+
+    display:none;
+
+    flex-direction:column;
+    align-items:flex-start;
+
+    gap:18px;
+
+    z-index:999;
+  }
+
+  /* ACTIVE STATE */
+  .navbar-menu.active{
+    display:flex;
+  }
+
+  .navbar-link{
+    width:100%;
+
+    text-align:left;
+
+    font-size:15px;
+    font-weight:500;
+  }
+
+  .navbar-apply-btn{
+    width:100%;
+    height:44px;
+
+    font-size:14px;
+  }
+
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width:769px){
+
+  .navbar-menu{
+    display:flex !important;
+    align-items:center;
+    gap:34px;
+  }
+
 }
 
 /* ─────────────────────────────────────────────
@@ -1081,4 +1221,1261 @@ select {
 }
 
 @media (max-width: 480px) {
+}
+
+
+/* ─────────────────────────────────────────────
+   LOGIN PAGE
+───────────────────────────────────────────── */
+
+.login-page{
+  width:100%;
+  min-height:100vh;
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  background:#F0FDF0;
+
+  overflow:hidden;
+}
+
+/* =========================
+   LEFT
+========================= */
+
+.login-left{
+  position:relative;
+
+  padding:72px;
+
+  display:flex;
+  align-items:flex-end;
+
+  background:linear-gradient(
+    180deg,
+    #ACE1AF 60%,
+    #B0EBB4 70%,
+    #BFF6C3 100%
+  );
+}
+
+.login-left-content{
+  max-width:420px;
+}
+
+.login-welcome{
+  margin-bottom:38px;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:.02em;
+
+  color:#1A2E1A;
+}
+
+.login-heading{
+  margin-bottom:42px;
+
+  font-family:"Playfair Display",serif;
+  font-size:82px;
+  line-height:.98;
+  font-weight:700;
+
+  color:#1A2E1A;
+}
+
+.login-heading span{
+  font-style:italic;
+  color:#2D5016;
+}
+
+.login-desc{
+  font-family:"DM Sans",sans-serif;
+  font-size:20px;
+  line-height:1.45;
+  font-weight:500;
+
+  color:#4E5C4E;
+}
+
+/* =========================
+   RIGHT
+========================= */
+
+.login-right{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:70px 72px;
+
+  background:#F0FDF0;
+}
+
+.login-form-wrapper{
+  width:100%;
+  max-width:575px;
+}
+
+.login-title{
+  margin-bottom:10px;
+
+  font-family:"Playfair Display",serif;
+  font-size:56px;
+  line-height:1;
+  font-weight:700;
+
+  color:#1A2E1A;
+}
+
+.login-subtitle{
+  margin-bottom:56px;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:20px;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+.login-link{
+  font-weight:700;
+  text-decoration:underline;
+
+  color:#1A2E1A;
+}
+
+.login-form{
+  width:100%;
+}
+
+.login-field{
+  margin-bottom:28px;
+}
+
+/* =========================
+   LABEL
+========================= */
+
+.auth-label{
+  display:block;
+
+  margin-bottom:12px;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:18px;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.auth-input{
+  width:100%;
+  height:64px;
+
+  padding:0 18px;
+
+  border:1px solid #2D5016;
+  border-radius:12px;
+
+  background:#E0FBE2 !important;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:18px;
+  font-weight:500;
+
+  color:#1A2E1A;
+
+  outline:none;
+  appearance:none;
+
+  transition:.2s;
+}
+
+.auth-input::placeholder{
+  color:#5E6A5E;
+}
+
+.auth-input:focus{
+  background:#E0FBE2 !important;
+  border:1px solid #2D5016;
+
+  box-shadow:
+    0 0 0 3px rgba(45,80,22,.08);
+}
+
+/* =========================
+   FORGOT
+========================= */
+
+.forgot-wrapper{
+  margin-top:18px;
+
+  display:flex;
+  justify-content:flex-end;
+}
+
+.forgot-link{
+  font-family:"DM Sans",sans-serif;
+  font-size:16px;
+  font-weight:500;
+
+  color:#767676;
+
+  text-decoration:none;
+
+  border-bottom:1px solid #B9B9B9;
+
+  transition:.2s;
+}
+
+.forgot-link:hover{
+  opacity:.75;
+}
+
+/* =========================
+   BUTTON PRIMARY
+========================= */
+
+.auth-btn-primary{
+  width:100%;
+  height:64px;
+
+  margin-top:14px;
+
+  border:none;
+  border-radius:12px;
+
+  background:#2D5016;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:24px;
+  font-weight:700;
+
+  color:#E0FBE2;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.auth-btn-primary:hover{
+  opacity:.92;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
+.auth-divider{
+  margin:28px 0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:20px;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+/* =========================
+   GOOGLE BUTTON
+========================= */
+
+.google-login-wrapper{
+  width:100%;
+}
+
+.google-login-wrapper > div{
+  width:100% !important;
+}
+
+.google-login-wrapper iframe{
+  width:100% !important;
+
+  border-radius:12px !important;
+
+  box-shadow:none !important;
+}
+
+/* hanya tombol google */
+.google-login-wrapper > div > div{
+  border:1px solid #2D5016 !important;
+  border-radius:12px !important;
+
+  background:rgba(26,46,26,.15) !important;
+
+  box-shadow:none !important;
+
+  overflow:hidden;
+}
+
+.google-login-wrapper *{
+  box-shadow:none !important;
+}
+
+/* =========================
+   TERMS
+========================= */
+
+.login-terms{
+  margin-top:34px;
+
+  text-align:center;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+.terms-link{
+  color:#1A2E1A;
+
+  text-decoration:underline;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:1200px){
+
+  .login-heading{
+    font-size:68px;
+  }
+
+  .login-title{
+    font-size:48px;
+  }
+
+}
+
+@media (max-width:992px){
+
+  .login-page{
+    grid-template-columns:1fr;
+  }
+
+  .login-left{
+    min-height:360px;
+
+    padding:52px 42px;
+  }
+
+  .login-heading{
+    font-size:62px;
+  }
+
+  .login-right{
+    padding:54px 36px 64px;
+  }
+
+}
+
+@media (max-width:768px){
+
+  .login-left{
+    min-height:300px;
+
+    padding:42px 24px;
+  }
+
+  .login-welcome{
+    font-size:14px;
+
+    margin-bottom:24px;
+  }
+
+  .login-heading{
+    font-size:52px;
+  }
+
+  .login-desc{
+    font-size:16px;
+  }
+
+  .login-right{
+    padding:40px 20px 48px;
+  }
+
+  .login-title{
+    font-size:42px;
+  }
+
+  .login-subtitle{
+    margin-bottom:40px;
+
+    font-size:16px;
+  }
+
+  .auth-label{
+    font-size:15px;
+  }
+
+  .auth-input{
+    height:56px;
+
+    font-size:16px;
+  }
+
+  .auth-btn-primary{
+    height:56px;
+
+    font-size:20px;
+  }
+
+  .forgot-link{
+    font-size:14px;
+  }
+
+  .login-terms{
+    font-size:14px;
+  }
+
+}
+
+@media (max-width:480px){
+
+  .login-left{
+    min-height:260px;
+
+    padding:34px 18px;
+  }
+
+  .login-heading{
+    font-size:42px;
+  }
+
+  .login-desc{
+    font-size:14px;
+  }
+
+  .login-right{
+    padding:34px 16px 42px;
+  }
+
+  .login-title{
+    font-size:36px;
+  }
+
+  .auth-input{
+    height:52px;
+
+    border-radius:10px;
+  }
+
+  .auth-btn-primary{
+    height:52px;
+
+    border-radius:10px;
+
+    font-size:18px;
+  }
+
+}
+
+
+/* ─────────────────────────────────────────────
+   REGISTER PAGE
+───────────────────────────────────────────── */
+
+.register-page{
+  width:100%;
+  min-height:100vh;
+
+  display:grid;
+  grid-template-columns:1fr 1fr;
+
+  background:#F0FDF0;
+
+  overflow:hidden;
+}
+
+/* =========================
+   LEFT
+========================= */
+
+.register-left{
+  padding:72px;
+
+  display:flex;
+  align-items:flex-end;
+
+  background:linear-gradient(
+    180deg,
+    #ACE1AF 60%,
+    #B0EBB4 70%,
+    #BFF6C3 100%
+  );
+}
+
+.register-left-content{
+  max-width:460px;
+}
+
+.register-tag{
+  margin-bottom:42px;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:.01em;
+
+  color:#1A2E1A;
+}
+
+.register-title{
+  margin-bottom:42px;
+
+  font-family:"Playfair Display",serif;
+  font-size:82px;
+  line-height:.98;
+  font-weight:700;
+
+  color:#1A2E1A;
+}
+
+.register-title span{
+  font-style:italic;
+  color:#2D5016;
+}
+
+.register-description{
+  font-family:"DM Sans",sans-serif;
+  font-size:20px;
+  line-height:1.5;
+  font-weight:500;
+
+  color:#526252;
+}
+
+/* =========================
+   RIGHT
+========================= */
+
+.register-right{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:72px;
+
+  background:#F0FDF0;
+}
+
+.register-form-wrapper{
+  width:100%;
+  max-width:575px;
+}
+
+.register-heading{
+  margin-bottom:10px;
+
+  font-family:"Playfair Display",serif;
+  font-size:56px;
+  line-height:1;
+  font-weight:700;
+
+  color:#1A2E1A;
+}
+
+.register-subtitle{
+  margin-bottom:52px;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:20px;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+.register-link{
+  font-weight:700;
+  text-decoration:underline;
+
+  color:#1A2E1A;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.register-form{
+  width:100%;
+}
+
+.register-name-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+
+  margin-bottom:24px;
+}
+
+.register-form > div{
+  margin-bottom:24px;
+}
+
+/* =========================
+   LABEL
+========================= */
+
+.register-label{
+  display:block;
+
+  margin-bottom:12px;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:18px;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+/* =========================
+   INPUT
+========================= */
+
+.register-input{
+  width:100%;
+  height:64px;
+
+  padding:0 18px;
+
+  border:1px solid #2D5016;
+  border-radius:12px;
+
+  background:#E0FBE2 !important;
+
+  outline:none;
+  appearance:none;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:18px;
+  font-weight:500;
+
+  color:#1A2E1A;
+
+  transition:.2s;
+}
+
+.register-input::placeholder{
+  color:#627062;
+}
+
+.register-input:focus{
+  background:#E0FBE2 !important;
+  border:1px solid #2D5016;
+
+  box-shadow:
+    0 0 0 3px rgba(45,80,22,.08);
+}
+/* =========================
+   CHECKBOX
+========================= */
+
+.register-checkbox-wrapper{
+  margin-top:8px;
+  margin-bottom:28px !important;
+
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.register-checkbox{
+  width:18px;
+  height:18px;
+
+  margin-top:3px;
+
+  accent-color:#08CB00;
+
+  cursor:pointer;
+
+  flex-shrink:0;
+}
+
+.register-checkbox-text{
+  font-family:"DM Sans",sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+.register-policy-link{
+  color:#1A2E1A;
+
+  text-decoration:underline;
+}
+
+/* =========================
+   ERROR
+========================= */
+
+.register-error{
+  margin-bottom:18px;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:15px;
+  font-weight:600;
+
+  color:#D62828;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.register-submit-btn{
+  width:100%;
+  height:64px;
+
+  border:none;
+  border-radius:12px;
+
+  background:#2D5016;
+
+  font-family:"DM Sans",sans-serif;
+  font-size:24px;
+  font-weight:700;
+
+  color:#E0FBE2;
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.register-submit-btn:hover{
+  opacity:.92;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+
+.register-divider{
+  margin:26px 0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+}
+
+.register-divider span{
+  font-family:"DM Sans",sans-serif;
+  font-size:20px;
+  font-weight:500;
+
+  color:#1A2E1A;
+}
+
+.register-divider-line{
+  flex:1;
+  height:1px;
+
+  background:rgba(26,46,26,.15);
+}
+
+/* =========================
+   GOOGLE BUTTON
+========================= */
+
+.google-login-wrapper{
+  width:100%;
+}
+
+.google-login-wrapper > div{
+  width:100% !important;
+}
+
+.google-login-wrapper iframe{
+  width:100% !important;
+
+  border-radius:12px !important;
+
+  box-shadow:none !important;
+}
+
+/* hanya tombol google */
+.google-login-wrapper > div > div{
+  border:1px solid #2D5016 !important;
+  border-radius:12px !important;
+
+  background:rgba(26,46,26,.15) !important;
+
+  box-shadow:none !important;
+
+  overflow:hidden;
+}
+
+.google-login-wrapper *{
+  box-shadow:none !important;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width:1200px){
+
+  .register-title{
+    font-size:68px;
+  }
+
+  .register-heading{
+    font-size:48px;
+  }
+
+}
+
+@media (max-width:992px){
+
+  .register-page{
+    grid-template-columns:1fr;
+  }
+
+  .register-left{
+    min-height:360px;
+
+    padding:52px 42px;
+  }
+
+  .register-title{
+    font-size:62px;
+  }
+
+  .register-right{
+    padding:54px 36px 64px;
+  }
+
+}
+
+@media (max-width:768px){
+
+  .register-left{
+    min-height:300px;
+
+    padding:42px 24px;
+  }
+
+  .register-tag{
+    font-size:14px;
+
+    margin-bottom:24px;
+  }
+
+  .register-title{
+    font-size:52px;
+  }
+
+  .register-description{
+    font-size:16px;
+  }
+
+  .register-right{
+    padding:40px 20px 48px;
+  }
+
+  .register-heading{
+    font-size:40px;
+  }
+
+  .register-subtitle{
+    margin-bottom:38px;
+
+    font-size:16px;
+  }
+
+  .register-name-grid{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
+
+  .register-label{
+    font-size:15px;
+  }
+
+  .register-input{
+    height:56px;
+
+    font-size:16px;
+  }
+
+  .register-submit-btn{
+    height:56px;
+
+    font-size:20px;
+  }
+
+}
+
+@media (max-width:480px){
+
+  .register-left{
+    min-height:260px;
+
+    padding:34px 18px;
+  }
+
+  .register-title{
+    font-size:42px;
+  }
+
+  .register-description{
+    font-size:14px;
+  }
+
+  .register-right{
+    padding:34px 16px 42px;
+  }
+
+  .register-heading{
+    font-size:34px;
+  }
+
+  .register-input{
+    height:52px;
+
+    border-radius:10px;
+  }
+
+  .register-submit-btn{
+    height:52px;
+
+    border-radius:10px;
+
+    font-size:18px;
+  }
+
+  .register-checkbox-text{
+    font-size:14px;
+  }
+
+}
+
+/* ===================================================
+   LAPTOP
+=================================================== */
+
+@media (max-width:1200px){
+
+  /* LOGIN */
+
+  .login-left,
+  .register-left{
+    padding:56px;
+  }
+
+  .login-right,
+  .register-right{
+    padding:56px;
+  }
+
+  .login-heading,
+  .register-title{
+    font-size:68px;
+  }
+
+  .login-title,
+  .register-heading{
+    font-size:48px;
+  }
+
+  .login-desc,
+  .register-description{
+    font-size:18px;
+  }
+
+}
+
+/* ===================================================
+   TABLET
+=================================================== */
+
+@media (max-width:992px){
+
+  .login-page,
+  .register-page{
+    grid-template-columns:1fr;
+  }
+
+  /* LEFT */
+
+  .login-left,
+  .register-left{
+    min-height:340px;
+
+    padding:48px 42px;
+  }
+
+  .login-heading,
+  .register-title{
+    font-size:60px;
+  }
+
+  .login-desc,
+  .register-description{
+    font-size:16px;
+  }
+
+  /* RIGHT */
+
+  .login-right,
+  .register-right{
+    padding:52px 36px 60px;
+  }
+
+  .login-form-wrapper,
+  .register-form-wrapper{
+    max-width:100%;
+  }
+
+  .login-title,
+  .register-heading{
+    font-size:44px;
+  }
+
+}
+
+/* ===================================================
+   MOBILE
+=================================================== */
+
+@media (max-width:768px){
+
+  .login-page,
+  .register-page{
+    grid-template-columns:1fr;
+  }
+
+  /* LEFT */
+
+  .login-left,
+  .register-left{
+    min-height:280px;
+
+    padding:38px 22px;
+
+    align-items:flex-end;
+  }
+
+  .login-left-content,
+  .register-left-content{
+    max-width:100%;
+  }
+
+  .login-welcome,
+  .register-tag{
+    margin-bottom:22px;
+
+    font-size:14px;
+  }
+
+  .login-heading,
+  .register-title{
+    font-size:48px;
+    line-height:1.02;
+
+    margin-bottom:24px;
+  }
+
+  .login-desc,
+  .register-description{
+    font-size:15px;
+    line-height:1.6;
+  }
+
+  /* RIGHT */
+
+  .login-right,
+  .register-right{
+    padding:
+      42px
+      18px
+      40px;
+  }
+
+  .login-title,
+  .register-heading{
+    font-size:38px;
+  }
+
+  .login-subtitle,
+  .register-subtitle{
+    margin-bottom:34px;
+
+    font-size:15px;
+  }
+
+  /* FORM */
+
+  .login-field{
+    margin-bottom:22px;
+  }
+
+  .register-name-grid{
+    grid-template-columns:1fr;
+
+    gap:20px;
+  }
+
+  .auth-label,
+  .register-label{
+    margin-bottom:10px;
+
+    font-size:15px;
+  }
+
+  .auth-input,
+  .register-input{
+    height:56px;
+
+    padding:0 16px;
+
+    font-size:15px;
+
+    border-radius:10px;
+  }
+
+  .auth-btn-primary,
+  .register-submit-btn{
+    height:56px;
+
+    font-size:20px;
+
+    border-radius:10px;
+  }
+
+  .forgot-link{
+    font-size:14px;
+  }
+
+  .login-terms,
+  .register-checkbox-text{
+    font-size:14px;
+    line-height:1.6;
+  }
+
+  /* GOOGLE BUTTON */
+
+  .google-login-wrapper [role="button"],
+  .google-login-wrapper div[style]{
+    height:56px !important;
+
+    border-radius:10px !important;
+  }
+
+  .google-login-wrapper span{
+    font-size:16px !important;
+  }
+
+}
+
+/* ===================================================
+   SMALL MOBILE
+=================================================== */
+
+@media (max-width:480px){
+
+  /* LEFT */
+
+  .login-left,
+  .register-left{
+    min-height:240px;
+
+    padding:30px 18px;
+  }
+
+  .login-heading,
+  .register-title{
+    font-size:40px;
+  }
+
+  .login-desc,
+  .register-description{
+    font-size:14px;
+  }
+
+  /* RIGHT */
+
+  .login-right,
+  .register-right{
+    padding:
+      34px
+      14px
+      36px;
+  }
+
+  .login-title,
+  .register-heading{
+    font-size:32px;
+  }
+
+  .login-subtitle,
+  .register-subtitle{
+    margin-bottom:28px;
+
+    font-size:14px;
+  }
+
+  /* FORM */
+
+  .auth-input,
+  .register-input{
+    height:52px;
+
+    padding:0 14px;
+
+    font-size:14px;
+  }
+
+  .auth-btn-primary,
+  .register-submit-btn{
+    height:52px;
+
+    font-size:17px;
+  }
+
+  .auth-label,
+  .register-label{
+    font-size:14px;
+  }
+
+  .login-terms,
+  .register-checkbox-text{
+    font-size:13px;
+  }
+
+  .forgot-link{
+    font-size:13px;
+  }
+
+  /* GOOGLE */
+
+  .google-login-wrapper [role="button"],
+  .google-login-wrapper div[style]{
+    height:52px !important;
+  }
+
+  .google-login-wrapper span{
+    font-size:14px !important;
+  }
+
 }
