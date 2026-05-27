@@ -251,3 +251,38 @@
   transition: background 0.2s;
 }
 .ob-btn-continue-full:hover { background: #1a2a00; }
+
+
+
+
+/* =========================
+   LAPTOP
+========================= */
+
+@media (max-width: 1200px){
+
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 992px){
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px){
+
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px){
+
+}

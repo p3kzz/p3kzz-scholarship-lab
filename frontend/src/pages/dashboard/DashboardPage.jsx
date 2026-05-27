@@ -1,4 +1,6 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { Menu } from "lucide-react"
 import Sidebar from "../../components/layout/Sidebar"
 import "../../styles/dashboard.css"
 
@@ -8,22 +10,33 @@ const RECS = [
   { pct:"84%", title:"MEXT Scholarship",   sub:"Japanese Government • Japan",      days:"45 Days Left" },
 ]
 
-const STRENGTHS = [
-  "Leadership Experience",
-  "High Score (90+)",
-  "Active Organization",
-]
+const STRENGTHS = ["Leadership Experience","High Score (90+)","Active Organization"]
 
 export default function DashboardPage() {
   const navigate = useNavigate()
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
     <div className="db-page">
-      <Sidebar />
+
+      {/* mobile hamburger */}
+      <button
+  className="db-mobile-menu"
+  onClick={() => setMobileOpen(prev => !prev)}
+>
+        <Menu size={22} color="white"/>
+      </button>
+
+      {/* overlay */}
+      {mobileOpen && (
+        <div className="db-overlay" onClick={() => setMobileOpen(false)} />
+      )}
+
+      <Sidebar isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
       <div className="db-main">
 
-        {/* ── TOP ── */}
+        {/* TOP */}
         <div className="db-top">
           <div>
             <h1 className="db-title">
@@ -40,7 +53,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ── STATS ── */}
+        {/* STATS */}
         <div className="db-stats">
           <div className="db-stat-card">
             <div className="db-stat-icon green">
@@ -82,7 +95,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* ── CONTENT ── */}
+        {/* CONTENT */}
         <div className="db-content">
 
           {/* LEFT */}
@@ -93,7 +106,6 @@ export default function DashboardPage() {
                 SEE ALL &rsaquo;
               </button>
             </div>
-
             <div className="db-rec-list">
               {RECS.map(r => (
                 <div key={r.title} className="db-rec-card">
@@ -118,9 +130,8 @@ export default function DashboardPage() {
             <div className="db-section-top">
               <h2 className="db-section-title">AI Profile Insights</h2>
             </div>
-
             <div className="db-insight-card">
-
+              <div className="db-insight-lightning">⚡</div>
               <div className="db-insight-body">
                 <div className="db-insight-label green">STRENGTHS</div>
                 <div className="db-insight-list">
@@ -135,19 +146,13 @@ export default function DashboardPage() {
                     </div>
                   ))}
                 </div>
-
                 <div className="db-insight-divider" />
-
                 <div className="db-insight-label red">ACTION NEEDED</div>
                 <div className="db-insight-item">
                   <div className="db-insight-warn">!</div>
                   <span className="db-insight-text">No IELTS Certificate</span>
                 </div>
-
-                <button
-                  className="db-improve-btn"
-                  onClick={() => navigate("/profile/edit")}
-                >
+                <button className="db-improve-btn" onClick={() => navigate("/profile/edit")}>
                   Improve My Profile Match
                 </button>
               </div>
