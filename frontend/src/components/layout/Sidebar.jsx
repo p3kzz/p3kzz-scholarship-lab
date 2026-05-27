@@ -1,6 +1,13 @@
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useState } from "react"
-import { LayoutGrid, User, LogOut } from "lucide-react"
+
+import {
+  LayoutGrid,
+  User,
+  LogOut
+} from "lucide-react"
+
+import { useAuth } from "../../context/AuthContext"
 import logoLight from "../../assets/logo-light.png"
 
 function LogoutModal({ onClose, onLogout }) {
@@ -12,9 +19,11 @@ function LogoutModal({ onClose, onLogout }) {
           You'll need to sign back in to access your
           scholarship matches and profile progress.
         </p>
+
         <button className="logout-confirm-btn" onClick={onLogout}>
           Yes, sign me out
         </button>
+
         <button className="logout-cancel-btn" onClick={onClose}>
           Stay signed in
         </button>
@@ -26,9 +35,17 @@ function LogoutModal({ onClose, onLogout }) {
 export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate()
   const location = useLocation()
+
+  const { logout } = useAuth()
+
   const [showLogoutModal, setShowLogoutModal] = useState(false)
 
   const isActive = (path) => location.pathname.startsWith(path)
+
+  const handleLogout = () => {
+    logout()
+    navigate("/login")
+  }
 
   return (
     <>
@@ -37,7 +54,11 @@ export default function Sidebar({ isOpen, onClose }) {
         <div>
           {/* logo */}
           <div className="sidebar-logo">
-            <img src={logoLight} alt="Scholarship Lab" className="sidebar-logo-img" />
+            <img
+              src={logoLight}
+              alt="Scholarship Lab"
+              className="sidebar-logo-img"
+            />
           </div>
 
           {/* menu */}
@@ -50,6 +71,7 @@ export default function Sidebar({ isOpen, onClose }) {
               <LayoutGrid size={20} />
               <span>Home</span>
             </Link>
+
             <Link
               to="/profile"
               className={`sidebar-link${isActive("/profile") ? " sidebar-link-active" : ""}`}
@@ -62,7 +84,10 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
 
         {/* sign out */}
-        <button className="sidebar-logout" onClick={() => setShowLogoutModal(true)}>
+        <button
+          className="sidebar-logout"
+          onClick={() => setShowLogoutModal(true)}
+        >
           <LogOut size={20} />
           <span>Sign Out</span>
         </button>
@@ -71,10 +96,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {showLogoutModal && (
         <LogoutModal
           onClose={() => setShowLogoutModal(false)}
-          onLogout={() => {
-            localStorage.removeItem("token")
-            navigate("/login")
-          }}
+          onLogout={handleLogout}
         />
       )}
     </>

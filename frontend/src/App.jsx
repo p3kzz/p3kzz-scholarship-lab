@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import ProtectedRoute from "./routes/ProtectedRoute"
 
 // Auth
 import LoginPage from "./pages/auth/LoginPage"
@@ -20,7 +21,7 @@ import DashboardPage from "./pages/dashboard/DashboardPage"
 import ProfilePage from "./pages/profile/ProfilePage"
 import EditProfilePage from "./pages/profile/EditProfilePage"
 import EditProfileAcademic from './pages/profile/EditProfileAcademic'
-import EditProfileSkills   from './pages/profile/EditProfileSkills'
+import EditProfileSkills from './pages/profile/EditProfileSkills'
 import MatchResultPage from "./pages/matching/MatchResultPage"
 import GapAnalysisPage from "./pages/matching/GapAnalysisPage"
 
@@ -45,13 +46,69 @@ function App() {
         </Route>
 
         {/* App */}
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/profile/edit" element={<EditProfilePage />} />
-        <Route path="/profile/edit/academic" element={<EditProfileAcademic />} />
-        <Route path="/profile/edit/skills" element={<EditProfileSkills />} />
-        <Route path="/match" element={<MatchResultPage />} />
-        <Route path="/gap-analysis" element={<GapAnalysisPage />} />
+        {/* App */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/edit"
+          element={
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/edit/academic"
+          element={
+            <ProtectedRoute>
+              <EditProfileAcademic />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile/edit/skills"
+          element={
+            <ProtectedRoute>
+              <EditProfileSkills />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/match"
+          element={
+            <ProtectedRoute>
+              <MatchResultPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/gap-analysis"
+          element={
+            <ProtectedRoute>
+              <GapAnalysisPage />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

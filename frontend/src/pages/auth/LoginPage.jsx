@@ -1,24 +1,67 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
+
+import { loginUser, getMe } from "../../api/auth"
+import { useAuth } from "../../context/AuthContext"
+
+import { GoogleLogin } from "@react-oauth/google"
+
+import { googleLogin } from "../../api/auth"
+
 import "../../styles/globals.css"
 
 export default function LoginPage() {
   const navigate = useNavigate()
+
+  const { login } = useAuth()
 
   const [form, setForm] = useState({
     email: "",
     password: "",
   })
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState("")
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    navigate("/dashboard")
+
+    try {
+
+      const response = await loginUser(form)
+
+      if (response.token) {
+
+        // simpan token ke context
+        login(response.token)
+
+        // ambil data user
+        const me = await getMe(response.token)
+
+        // cek profile lengkap atau belum
+        if (
+          !me.profile ||
+          !me.profile.isCompleted
+        ) {
+          navigate("/onboarding")
+        } else {
+          navigate("/dashboard")
+        }
+      } else {
+        setError(response.message || "Login gagal")
+      }
+    } catch (error) {
+
+      console.error(error)
+
+      setError("Terjadi kesalahan")
+
+    }
   }
 
   return (
     <div className="login-page">
 
-      {/* LEFT SIDE */}
+      {/* left side */}
       <div className="login-left">
 
         <div className="login-left-content">
@@ -41,7 +84,6 @@ export default function LoginPage() {
 
       </div>
 
-      {/* RIGHT SIDE */}
       <div className="login-right">
 
         <div className="login-form-wrapper">
@@ -62,7 +104,7 @@ export default function LoginPage() {
             className="login-form"
           >
 
-            {/* EMAIL */}
+            {/* email */}
             <div className="login-field">
               <label className="auth-label">
                 Email Address
@@ -70,6 +112,7 @@ export default function LoginPage() {
 
               <input
                 type="email"
+                name="email"
                 placeholder="Input your email"
                 className="auth-input"
                 value={form.email}
@@ -82,7 +125,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* PASSWORD */}
+            {/* pass */}
             <div className="login-field">
               <label className="auth-label">
                 Password
@@ -90,6 +133,7 @@ export default function LoginPage() {
 
               <input
                 type="password"
+                name="password"
                 placeholder="********"
                 className="auth-input"
                 value={form.password}
@@ -108,7 +152,14 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* SIGN IN BUTTON */}
+            {/* error message */}
+            {error && (
+              <p style={{ color: "red", marginBottom: "10px" }}>
+                {error}
+              </p>
+            )}
+
+            {/* button sign in */}
             <button
               type="submit"
               className="auth-btn-primary"
@@ -116,21 +167,64 @@ export default function LoginPage() {
               Sign In
             </button>
 
-            {/* DIVIDER */}
             <div className="auth-divider">
               <span>Or</span>
             </div>
 
-            {/* GOOGLE BUTTON */}
-            <button
-  type="button"
-  className="auth-btn-google"
-  onClick={() => navigate("/dashboard")}
->
-  Continue With Google
-</button>
+            {/* button google */}
+            <div className="google-login-wrapper">
 
-            {/* TERMS */}
+              <GoogleLogin
+
+                onSuccess={async (credentialResponse) => {
+
+                  try {
+
+                    // LOGIN GOOGLE KE BACKEND
+                    const response = await googleLogin(
+                      credentialResponse.credential
+                    )
+
+                    // SIMPAN TOKEN
+                    login(response.token)
+
+                    // AMBIL USER
+                    const me = await getMe(response.token)
+
+                    // CEK ONBOARDING
+                    if (
+                      !me.profile ||
+                      !me.profile.isCompleted
+                    ) {
+
+                      navigate("/onboarding")
+
+                    } else {
+
+                      navigate("/dashboard")
+
+                    }
+
+                  } catch (error) {
+
+                    console.error(error)
+
+                    setError(error.message)
+
+                  }
+                }}
+
+                onError={() => {
+
+                  setError("Google login failed")
+
+                }}
+
+              />
+
+            </div>
+
+            {/* terms */}
             <p className="login-terms">
               By signing in you agree to our{" "}
               <Link to="/" className="terms-link">
