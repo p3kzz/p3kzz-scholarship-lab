@@ -26,75 +26,147 @@ model User {
 }
 
 model Profile {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  userId    Int      @unique
-  user      User     @relation(fields: [userId], references: [id])
+  // =========================
+  // RELATION
+  // =========================
 
-  //  IDENTITAS 
-  fullName  String?
-  gender    String?
+  userId Int @unique
+
+  user User @relation(fields: [userId], references: [id])
+
+  // =========================
+  // PERSONAL INFORMATION
+  // =========================
+
+  fullName String?
+
+  gender String?
+
   birthDate DateTime?
 
-  nationality String?
-  province    String?
+  // otomatis "Indonesia"
+  nationality String? @default("Indonesia")
 
-  //  AKADEMIK 
-  currentDegreeLevel String? // high_school
-  targetDegreeLevel  String? // bachelors
+  province String?
 
-  schoolName       String?
-  highSchoolTrack  String?
+  familyIncomeCategory String?
 
-  reportAverage       Float?
-  mathScore           Float?
-  englishScore        Float?
-  majorSubjectAverage Float?
+  fromUnderrepresentedRegion Boolean?
+
+  // =========================
+  // ACADEMIC
+  // =========================
+
+  currentDegreeLevel String?
+  // example:
+  // high_school
+  // diploma
+  // bachelors
+
+  // future use
+  targetDegreeLevel String?
+
+  schoolName String?
+
+  highSchoolTrack String?
+  // example:
+  // science
+  // social
+  // language
+
+  schoolTier String?
+  // example:
+  // public_a
+  // private_b
 
   expectedGraduationYear Int?
 
-  //  ACHIEVEMENTS 
-  olympiadLevel   String?
+  // =========================
+  // ACADEMIC SCORES
+  // =========================
 
-  leadershipCount Int?
-  volunteerCount  Int?
-  competitionCount Int?
+  reportAverage Float?
+
+  mathScore Float?
+
+  englishScore Float?
+
+  majorSubjectAverage Float?
+
+  // =========================
+  // ACHIEVEMENTS
+  // =========================
 
   extracurricularText String? @db.Text
 
-  //  BACKGROUND 
-  familyIncomeCategory String?
-  schoolTier           String?
+  olympiadLevel String?
+  // example:
+  // city
+  // province
+  // national
+  // international
 
-  //  CAREER 
+  // =========================
+  // CAREER & GOALS
+  // =========================
+
   intendedCareerTrack String?
+  // example:
+  // tech
+  // healthcare
+  // business
 
   willingReturnHome Boolean?
 
-  //  AI TEXT FIELDS 
-  personalStatement      String? @db.Text
-  achievementsNarrative  String? @db.Text
-  futureGoals            String? @db.Text
+  needsFullFunding Boolean?
 
-  //  STATUS 
+  // =========================
+  // AI TEXT FIELDS
+  // =========================
+
+  personalStatement String? @db.Text
+
+  achievementsNarrative String? @db.Text
+
+  futureGoals String? @db.Text
+
+  // =========================
+  // STATUS
+  // =========================
+
   isCompleted Boolean @default(false)
 
-  //  RELATIONS 
+  // =========================
+  // RELATIONS
+  // =========================
+
   skills Skill[]
 
+  targetCountries TargetCountry[]
+
+  languageCertificates LanguageCertificate[]
+
+  // =========================
+  // TIMESTAMPS
+  // =========================
+
   createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
 }
 
 model Skill {
-  id        Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   profileId Int
-  profile   Profile @relation(fields: [profileId], references: [id])
 
-  name      String
+  profile Profile @relation(fields: [profileId], references: [id])
 
-  type      SkillType
+  name String
+
+  type SkillType
 
   createdAt DateTime @default(now())
 }
@@ -103,4 +175,32 @@ enum SkillType {
   HARD
   SOFT
   LANGUAGE
+}
+
+model TargetCountry {
+  id Int @id @default(autoincrement())
+
+  profileId Int
+
+ profile Profile @relation(fields: [profileId], references: [id])
+
+  country String
+
+  createdAt DateTime @default(now())
+}
+
+model LanguageCertificate {
+  id Int @id @default(autoincrement())
+
+  profileId Int
+
+  profile Profile @relation(fields: [profileId], references: [id])
+
+  name String
+  // IELTS / TOEFL / TOPIK
+
+  score String
+  // 7.5 / 550 / Level 3
+
+  createdAt DateTime @default(now())
 }

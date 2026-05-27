@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
     try {
         const { name, email, password } = req.body
 
-        // CHECK EMAIL
+        // cek email sudah terdaftar atau belum
         const existingUser = await prisma.user.findUnique({
             where: {
                 email,
@@ -30,10 +30,9 @@ exports.register = async (req, res) => {
             })
         }
 
-        // HASH PASSWORD
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        // CREATE USER
+        // create user
         const user = await prisma.user.create({
             data: {
                 name,
@@ -65,7 +64,7 @@ exports.login = async (req, res) => {
     try {
         const { email, password } = req.body
 
-        // CEK USER
+        // cek user
         const user = await prisma.user.findUnique({
             where: {
                 email,
@@ -78,7 +77,7 @@ exports.login = async (req, res) => {
             })
         }
 
-        // CEK PASSWORD
+        // cek pass
         const isMatch = await bcrypt.compare(
             password,
             user.password
@@ -90,7 +89,7 @@ exports.login = async (req, res) => {
             })
         }
 
-        // GENERATE JWT
+        // generate token jwt
         const token = jwt.sign(
             {
                 userId: user.id,
@@ -128,13 +127,13 @@ exports.googleLogin = async (req, res) => {
     try {
         const { credential } = req.body
 
-        // VERIFY TOKEN GOOGLE
+        // verivikasi token google
         const ticket = await googleClient.verifyIdToken({
             idToken: credential,
             audience: process.env.GOOGLE_CLIENT_ID,
         })
 
-        // AMBIL DATA USER GOOGLE
+        // ambil data user dari google
         const payload = ticket.getPayload()
 
         const {
@@ -143,14 +142,14 @@ exports.googleLogin = async (req, res) => {
             picture,
         } = payload
 
-        // CEK USER
+        // cek user
         let user = await prisma.user.findUnique({
             where: {
                 email,
             },
         })
 
-        // JIKA BELUM ADA → CREATE
+        // jika gada buat user baru
         if (!user) {
             user = await prisma.user.create({
                 data: {
@@ -165,7 +164,7 @@ exports.googleLogin = async (req, res) => {
             })
         }
 
-        // GENERATE JWT INTERNAL
+        // generate token jwt
         const token = jwt.sign(
             {
                 userId: user.id,

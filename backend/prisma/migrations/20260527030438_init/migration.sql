@@ -18,26 +18,25 @@ CREATE TABLE `Profile` (
     `fullName` VARCHAR(191) NULL,
     `gender` VARCHAR(191) NULL,
     `birthDate` DATETIME(3) NULL,
-    `nationality` VARCHAR(191) NULL,
+    `nationality` VARCHAR(191) NULL DEFAULT 'Indonesia',
     `province` VARCHAR(191) NULL,
+    `familyIncomeCategory` VARCHAR(191) NULL,
+    `fromUnderrepresentedRegion` BOOLEAN NULL,
     `currentDegreeLevel` VARCHAR(191) NULL,
     `targetDegreeLevel` VARCHAR(191) NULL,
     `schoolName` VARCHAR(191) NULL,
     `highSchoolTrack` VARCHAR(191) NULL,
+    `schoolTier` VARCHAR(191) NULL,
+    `expectedGraduationYear` INTEGER NULL,
     `reportAverage` DOUBLE NULL,
     `mathScore` DOUBLE NULL,
     `englishScore` DOUBLE NULL,
     `majorSubjectAverage` DOUBLE NULL,
-    `expectedGraduationYear` INTEGER NULL,
-    `olympiadLevel` VARCHAR(191) NULL,
-    `leadershipCount` INTEGER NULL,
-    `volunteerCount` INTEGER NULL,
-    `competitionCount` INTEGER NULL,
     `extracurricularText` TEXT NULL,
-    `familyIncomeCategory` VARCHAR(191) NULL,
-    `schoolTier` VARCHAR(191) NULL,
+    `olympiadLevel` VARCHAR(191) NULL,
     `intendedCareerTrack` VARCHAR(191) NULL,
     `willingReturnHome` BOOLEAN NULL,
+    `needsFullFunding` BOOLEAN NULL,
     `personalStatement` TEXT NULL,
     `achievementsNarrative` TEXT NULL,
     `futureGoals` TEXT NULL,
@@ -60,8 +59,35 @@ CREATE TABLE `Skill` (
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+-- CreateTable
+CREATE TABLE `TargetCountry` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `profileId` INTEGER NOT NULL,
+    `country` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `LanguageCertificate` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `profileId` INTEGER NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `score` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 -- AddForeignKey
 ALTER TABLE `Profile` ADD CONSTRAINT `Profile_userId_fkey` FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Skill` ADD CONSTRAINT `Skill_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `Profile`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `TargetCountry` ADD CONSTRAINT `TargetCountry_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `Profile`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `LanguageCertificate` ADD CONSTRAINT `LanguageCertificate_profileId_fkey` FOREIGN KEY (`profileId`) REFERENCES `Profile`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

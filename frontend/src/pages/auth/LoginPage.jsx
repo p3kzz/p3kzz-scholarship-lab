@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
-import { loginUser } from "../../api/auth"
+import { loginUser, getMe } from "../../api/auth"
 import { useAuth } from "../../context/AuthContext"
 
 import "../../styles/globals.css"
@@ -22,26 +22,42 @@ export default function LoginPage() {
     e.preventDefault()
 
     try {
+
       const response = await loginUser(form)
 
       if (response.token) {
+
+        // simpan token ke context
         login(response.token)
 
-        navigate("/dashboard")
+        // ambil data user
+        const me = await getMe(response.token)
+
+        // cek profile lengkap atau belum
+        if (
+          !me.profile ||
+          !me.profile.isCompleted
+        ) {
+          navigate("/onboarding")
+        } else {
+          navigate("/dashboard")
+        }
       } else {
         setError(response.message || "Login gagal")
       }
     } catch (error) {
+
       console.error(error)
 
       setError("Terjadi kesalahan")
+
     }
   }
 
   return (
     <div className="login-page">
 
-      {/* LEFT SIDE */}
+      {/* left side */}
       <div className="login-left">
 
         <div className="login-left-content">
@@ -64,7 +80,6 @@ export default function LoginPage() {
 
       </div>
 
-      {/* RIGHT SIDE */}
       <div className="login-right">
 
         <div className="login-form-wrapper">
@@ -85,7 +100,7 @@ export default function LoginPage() {
             className="login-form"
           >
 
-            {/* EMAIL */}
+            {/* email */}
             <div className="login-field">
               <label className="auth-label">
                 Email Address
@@ -106,7 +121,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {/* PASSWORD */}
+            {/* pass */}
             <div className="login-field">
               <label className="auth-label">
                 Password
@@ -133,14 +148,14 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* ERROR MESSAGE */}
+            {/* error message */}
             {error && (
               <p style={{ color: "red", marginBottom: "10px" }}>
                 {error}
               </p>
             )}
 
-            {/* SIGN IN BUTTON */}
+            {/* button sign in */}
             <button
               type="submit"
               className="auth-btn-primary"
@@ -148,12 +163,11 @@ export default function LoginPage() {
               Sign In
             </button>
 
-            {/* DIVIDER */}
             <div className="auth-divider">
               <span>Or</span>
             </div>
 
-            {/* GOOGLE BUTTON */}
+            {/* button google */}
             <button
               type="button"
               className="auth-btn-google"
@@ -161,7 +175,7 @@ export default function LoginPage() {
               Continue With Google
             </button>
 
-            {/* TERMS */}
+            {/* terms */}
             <p className="login-terms">
               By signing in you agree to our{" "}
               <Link to="/" className="terms-link">

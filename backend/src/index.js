@@ -27,6 +27,12 @@ app.get('/me', authMiddleware, async (req, res) => {
             id: true,
             name: true,
             email: true,
+
+            profile: {
+                select: {
+                    isCompleted: true,
+                },
+            },
         },
     });
 
