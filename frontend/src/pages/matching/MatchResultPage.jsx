@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import Sidebar from "../../components/layout/Sidebar"
 import "../../styles/match-result.css"
@@ -5,6 +6,8 @@ import "../../styles/match-result.css"
 export default function MatchResultPage() {
 
   const navigate = useNavigate()
+
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const scholarships = [
     {
@@ -31,7 +34,6 @@ export default function MatchResultPage() {
       tag2: "EUROPE",
       days: "51 Days Left"
     },
-
     {
       name: "BJUT China Scholarship",
       country: "CHINA • ENGINEERING",
@@ -45,8 +47,34 @@ export default function MatchResultPage() {
   return (
     <div className="match-page">
 
+      {/* HAMBURGER */}
+      <button
+        className="match-mobile-menu"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 640 640"
+          width="22"
+          height="22"
+          fill="currentColor"
+        >
+          <path d="M96 160C96 142.3 110.3 128 128 128L512 128C529.7 128 544 142.3 544 160C544 177.7 529.7 192 512 192L128 192C110.3 192 96 177.7 96 160zM96 320C96 302.3 110.3 288 128 288L512 288C529.7 288 544 302.3 544 320C544 337.7 529.7 352 512 352L128 352C110.3 352 96 337.7 96 320zM544 480C544 497.7 529.7 512 512 512L128 512C110.3 512 96 497.7 96 480C96 462.3 110.3 448 128 448L512 448C529.7 448 544 462.3 544 480z"/>
+        </svg>
+
+      </button>
+
       {/* SIDEBAR */}
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} />
+
+      {/* OVERLAY */}
+      {sidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
 
       {/* MAIN */}
       <div className="match-main">
@@ -155,15 +183,18 @@ export default function MatchResultPage() {
             <div className="match-buttons">
 
               <button
-  className="match-detail-btn"
-  onClick={() => navigate("/gap-analysis")}
->
-  View Analysis Details
-</button>
-
-              <button className="match-save-btn">
-                Save
+                className="match-detail-btn"
+                onClick={() => navigate("/gap-analysis")}
+              >
+                View Analysis Details
               </button>
+
+              <button
+  className="match-save-btn"
+  onClick={() => navigate("/dashboard")}
+>
+  Save
+</button>
 
             </div>
 
@@ -245,10 +276,18 @@ export default function MatchResultPage() {
                   {item.days}
                 </p>
 
-                <button className="match-compare-btn">
-                  Compare AI →
-                </button>
-
+                <button
+  className="match-compare-btn"
+  onClick={() =>
+    navigate("/gap-analysis", {
+      state: {
+        scholarship: item
+      }
+    })
+  }
+>
+  Compare AI →
+</button>
               </div>
 
             </div>
