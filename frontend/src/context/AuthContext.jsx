@@ -5,7 +5,22 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const refreshUser = async () => {
 
+        if (!token) return
+
+        try {
+
+            const data = await getMe(token)
+
+            setUser(data)
+
+        } catch (error) {
+
+            console.error(error)
+
+        }
+    }
     const [token, setToken] = useState(
         localStorage.getItem("token")
     );
@@ -44,11 +59,11 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-    localStorage.removeItem("token")
+        localStorage.removeItem("token")
 
-    setToken(null)
-    setUser(null)
-}
+        setToken(null)
+        setUser(null)
+    }
 
     return (
         <AuthContext.Provider
@@ -58,6 +73,7 @@ export const AuthProvider = ({ children }) => {
                 loading,
                 login,
                 logout,
+                refreshUser,
             }}
         >
             {children}

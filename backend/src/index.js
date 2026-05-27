@@ -6,7 +6,9 @@ const express = require('express');
 const cors = require('cors');
 const prisma = require('./lib/prisma');
 const authController = require('./controllers/authController');
+const profileController = require('./controllers/profileController')
 const authMiddleware = require('./middleware/auth');
+
 
 const app = express();
 
@@ -39,14 +41,8 @@ app.get('/me', authMiddleware, async (req, res) => {
     res.json(user);
 });
 
-app.get('/test-db', async (req, res) => {
-    try {
-        const users = await prisma.user.findMany();
-        res.json(users);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+app.post('/onboarding', authMiddleware, profileController.completeOnboarding)
+
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');

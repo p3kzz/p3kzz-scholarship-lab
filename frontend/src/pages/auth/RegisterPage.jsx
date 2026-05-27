@@ -277,31 +277,57 @@ export default function RegisterPage() {
             {/* GOOGLE BUTTON */}
             <div className="google-login-wrapper">
 
-              <GoogleLogin
-                onSuccess={async (credentialResponse) => {
-                  try {
+              <div className="google-login-wrapper">
 
-                    const data = await googleLogin(
-                      credentialResponse.credential
-                    )
+                <GoogleLogin
 
-                    // SIMPAN JWT
-                    login(data.token)
+                  onSuccess={async (credentialResponse) => {
 
-                    // REDIRECT
-                    navigate("/dashboard")
+                    try {
 
-                  } catch (error) {
-                    console.error(error)
+                      // LOGIN GOOGLE KE BACKEND
+                      const response = await googleLogin(
+                        credentialResponse.credential
+                      )
 
-                    setError(error.message)
-                  }
-                }}
+                      // SIMPAN TOKEN
+                      login(response.token)
 
-                onError={() => {
-                  setError("Google login failed")
-                }}
-              />
+                      // AMBIL USER
+                      const me = await getMe(response.token)
+
+                      // CEK ONBOARDING
+                      if (
+                        !me.profile ||
+                        !me.profile.isCompleted
+                      ) {
+
+                        navigate("/onboarding")
+
+                      } else {
+
+                        navigate("/dashboard")
+
+                      }
+
+                    } catch (error) {
+
+                      console.error(error)
+
+                      setError(error.message)
+
+                    }
+                  }}
+
+                  onError={() => {
+
+                    setError("Google login failed")
+
+                  }}
+
+                />
+
+              </div>
 
             </div>
 

@@ -4,6 +4,10 @@ import { Link, useNavigate } from "react-router-dom"
 import { loginUser, getMe } from "../../api/auth"
 import { useAuth } from "../../context/AuthContext"
 
+import { GoogleLogin } from "@react-oauth/google"
+
+import { googleLogin } from "../../api/auth"
+
 import "../../styles/globals.css"
 
 export default function LoginPage() {
@@ -168,12 +172,57 @@ export default function LoginPage() {
             </div>
 
             {/* button google */}
-            <button
-              type="button"
-              className="auth-btn-google"
-            >
-              Continue With Google
-            </button>
+            <div className="google-login-wrapper">
+
+              <GoogleLogin
+
+                onSuccess={async (credentialResponse) => {
+
+                  try {
+
+                    // LOGIN GOOGLE KE BACKEND
+                    const response = await googleLogin(
+                      credentialResponse.credential
+                    )
+
+                    // SIMPAN TOKEN
+                    login(response.token)
+
+                    // AMBIL USER
+                    const me = await getMe(response.token)
+
+                    // CEK ONBOARDING
+                    if (
+                      !me.profile ||
+                      !me.profile.isCompleted
+                    ) {
+
+                      navigate("/onboarding")
+
+                    } else {
+
+                      navigate("/dashboard")
+
+                    }
+
+                  } catch (error) {
+
+                    console.error(error)
+
+                    setError(error.message)
+
+                  }
+                }}
+
+                onError={() => {
+
+                  setError("Google login failed")
+
+                }}
+
+              />
+
+            </div>
 
             {/* terms */}
             <p className="login-terms">

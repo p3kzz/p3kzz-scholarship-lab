@@ -1,13 +1,96 @@
 import { useNavigate } from "react-router-dom"
 import { useProfile } from "../../context/ProfileContext"
+import { completeOnboarding } from "../../api/profile"
+import { useAuth } from "../../context/AuthContext"
 import "../../styles/review.css"
 
 export default function ReviewPage() {
   const navigate = useNavigate()
+  const { refreshUser } = useAuth()
+  const token = localStorage.getItem("token")
   const { profile } = useProfile()
-  const p = profile.personal  || {}
-  const a = profile.academic  || {}
-  const s = profile.skills    || {}
+  const p = profile.personal || {}
+  const a = profile.academic || {}
+  const s = profile.skills || {}
+  const handleCompleteOnboarding = async () => {
+
+    try {
+
+      // MAPPING DATA
+      const payload = {
+
+        // PERSONAL
+        fullName: p.fullName,
+        gender: p.gender,
+
+        birthDate: p.dateOfBirth,
+
+        nationality: "Indonesia",
+
+        province: p.province,
+
+        familyIncomeCategory:
+          p.economicBackground,
+
+        fromUnderrepresentedRegion:
+          p.fromUnderrepresentedRegion,
+
+        // ACADEMIC
+        currentDegreeLevel:
+          a.schoolLevel,
+
+        schoolName:
+          a.schoolName,
+
+        highSchoolTrack:
+          a.major,
+
+        reportAverage:
+          Number(a.overallGrade),
+
+        extracurricularText:
+          a.extracurricular,
+
+        intendedCareerTrack:
+          a.intendedCareerTrack,
+
+        // SKILLS
+        hardSkills:
+          s.hardSkills || [],
+
+        softSkills:
+          s.softSkills || [],
+
+        langSkills:
+          s.langSkills || [],
+
+        langCerts:
+          s.langCerts || [],
+
+        targetCountries:
+          s.targetCountries || [],
+      }
+
+      // POST BACKEND
+      await completeOnboarding(
+        token,
+        payload
+      )
+
+      // REFRESH USER STATE
+      await refreshUser()
+
+      navigate("/onboarding/processing")
+
+    } catch (error) {
+
+      console.error(error)
+
+      alert(error.message)
+
+    }
+  }
+
 
   const formatDob = (str) => {
     if (!str) return "—"
@@ -106,7 +189,12 @@ export default function ReviewPage() {
 
       <div className="rv-footer">
         <button className="rv-btn-back" onClick={() => navigate("/onboarding/step3")}>Back</button>
-        <button className="rv-btn-continue" onClick={() => navigate("/onboarding/processing")}>Find My Scholarships</button>
+        <button
+          className="rv-btn-continue"
+          onClick={handleCompleteOnboarding}
+        >
+          Find My Scholarships
+        </button>
       </div>
     </div>
   )
