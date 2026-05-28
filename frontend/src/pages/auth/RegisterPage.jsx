@@ -1,19 +1,24 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 
-import { registerUser } from "../../api/auth"
+import {
+  registerUser,
+  googleLogin,
+  getMe,
+} from "../../api/auth"
 
 import { GoogleLogin } from "@react-oauth/google"
-
-import { googleLogin } from "../../api/auth"
 
 import { useAuth } from "../../context/AuthContext"
 
 import "../../styles/globals.css"
 
 export default function RegisterPage() {
+
   const navigate = useNavigate()
+
   const { login } = useAuth()
+
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -28,23 +33,29 @@ export default function RegisterPage() {
   const [error, setError] = useState("")
 
   const handleSubmit = async (e) => {
+
     e.preventDefault()
 
     setError("")
 
     // VALIDASI TERMS
     if (!form.agree) {
+
       setError("Please agree to Terms & Privacy Policy")
+
       return
     }
 
     // VALIDASI PASSWORD
     if (form.password !== form.confirmPassword) {
+
       setError("Password confirmation does not match")
+
       return
     }
 
     try {
+
       setLoading(true)
 
       const payload = {
@@ -62,21 +73,27 @@ export default function RegisterPage() {
       navigate("/login")
 
     } catch (error) {
+
       console.error(error)
 
       setError(error.message)
+
     } finally {
+
       setLoading(false)
+
     }
   }
 
   return (
+
     <div className="register-page">
 
       {/* LEFT SIDE */}
       <div className="register-left">
 
         <div className="register-left-content">
+
           <p className="register-tag">
             CREATE ACCOUNT
           </p>
@@ -91,7 +108,9 @@ export default function RegisterPage() {
             <br />
             their perfect scholarship match.
           </p>
+
         </div>
+
       </div>
 
       {/* RIGHT SIDE */}
@@ -105,17 +124,24 @@ export default function RegisterPage() {
 
           <p className="register-subtitle">
             Already have an account?{" "}
-            <Link to="/login" className="register-link">
+            <Link
+              to="/login"
+              className="register-link"
+            >
               Sign in
             </Link>
           </p>
 
-          <form onSubmit={handleSubmit} className="register-form">
+          <form
+            onSubmit={handleSubmit}
+            className="register-form"
+          >
 
             {/* NAME */}
             <div className="register-name-grid">
 
               <div>
+
                 <label className="register-label">
                   First Name
                 </label>
@@ -132,9 +158,11 @@ export default function RegisterPage() {
                     })
                   }
                 />
+
               </div>
 
               <div>
+
                 <label className="register-label">
                   Last Name
                 </label>
@@ -151,12 +179,14 @@ export default function RegisterPage() {
                     })
                   }
                 />
+
               </div>
 
             </div>
 
             {/* EMAIL */}
             <div>
+
               <label className="register-label">
                 Email Address
               </label>
@@ -173,10 +203,12 @@ export default function RegisterPage() {
                   })
                 }
               />
+
             </div>
 
             {/* PASSWORD */}
             <div>
+
               <label className="register-label">
                 Password
               </label>
@@ -193,10 +225,12 @@ export default function RegisterPage() {
                   })
                 }
               />
+
             </div>
 
             {/* CONFIRM PASSWORD */}
             <div>
+
               <label className="register-label">
                 Confirm Password
               </label>
@@ -213,6 +247,7 @@ export default function RegisterPage() {
                   })
                 }
               />
+
             </div>
 
             {/* CHECKBOX */}
@@ -232,11 +267,17 @@ export default function RegisterPage() {
 
               <p className="register-checkbox-text">
                 I agree to the{" "}
-                <Link to="/" className="register-policy-link">
+                <Link
+                  to="/"
+                  className="register-policy-link"
+                >
                   Terms of Service
                 </Link>{" "}
                 and{" "}
-                <Link to="/" className="register-policy-link">
+                <Link
+                  to="/"
+                  className="register-policy-link"
+                >
                   Privacy Policy
                 </Link>
               </p>
@@ -258,82 +299,83 @@ export default function RegisterPage() {
               className="register-submit-btn"
               disabled={loading}
             >
+
               {
                 loading
                   ? "Loading..."
                   : "Create Account"
               }
+
             </button>
 
             {/* DIVIDER */}
             <div className="register-divider">
+
               <div className="register-divider-line"></div>
 
               <span>Or</span>
 
               <div className="register-divider-line"></div>
+
             </div>
 
             {/* GOOGLE BUTTON */}
             <div className="google-login-wrapper">
 
-              <div className="google-login-wrapper">
+              <GoogleLogin
 
-                <GoogleLogin
+                onSuccess={async (credentialResponse) => {
 
-                  onSuccess={async (credentialResponse) => {
+                  try {
 
-                    try {
+                    const response = await googleLogin(
+                      credentialResponse.credential
+                    )
 
-                      // LOGIN GOOGLE KE BACKEND
-                      const response = await googleLogin(
-                        credentialResponse.credential
-                      )
+                    login(response.token)
 
-                      // SIMPAN TOKEN
-                      login(response.token)
+                    const me = await getMe(response.token)
 
-                      // AMBIL USER
-                      const me = await getMe(response.token)
+                    if (
+                      !me.profile ||
+                      !me.profile.isCompleted
+                    ) {
 
-                      // CEK ONBOARDING
-                      if (
-                        !me.profile ||
-                        !me.profile.isCompleted
-                      ) {
+                      navigate("/onboarding")
 
-                        navigate("/onboarding")
+                    } else {
 
-                      } else {
-
-                        navigate("/dashboard")
-
-                      }
-
-                    } catch (error) {
-
-                      console.error(error)
-
-                      setError(error.message)
+                      navigate("/dashboard")
 
                     }
-                  }}
 
-                  onError={() => {
+                  } catch (error) {
 
-                    setError("Google login failed")
+                    console.error(error)
 
-                  }}
+                    setError(error.message)
 
-                />
+                  }
 
-              </div>
+                }}
+
+                onError={() => {
+
+                  setError("Google login failed")
+
+                }}
+
+              />
 
             </div>
 
           </form>
+
         </div>
+
       </div>
+
     </div>
+
   )
 }

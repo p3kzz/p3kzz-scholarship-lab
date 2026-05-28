@@ -14,6 +14,8 @@
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:16px;
+
   margin-bottom:78px;
 }
 
@@ -361,12 +363,6 @@
     padding:36px 22px 60px;
   }
 
-  .pf-topbar{
-    flex-direction:column;
-    gap:16px;
-    align-items:flex-start;
-  }
-
   .pf-header{
     flex-direction:column;
     align-items:flex-start;
@@ -374,13 +370,42 @@
 
 }
 
-
-
 /* =========================
    LAPTOP
 ========================= */
 
 @media (max-width: 1200px){
+
+  .pf-wrap{
+    padding:50px 56px 80px;
+  }
+
+  .pf-topbar{
+    margin-bottom:60px;
+  }
+
+  .pf-card{
+    padding:22px 26px 26px;
+  }
+
+  .pf-header{
+    gap:28px;
+  }
+
+  .pf-avatar{
+    width:96px;
+    height:96px;
+
+    font-size:44px;
+  }
+
+  .pf-name{
+    font-size:22px;
+  }
+
+  .pf-email{
+    font-size:16px;
+  }
 
 }
 
@@ -390,6 +415,40 @@
 
 @media (max-width: 992px){
 
+  .pf-wrap{
+    padding:42px 34px 70px;
+  }
+
+  .pf-grid{
+    grid-template-columns:1fr;
+  }
+
+  .pf-topbar{
+    margin-bottom:46px;
+  }
+
+  .pf-card{
+    padding:22px 24px 26px;
+  }
+
+  .pf-row{
+    gap:18px;
+  }
+
+  .pf-row span{
+    font-size:15px;
+  }
+
+  .pf-cv-file{
+    height:auto;
+
+    padding:14px 16px;
+
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
 }
 
 /* =========================
@@ -398,6 +457,132 @@
 
 @media (max-width: 768px){
 
+  .pf-wrap{
+    padding:32px 20px 56px;
+  }
+
+  /* INI YG DIBENERIN */
+  .pf-topbar{
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:38px;
+  }
+
+  .pf-top-btn{
+    flex:1;
+
+    width:auto;
+    height:48px;
+
+    padding:0 12px;
+
+    font-size:13px;
+
+    white-space:nowrap;
+  }
+
+  .pf-header{
+    flex-direction:column;
+    align-items:center;
+
+    text-align:center;
+
+    gap:22px;
+  }
+
+  .pf-user{
+    align-items:center;
+  }
+
+  .pf-avatar{
+    width:88px;
+    height:88px;
+
+    font-size:38px;
+  }
+
+  .pf-name{
+    font-size:22px;
+  }
+
+  .pf-email{
+    font-size:15px;
+
+    margin-bottom:14px;
+
+    word-break:break-word;
+  }
+
+  .pf-badges{
+    justify-content:center;
+
+    gap:10px;
+  }
+
+  .pf-badge{
+    height:34px;
+
+    padding:0 14px;
+
+    font-size:14px;
+  }
+
+  .pf-progress-card{
+    padding:18px 18px 16px;
+  }
+
+  .pf-card{
+    padding:20px 18px 24px;
+  }
+
+  .pf-card-title,
+  .pf-section-title{
+    font-size:16px;
+  }
+
+  .pf-row{
+    flex-direction:column;
+    align-items:flex-start;
+
+    gap:6px;
+
+    margin-bottom:16px;
+  }
+
+  .pf-row span:last-child{
+    text-align:left;
+  }
+
+  .pf-achievement{
+    font-size:15px;
+  }
+
+  .pf-tags{
+    gap:10px;
+  }
+
+  .pf-tag{
+    height:36px;
+
+    padding:0 14px;
+
+    font-size:14px;
+  }
+
+  .pf-cv-sub{
+    font-size:15px;
+  }
+
+  .pf-cv-btn{
+    height:46px;
+
+    font-size:15px;
+  }
+
 }
 
 /* =========================
@@ -405,5 +590,92 @@
 ========================= */
 
 @media (max-width: 480px){
+
+  .pf-wrap{
+    padding:24px 14px 48px;
+  }
+
+  .pf-topbar{
+    gap:8px;
+  }
+
+  .pf-top-btn{
+    height:46px;
+
+    font-size:12px;
+
+    padding:0 10px;
+  }
+
+  .pf-avatar{
+    width:74px;
+    height:74px;
+
+    font-size:30px;
+  }
+
+  .pf-name{
+    font-size:20px;
+  }
+
+  .pf-email{
+    font-size:14px;
+  }
+
+  .pf-badge{
+    width:100%;
+
+    justify-content:center;
+  }
+
+  .pf-badges{
+    width:100%;
+
+    flex-direction:column;
+  }
+
+  .pf-progress-head{
+    font-size:15px;
+  }
+
+  .pf-progress-text{
+    font-size:15px;
+  }
+
+  .pf-card{
+    border-radius:18px;
+
+    padding:18px 16px 22px;
+  }
+
+  .pf-card-title,
+  .pf-section-title{
+    font-size:15px;
+  }
+
+  .pf-row span{
+    font-size:14px;
+    line-height:1.5;
+  }
+
+  .pf-achievement{
+    font-size:14px;
+  }
+
+  .pf-tag{
+    width:100%;
+    justify-content:center;
+  }
+
+  .pf-cv-file span{
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .pf-cv-btn{
+    height:44px;
+
+    font-size:14px;
+  }
 
 }
