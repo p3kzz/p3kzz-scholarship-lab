@@ -1180,6 +1180,125 @@ select {
   }
 }
 
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+
+/* TABLET */
+
+@media (max-width: 992px){
+
+  .logout-card{
+    max-width: 480px;
+
+    padding: 44px 36px;
+
+    border-radius: 30px;
+  }
+
+  .logout-title{
+    font-size: 42px;
+
+    margin-bottom: 18px;
+  }
+
+  .logout-desc{
+    font-size: 17px;
+
+    margin-bottom: 32px;
+  }
+
+  .logout-confirm-btn,
+  .logout-cancel-btn{
+    height: 62px;
+
+    font-size: 22px;
+  }
+
+}
+
+/* MOBILE */
+
+@media (max-width: 768px){
+
+  .logout-overlay{
+    padding: 18px;
+  }
+
+  .logout-card{
+    max-width: 100%;
+
+    padding: 34px 24px;
+
+    border-radius: 24px;
+  }
+
+  .logout-title{
+    font-size: 34px;
+
+    margin-bottom: 14px;
+
+    line-height: 1.2;
+  }
+
+  .logout-desc{
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    margin-bottom: 26px;
+  }
+
+  .logout-confirm-btn,
+  .logout-cancel-btn{
+    height: 54px;
+
+    border-radius: 12px;
+
+    font-size: 18px;
+  }
+
+  .logout-cancel-btn{
+    margin-top: 14px;
+  }
+
+}
+
+/* SMALL MOBILE */
+
+@media (max-width: 480px){
+
+  .logout-overlay{
+    padding: 14px;
+  }
+
+  .logout-card{
+    padding: 28px 18px;
+
+    border-radius: 20px;
+  }
+
+  .logout-title{
+    font-size: 28px;
+  }
+
+  .logout-desc{
+    font-size: 14px;
+
+    margin-bottom: 22px;
+  }
+
+  .logout-confirm-btn,
+  .logout-cancel-btn{
+    height: 50px;
+
+    font-size: 15px;
+
+    border-radius: 10px;
+  }
+
+}
+
 /* ─────────────────────────────────────────────
    RESPONSIVE
 ───────────────────────────────────────────── */
@@ -1507,7 +1626,6 @@ select {
   box-shadow:none !important;
 }
 
-/* hanya tombol google */
 .google-login-wrapper > div > div{
   border:1px solid #2D5016 !important;
   border-radius:12px !important;
@@ -2013,7 +2131,6 @@ select {
   box-shadow:none !important;
 }
 
-/* hanya tombol google */
 .google-login-wrapper > div > div{
   border:1px solid #2D5016 !important;
   border-radius:12px !important;

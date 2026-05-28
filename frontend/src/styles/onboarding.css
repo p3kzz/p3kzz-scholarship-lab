@@ -31,6 +31,7 @@
   margin-bottom: 10px;
   margin-top: 64px;
 }
+
 .ob-sub {
   font-size: 15px;
   color: #3d5a38;
@@ -40,6 +41,7 @@
 }
 
 /* ── METHOD CARDS ── */
+
 .ob-method-card {
   background: #fff;
   border: 1.5px solid #d0e8cc;
@@ -52,13 +54,16 @@
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 }
+
 .ob-method-card:hover {
   border-color: #3d7a38;
 }
+
 .ob-method-card.selected {
   border-color: #253900;
   background: #f5fbf4;
 }
+
 .ob-method-card-title {
   font-size: 18px;
   font-weight: 700;
@@ -68,6 +73,7 @@
   gap: 10px;
   margin-bottom: 8px;
 }
+
 .ob-method-tag {
   font-size: 11px;
   font-weight: 600;
@@ -77,11 +83,13 @@
   border-radius: 100px;
   padding: 2px 10px;
 }
+
 .ob-method-card-desc {
   font-size: 14px;
   color: #5a7a55;
   line-height: 1.6;
 }
+
 .ob-radio {
   width: 32px;
   height: 32px;
@@ -92,6 +100,7 @@
   justify-content: center;
   flex-shrink: 0;
 }
+
 .ob-radio-inner {
   width: 18px;
   height: 18px;
@@ -100,6 +109,7 @@
 }
 
 /* ── CV UPLOAD ── */
+
 .ob-dropzone {
   background: #fff;
   border: 1.5px solid #d0e8cc;
@@ -110,25 +120,30 @@
   transition: border-color 0.2s, background 0.2s;
   margin-bottom: 16px;
 }
+
 .ob-dropzone:hover {
   border-color: #3d7a38;
   background: #f5fbf4;
 }
+
 .ob-dropzone.dragover {
   border-color: #08CB00;
   background: #f0faf0;
 }
+
 .ob-dropzone-title {
   font-size: 20px;
   font-weight: 500;
   color: #2d5a27;
   margin-bottom: 8px;
 }
+
 .ob-dropzone-sub {
   font-size: 15px;
   color: #5a7a55;
   margin-bottom: 20px;
 }
+
 .ob-dropzone-badge {
   display: inline-block;
   background: #fff;
@@ -139,6 +154,7 @@
   font-weight: 600;
   color: #3d5a38;
 }
+
 .ob-loading-bar {
   background: #d8ead4;
   border: 1.5px solid #c0ddb8;
@@ -149,6 +165,7 @@
   gap: 16px;
   margin-bottom: 16px;
 }
+
 .ob-loading-spinner {
   width: 32px;
   height: 32px;
@@ -158,32 +175,43 @@
   animation: spin 0.8s linear infinite;
   flex-shrink: 0;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .ob-loading-text {
   font-size: 15px;
   font-weight: 500;
   color: #2d5a27;
 }
+
 .ob-loading-sub {
   font-size: 13px;
   color: #5a7a55;
   margin-top: 2px;
 }
+
 .ob-divider {
   display: flex;
   align-items: center;
   gap: 16px;
   margin: 20px 0;
 }
+
 .ob-divider-line {
   flex: 1;
   height: 1px;
   background: #c8dfc4;
 }
+
 .ob-divider-text {
   font-size: 14px;
   color: #7a9a76;
 }
+
 .ob-manual-btn {
   width: 100%;
   background: #fff;
@@ -198,17 +226,20 @@
   font-family: 'DM Sans', sans-serif;
   transition: background 0.2s, border-color 0.2s;
 }
+
 .ob-manual-btn:hover {
   background: #f5fbf4;
   border-color: #3d7a38;
 }
 
 /* ── FOOTER BUTTONS ── */
+
 .ob-footer {
   display: flex;
   gap: 14px;
   margin-top: 36px;
 }
+
 .ob-btn-back {
   width: 200px;
   height: 56px;
@@ -222,6 +253,7 @@
   font-family: 'DM Sans', sans-serif;
   flex-shrink: 0;
 }
+
 .ob-btn-continue {
   flex: 1;
   height: 56px;
@@ -235,7 +267,11 @@
   font-family: 'DM Sans', sans-serif;
   transition: background 0.2s;
 }
-.ob-btn-continue:hover { background: #1a2a00; }
+
+.ob-btn-continue:hover {
+  background: #1a2a00;
+}
+
 .ob-btn-continue-full {
   width: 100%;
   height: 56px;
@@ -250,16 +286,42 @@
   margin-top: 36px;
   transition: background 0.2s;
 }
-.ob-btn-continue-full:hover { background: #1a2a00; }
 
-
-
+.ob-btn-continue-full:hover {
+  background: #1a2a00;
+}
 
 /* =========================
    LAPTOP
 ========================= */
 
 @media (max-width: 1200px){
+
+  .ob-wrap{
+    padding: 30px 38px 42px;
+  }
+
+  .ob-badge{
+    top: 30px;
+    right: 38px;
+  }
+
+  .ob-title{
+    font-size: 26px;
+  }
+
+  .ob-sub{
+    font-size: 14px;
+    max-width: 680px;
+  }
+
+  .ob-method-card{
+    padding: 24px 26px;
+  }
+
+  .ob-dropzone{
+    padding: 50px 28px;
+  }
 
 }
 
@@ -269,6 +331,89 @@
 
 @media (max-width: 992px){
 
+  .ob-wrap{
+    padding: 28px 28px 40px;
+  }
+
+  .ob-badge{
+    top: 24px;
+    right: 28px;
+
+    padding: 8px 16px;
+
+    font-size: 13px;
+  }
+
+  .ob-title{
+    margin-top: 74px;
+
+    font-size: 24px;
+
+    line-height: 1.3;
+  }
+
+  .ob-sub{
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    margin-bottom: 30px;
+
+    max-width: 100%;
+  }
+
+  .ob-method-card{
+    padding: 22px;
+
+    gap: 18px;
+  }
+
+  .ob-method-card-title{
+    font-size: 17px;
+
+    flex-wrap: wrap;
+  }
+
+  .ob-method-card-desc{
+    font-size: 13px;
+  }
+
+  .ob-radio{
+    width: 28px;
+    height: 28px;
+  }
+
+  .ob-radio-inner{
+    width: 14px;
+    height: 14px;
+  }
+
+  .ob-dropzone{
+    padding: 42px 24px;
+  }
+
+  .ob-dropzone-title{
+    font-size: 18px;
+  }
+
+  .ob-dropzone-sub{
+    font-size: 14px;
+  }
+
+  .ob-loading-bar{
+    padding: 16px 18px;
+  }
+
+  .ob-manual-btn{
+    padding: 18px;
+
+    font-size: 16px;
+  }
+
+  .ob-btn-back{
+    width: 170px;
+  }
+
 }
 
 /* =========================
@@ -277,6 +422,29 @@
 
 @media (max-width: 768px){
 
+  .ob-footer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 12px;
+
+    margin-top: 28px;
+  }
+
+  .ob-btn-back,
+  .ob-btn-continue{
+    width: 100%;
+    min-width: 0;
+
+    height: 52px;
+
+    font-size: 15px;
+  }
+
+  .ob-btn-back{
+    flex: unset;
+  }
+
 }
 
 /* =========================
@@ -284,5 +452,100 @@
 ========================= */
 
 @media (max-width: 480px){
+
+  .ob-wrap{
+    padding: 20px 14px 30px;
+  }
+
+  .ob-badge{
+    top: 16px;
+    right: 14px;
+
+    padding: 6px 12px;
+
+    font-size: 11px;
+
+    max-width: 120px;
+
+    text-align: center;
+  }
+
+  .ob-title{
+    margin-top: 68px;
+
+    font-size: 20px;
+
+    padding-right: 120px;
+  }
+
+  .ob-sub{
+    font-size: 13px;
+  }
+
+  .ob-method-card{
+    flex-direction: column;
+
+    padding: 16px 14px;
+  }
+
+  .ob-method-card-title{
+    font-size: 15px;
+  }
+
+  .ob-method-card-desc{
+    font-size: 12px;
+  }
+
+  .ob-radio{
+    margin-top: 4px;
+  }
+
+  .ob-dropzone{
+    padding: 28px 14px;
+  }
+
+  .ob-dropzone-title{
+    font-size: 16px;
+  }
+
+  .ob-dropzone-sub{
+    font-size: 12px;
+  }
+
+  .ob-dropzone-badge{
+    width: 100%;
+
+    font-size: 11px;
+
+    padding: 8px 12px;
+  }
+
+  .ob-loading-bar{
+    align-items: flex-start;
+  }
+
+  .ob-loading-text{
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .ob-loading-sub{
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .ob-manual-btn{
+    font-size: 14px;
+
+    padding: 15px 14px;
+  }
+
+  .ob-btn-back,
+  .ob-btn-continue,
+  .ob-btn-continue-full{
+    height: 48px;
+
+    font-size: 14px;
+  }
 
 }

@@ -544,66 +544,41 @@
   background:#233F12;
 }
 
-/* ─────────────────────────────────────────
-   RESPONSIVE
-───────────────────────────────────────── */
-
-@media (max-width:1100px){
-
-  .step-wrap{
-    padding:40px 24px 56px;
-  }
-
-  .step-form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .step-footer{
-    flex-direction:column;
-  }
-
-  .step-btn-back,
-  .step-btn-continue{
-    width:100%;
-  }
-
-  .step-badge{
-    top:40px;
-    right:24px;
-  }
-}
-
-@media (max-width:640px){
-
-  .step-wrap{
-    padding:24px 16px 40px;
-  }
-
-  .step-badge{
-    position:static;
-    margin-left:auto;
-    margin-bottom:26px;
-    width:fit-content;
-  }
-
-  .step-calendar{
-    width:100%;
-  }
-
-  .step-progress,
-  .step-labels{
-    gap:8px;
-  }
-}
-
-
-
-
 /* =========================
    LAPTOP
 ========================= */
 
 @media (max-width: 1200px){
+
+  .step-wrap{
+    padding:48px 42px 60px;
+  }
+
+  .step-badge{
+    top:48px;
+    right:42px;
+  }
+
+  .step-progress{
+    margin-top:78px;
+  }
+
+  .step-form-grid{
+    gap:26px 18px;
+  }
+
+  .step-btn-back{
+    width:220px;
+    height:64px;
+
+    font-size:20px;
+  }
+
+  .step-btn-continue{
+    height:64px;
+
+    font-size:20px;
+  }
 
 }
 
@@ -613,6 +588,86 @@
 
 @media (max-width: 992px){
 
+  .step-wrap{
+    padding:38px 28px 52px;
+  }
+
+  .step-badge{
+    top:38px;
+    right:28px;
+
+    height:44px;
+
+    padding:0 18px;
+
+    font-size:13px;
+  }
+
+  .step-progress{
+    margin-top:74px;
+
+    gap:10px;
+  }
+
+  .step-labels{
+    gap:10px;
+
+    margin-bottom:34px;
+  }
+
+  .step-label{
+    font-size:13px;
+  }
+
+  .step-form-grid{
+    grid-template-columns:1fr;
+
+    gap:22px;
+  }
+
+  .step-input,
+  .step-dropdown-trigger,
+  .step-date-trigger{
+    height:52px;
+
+    font-size:15px;
+  }
+
+  .step-toggle-group{
+    height:52px;
+  }
+
+  .step-toggle-opt{
+    font-size:14px;
+  }
+
+  .step-eco-opt{
+    min-height:52px;
+
+    font-size:14px;
+  }
+
+  .step-footer{
+    gap:16px;
+
+    margin-top:42px;
+  }
+
+  .step-btn-back{
+    width:180px;
+    height:56px;
+
+    font-size:17px;
+
+    flex-shrink:0;
+  }
+
+  .step-btn-continue{
+    height:56px;
+
+    font-size:17px;
+  }
+
 }
 
 /* =========================
@@ -621,6 +676,118 @@
 
 @media (max-width: 768px){
 
+  .step-wrap{
+    padding:24px 18px 40px;
+  }
+
+  .step-badge{
+    position:absolute;
+
+    top:24px;
+    right:18px;
+
+    height:40px;
+
+    padding:0 14px;
+
+    font-size:12px;
+  }
+
+  .step-progress{
+    margin-top:72px;
+
+    gap:8px;
+  }
+
+  .step-labels{
+    gap:8px;
+
+    margin-bottom:28px;
+  }
+
+  .step-label{
+    font-size:11px;
+  }
+
+  .step-form-grid{
+    gap:18px;
+  }
+
+  .step-label-text{
+    font-size:11px;
+
+    margin-bottom:8px;
+  }
+
+  .step-input,
+  .step-dropdown-trigger,
+  .step-date-trigger{
+    height:50px;
+
+    padding:0 14px;
+
+    font-size:14px;
+  }
+
+  .step-toggle-group{
+    height:50px;
+  }
+
+  .step-toggle-opt{
+    font-size:13px;
+  }
+
+  .step-eco-opt{
+    min-height:50px;
+
+    padding:0 14px;
+
+    gap:10px;
+
+    font-size:13px;
+  }
+
+  .step-calendar{
+    width:100%;
+    left:0;
+  }
+
+  .step-cal-day,
+  .step-cal-dow{
+    width:100%;
+    height:36px;
+
+    font-size:12px;
+  }
+
+  .step-footer{
+    flex-direction:row;
+
+    gap:12px;
+
+    margin-top:34px;
+  }
+
+  .step-btn-back,
+  .step-btn-continue{
+    height:50px;
+
+    font-size:15px;
+  }
+
+  .step-btn-back{
+    width:35%;
+    min-width:110px;
+    max-width:140px;
+
+    flex:unset;
+  }
+
+  .step-btn-continue{
+    flex:1;
+    min-width:0;
+  }
+
 }
 
 /* =========================
@@ -628,5 +795,71 @@
 ========================= */
 
 @media (max-width: 480px){
+
+  .step-wrap{
+    padding:20px 14px 32px;
+  }
+
+  .step-badge{
+    top:20px;
+    right:14px;
+
+    height:36px;
+
+    padding:0 12px;
+
+    font-size:11px;
+  }
+
+  .step-progress{
+    margin-top:66px;
+  }
+
+  .step-label{
+    font-size:10px;
+  }
+
+  .step-input,
+  .step-dropdown-trigger,
+  .step-date-trigger{
+    height:48px;
+
+    font-size:13px;
+  }
+
+  .step-toggle-group{
+    height:48px;
+  }
+
+  .step-toggle-opt{
+    font-size:12px;
+  }
+
+  .step-eco-opt{
+    min-height:48px;
+
+    font-size:12px;
+  }
+
+  .step-footer{
+    gap:10px;
+  }
+
+  .step-btn-back,
+  .step-btn-continue{
+    height:48px;
+
+    font-size:14px;
+  }
+
+  .step-btn-back{
+    width:34%;
+    min-width:96px;
+    max-width:120px;
+  }
+
+  .step-calendar{
+    padding:12px;
+  }
 
 }
