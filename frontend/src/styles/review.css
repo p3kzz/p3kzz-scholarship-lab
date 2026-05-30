@@ -259,13 +259,15 @@
 
 .rv-footer{
   display:flex;
-  gap:36px;
+  gap:12px;
 
   margin-top:56px;
+
+  width:100%;
 }
 
 .rv-btn-back{
-  width:250px;
+  flex:0 0 180px;
   height:72px;
 
   border-radius:10px;
@@ -456,30 +458,240 @@
    LAPTOP
 ========================= */
 
-@media (max-width: 1200px){
+@media (max-width:1200px){
 
+  .rv-wrap{
+    padding:48px 40px 64px;
+  }
+
+  .rv-badge{
+    top:48px;
+    right:40px;
+  }
+
+  .rv-grid{
+    gap:18px;
+  }
+
+  .proc-title{
+    font-size:36px;
+  }
+
+  .proc-step{
+    font-size:22px;
+  }
 }
 
 /* =========================
    TABLET
 ========================= */
 
-@media (max-width: 992px){
+@media (max-width:992px){
 
+  .rv-wrap{
+    padding:40px 24px 56px;
+  }
+
+  .rv-badge{
+    position:static;
+    width:max-content;
+
+    margin-left:auto;
+    margin-bottom:24px;
+  }
+
+  .rv-grid{
+    grid-template-columns:1fr;
+  }
+
+  /* BUTTON TETAP HORIZONTAL */
+
+  .rv-footer{
+    display:flex;
+    flex-direction:row;
+    gap:12px;
+  }
+
+  .rv-btn-back{
+    flex:0 0 160px;
+  }
+
+  .rv-btn-continue{
+    flex:1;
+  }
+
+  .proc-title{
+    font-size:32px;
+  }
+
+  .proc-sub{
+    font-size:16px;
+    margin-bottom:48px;
+  }
+
+  .proc-step{
+    height:68px;
+    font-size:20px;
+    padding:0 20px;
+  }
 }
 
 /* =========================
    MOBILE
 ========================= */
 
-@media (max-width: 768px){
+@media (max-width:768px){
 
+  .rv-wrap{
+    padding:24px 16px 40px;
+  }
+
+  .rv-title{
+    font-size:28px;
+  }
+
+  .rv-sub{
+    font-size:15px;
+  }
+
+  .rv-card{
+    padding:18px;
+  }
+
+  .rv-card-head{
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .rv-row{
+    gap:12px;
+  }
+
+  .rv-row-key{
+    font-size:13px;
+  }
+
+  .rv-row-val{
+    font-size:13px;
+    text-align:right;
+  }
+
+  /* BUTTON TETAP SAMPINGAN */
+
+  .rv-footer{
+    gap:10px;
+  }
+
+  .rv-btn-back{
+    flex:0 0 120px;
+    height:60px;
+    font-size:20px;
+  }
+
+  .rv-btn-continue{
+    flex:1;
+    height:60px;
+    font-size:20px;
+  }
+
+  /* PROCESSING */
+
+  .proc-spinner-svg{
+    width:90px;
+    height:90px;
+  }
+
+  .proc-title{
+    font-size:28px;
+  }
+
+  .proc-sub{
+    font-size:15px;
+    line-height:1.7;
+  }
+
+  .proc-step{
+    height:64px;
+    font-size:18px;
+    border-radius:18px;
+  }
+
+  .proc-step-loader{
+    width:24px;
+    height:24px;
+    margin-right:14px;
+  }
 }
 
 /* =========================
    SMALL MOBILE
 ========================= */
 
-@media (max-width: 480px){
+@media (max-width:480px){
 
+  .rv-title{
+    font-size:24px;
+  }
+
+  .rv-notice{
+    padding:14px;
+    font-size:13px;
+  }
+
+  .rv-card{
+    padding:16px;
+    border-radius:18px;
+  }
+
+  .rv-row{
+    gap:10px;
+  }
+
+  .rv-row-key{
+    font-size:12px;
+  }
+
+  .rv-row-val{
+    font-size:12px;
+    text-align:right;
+  }
+
+  /* BUTTON KAYAK STEP 1-3 */
+
+  .rv-footer{
+    gap:8px;
+  }
+
+  .rv-btn-back{
+    flex:0 0 105px;
+    height:56px;
+    font-size:18px;
+  }
+
+  .rv-btn-continue{
+    flex:1;
+    height:56px;
+    font-size:18px;
+  }
+
+  /* PROCESSING */
+
+  .proc-title{
+    font-size:24px;
+  }
+
+  .proc-sub{
+    font-size:14px;
+  }
+
+  .proc-step{
+    height:60px;
+    font-size:16px;
+    padding:0 16px;
+  }
+
+  .proc-step-loader{
+    width:22px;
+    height:22px;
+  }
 }

@@ -10,7 +10,7 @@
 
   background:#DFF0DD;
 
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 /* ─────────────────────────────────────────────
@@ -22,14 +22,13 @@
 
   margin-left:240px;
 
-  width:auto;
   min-width:0;
 
   position:relative;
 
-  padding:40px 48px 40px;
+  padding:40px 48px;
 
-  overflow:hidden;
+  overflow-x:hidden;
 }
 
 /* BG CIRCLE */
@@ -604,10 +603,81 @@
 }
 
 /* =========================
+   SIDEBAR FIX
+========================= */
+
+.sidebar{
+  position:fixed;
+
+  top:0;
+  left:0;
+
+  width:240px;
+  height:100vh;
+
+  z-index:1200;
+}
+
+/* =========================
    LAPTOP
 ========================= */
 
 @media (max-width:1200px){
+
+  .match-page{
+    flex-direction:column;
+  }
+
+  .match-main{
+    margin-left:0 !important;
+    width:100%;
+
+    padding:100px 28px 40px;
+  }
+
+  /* HAMBURGER */
+
+  .match-mobile-menu{
+    position:fixed;
+    top:18px;
+    left:18px;
+
+    z-index:9999;
+
+    width:48px;
+    height:48px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#07A94D;
+    color:#fff;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.16);
+  }
+
+  .match-mobile-menu svg{
+    width:22px;
+    height:22px;
+    fill:#fff;
+  }
+
+  /* SIDEBAR MOBILE */
+
+  .sidebar{
+    left:-100%;
+    transition:left .28s ease;
+  }
+
+  .sidebar.mobile-open{
+    left:0;
+  }
 
   .match-title{
     font-size:58px;
@@ -619,7 +689,7 @@
 
   .match-card-left{
     border-right:none;
-    border-bottom:1px solid rgba(85,85,85,0.18);
+    border-bottom:1px solid rgba(85,85,85,.18);
 
     padding-bottom:36px;
   }
@@ -641,7 +711,7 @@
 @media (max-width:992px){
 
   .match-main{
-    padding:36px 28px;
+    padding:100px 24px 40px;
   }
 
   .match-title{
@@ -664,47 +734,7 @@
 
 @media (max-width:768px){
 
-  .match-page{
-    flex-direction:column;
-  }
-
-  .match-mobile-menu{
-    position:fixed;
-    top:18px;
-    left:18px;
-
-    z-index:9999;
-
-    width:48px;
-    height:48px;
-
-    border:none;
-    border-radius:14px;
-
-    background:#07A94D;
-    color:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.16);
-  }
-
-  .match-mobile-menu svg{
-    width:22px;
-    height:22px;
-
-    fill:white;
-  }
-
   .match-main{
-    width:100% !important;
-
-    margin-left:0 !important;
-
     padding:
       110px
       18px
@@ -737,6 +767,7 @@
 
   .match-buttons{
     flex-direction:column;
+    gap:12px;
   }
 
   .match-detail-btn,
