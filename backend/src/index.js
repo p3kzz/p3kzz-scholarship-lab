@@ -7,6 +7,13 @@ const cors = require('cors');
 const prisma = require('./lib/prisma');
 const authController = require('./controllers/authController');
 const profileController = require('./controllers/profileController')
+const feedbackController = require("./controllers/feedbackController")
+const aiController =
+    require("./controllers/aiController")
+const recommendationController =
+    require(
+        "./controllers/recommendationController"
+    )
 const authMiddleware = require('./middleware/auth');
 
 
@@ -42,6 +49,21 @@ app.get('/me', authMiddleware, async (req, res) => {
 });
 
 app.post('/onboarding', authMiddleware, profileController.completeOnboarding)
+app.post('/feedback', authMiddleware, feedbackController.createFeedback)
+app.get('/feedback/status/:scholarshipId', authMiddleware, feedbackController.getFeedbackStatus)
+app.get(
+    "/ai/health",
+    aiController.health
+)
+app.get(
+
+    "/recommendations",
+
+    authMiddleware,
+
+    recommendationController.getRecommendations
+)
+
 
 
 app.listen(3000, () => {
