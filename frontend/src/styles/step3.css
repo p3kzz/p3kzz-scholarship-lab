@@ -726,13 +726,23 @@
 
 
 
-
-
 /* =========================
    LAPTOP
 ========================= */
 
 @media (max-width: 1200px){
+
+  .s3-wrap{
+    padding:48px 42px 60px;
+  }
+
+  .s3-badge{
+    right:42px;
+  }
+
+  .s3-counter-text{
+    font-size:18px;
+  }
 
 }
 
@@ -742,6 +752,82 @@
 
 @media (max-width: 992px){
 
+  .s3-wrap{
+    padding:38px 28px 50px;
+  }
+
+  .s3-badge{
+    top:38px;
+    right:28px;
+
+    height:42px;
+    font-size:14px;
+  }
+
+  .s3-progress{
+    margin-top:80px;
+  }
+
+  .s3-label{
+    font-size:14px;
+  }
+
+  .s3-counter{
+    height:auto;
+    min-height:68px;
+
+    padding:16px 18px;
+  }
+
+  .s3-counter-text{
+    font-size:17px;
+  }
+
+  .s3-counter-hint{
+    font-size:14px;
+  }
+
+  .s3-card{
+    padding:20px;
+  }
+
+  .s3-card-sub{
+    font-size:15px;
+  }
+
+  .s3-cert-entry{
+    grid-template-columns:1fr 1fr;
+  }
+
+  /* BUTTON */
+
+  .s3-footer{
+    display:flex;
+    flex-direction:row;
+    gap:16px;
+
+    margin-top:40px;
+  }
+
+  .s3-btn-back{
+    width:180px;
+    min-width:180px;
+
+    height:64px;
+    font-size:20px;
+
+    flex:none;
+  }
+
+  .s3-btn-continue{
+    flex:1;
+
+    height:64px;
+    font-size:20px;
+
+    min-width:0;
+  }
+
 }
 
 /* =========================
@@ -749,6 +835,126 @@
 ========================= */
 
 @media (max-width: 768px){
+
+  .s3-wrap{
+    padding:24px 18px 40px;
+  }
+
+  .s3-badge{
+    top:24px;
+    right:18px;
+
+    height:38px;
+    padding:0 16px;
+
+    font-size:13px;
+  }
+
+  .s3-progress{
+    margin-top:78px;
+    gap:8px;
+  }
+
+  .s3-labels{
+    gap:8px;
+    margin-bottom:24px;
+  }
+
+  .s3-label{
+    font-size:12px;
+  }
+
+  .s3-counter{
+    flex-direction:column;
+    align-items:flex-start;
+
+    gap:10px;
+
+    padding:16px;
+  }
+
+  .s3-counter-left{
+    gap:10px;
+  }
+
+  .s3-counter-text{
+    font-size:16px;
+  }
+
+  .s3-counter-hint{
+    font-size:13px;
+  }
+
+  .s3-card{
+    padding:18px;
+    border-radius:18px;
+  }
+
+  .s3-card-title{
+    font-size:14px;
+  }
+
+  .s3-card-sub{
+    font-size:14px;
+  }
+
+  .s3-tag{
+    font-size:13px;
+  }
+
+  /* INPUT + ADD TETAP DESAIN */
+
+  .s3-input{
+    font-size:14px;
+  }
+
+  .s3-add-btn{
+    font-size:14px;
+    padding:0 16px;
+  }
+
+  .s3-cert-entry{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .s3-cert-remove{
+    width:100%;
+  }
+
+  .step-calendar{
+    width:100%;
+    max-width:340px;
+  }
+
+  /* BUTTON */
+
+  .s3-footer{
+    display:flex;
+    flex-direction:row;
+
+    gap:12px;
+    margin-top:32px;
+  }
+
+  .s3-btn-back{
+    width:36%;
+    min-width:110px;
+
+    height:56px;
+    font-size:16px;
+
+    flex:none;
+  }
+
+  .s3-btn-continue{
+    flex:1;
+
+    height:56px;
+    font-size:16px;
+
+    min-width:0;
+  }
 
 }
 
@@ -758,4 +964,114 @@
 
 @media (max-width: 480px){
 
+  .s3-wrap{
+    padding:20px 14px 32px;
+  }
+
+  .s3-badge{
+    top:20px;
+    right:14px;
+
+    height:34px;
+    padding:0 14px;
+
+    font-size:12px;
+  }
+
+  .s3-progress{
+    margin-top:70px;
+  }
+
+  .s3-label{
+    font-size:11px;
+  }
+
+  .s3-counter{
+    padding:14px;
+  }
+
+  .s3-counter-badge{
+    width:30px;
+    height:30px;
+    font-size:13px;
+  }
+
+  .s3-counter-text{
+    font-size:14px;
+  }
+
+  .s3-counter-hint{
+    font-size:12px;
+  }
+
+  .s3-card{
+    padding:14px;
+  }
+
+  .s3-card-title{
+    font-size:13px;
+  }
+
+  .s3-card-sub{
+    font-size:13px;
+  }
+
+  .s3-tag{
+    font-size:12px;
+    padding:6px 10px;
+  }
+
+  .s3-input{
+    font-size:13px;
+  }
+
+  .s3-add-btn{
+    font-size:13px;
+    padding:0 14px;
+  }
+
+  .s3-cert-label{
+    font-size:11px;
+  }
+
+  .s3-cert-input,
+  .s3-cert-select,
+  .s3-date-trigger{
+    height:44px;
+    font-size:13px;
+  }
+
+  .s3-cert-remove{
+    height:44px;
+  }
+
+  /* BUTTON */
+
+  .s3-footer{
+    display:flex;
+    flex-direction:row;
+
+    gap:8px;
+  }
+
+  .s3-btn-back{
+    width:34%;
+    min-width:96px;
+
+    height:52px;
+    font-size:14px;
+
+    flex:none;
+  }
+
+  .s3-btn-continue{
+    flex:1;
+
+    height:52px;
+    font-size:14px;
+
+    min-width:0;
+  }
+
 }
+

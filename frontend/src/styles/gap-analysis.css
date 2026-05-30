@@ -598,14 +598,81 @@
   color:#6D8562;
 }
 
+/* =========================
+   SIDEBAR FIX
+========================= */
+
+.sidebar{
+  position:fixed;
+
+  top:0;
+  left:0;
+
+  width:240px;
+  height:100vh;
+
+  z-index:1200;
+}
+
 /* ===================================================
    LAPTOP
 =================================================== */
 
 @media (max-width:1200px){
 
+  .gap-page{
+    flex-direction:column;
+  }
+
   .gap-main{
-    padding:36px 28px 40px;
+    margin-left:0 !important;
+    width:100%;
+
+    padding:100px 28px 40px;
+  }
+
+  /* HAMBURGER */
+
+  .gap-mobile-menu{
+    position:fixed;
+    top:18px;
+    left:18px;
+
+    z-index:9999;
+
+    width:48px;
+    height:48px;
+
+    border:none;
+    border-radius:14px;
+
+    background:#07A94D;
+    color:white;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.16);
+  }
+
+  .gap-mobile-menu svg{
+    width:22px;
+    height:22px;
+    fill:white;
+  }
+
+  /* SIDEBAR MOBILE */
+
+  .sidebar{
+    left:-100%;
+    transition:left .28s ease;
+  }
+
+  .sidebar.mobile-open{
+    left:0;
   }
 
   .gap-title{
@@ -636,7 +703,7 @@
 @media (max-width:992px){
 
   .gap-main{
-    padding:36px 24px 40px;
+    padding:100px 24px 40px;
   }
 
   .gap-title{
@@ -656,47 +723,7 @@
 
 @media (max-width:768px){
 
-  .gap-page{
-    flex-direction:column;
-  }
-
-  .gap-mobile-menu{
-    position:fixed;
-    top:18px;
-    left:18px;
-
-    z-index:9999;
-
-    width:48px;
-    height:48px;
-
-    border:none;
-    border-radius:14px;
-
-    background:#07A94D;
-    color:white;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    cursor:pointer;
-
-    box-shadow:0 8px 20px rgba(0,0,0,.16);
-  }
-
-  .gap-mobile-menu svg{
-    width:22px;
-    height:22px;
-
-    fill:white;
-  }
-
   .gap-main{
-    width:100% !important;
-
-    margin-left:0 !important;
-
     padding:
       110px
       18px
@@ -705,13 +732,11 @@
 
   .gap-back{
     font-size:14px;
-
     margin-bottom:24px;
   }
 
   .gap-header{
     gap:24px;
-
     margin-bottom:24px;
   }
 
