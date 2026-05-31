@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "../../styles/review.css"
+import { getRecommendations } from "../../api/recommendationApi"
 
 const STEPS = [
   "Profile saved",
@@ -8,18 +9,53 @@ const STEPS = [
   "Generating recommendations..."
 ]
 
+const recommendations =
+  JSON.parse(
+    localStorage.getItem(
+      "recommendations"
+    )
+  ) || []
+console.log(recommendations)
+
 export default function ProcessingPage() {
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(0)
 
   useEffect(() => {
-    const timers = [
-      setTimeout(() => setCurrentStep(1), 1400),
-      setTimeout(() => setCurrentStep(2), 2800),
-      setTimeout(() => navigate("/match"), 5000),
-    ]
 
-    return () => timers.forEach(clearTimeout)
+    async function processRecommendation() {
+
+      try {
+
+        setCurrentStep(1)
+
+        const response =
+          await getRecommendations()
+
+        setCurrentStep(2)
+
+        localStorage.setItem(
+          "recommendations",
+          JSON.stringify(
+            response.recommendations
+          )
+        )
+
+        setTimeout(() => {
+
+          navigate("/match")
+
+        }, 1000)
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    processRecommendation()
+
   }, [navigate])
 
   return (
@@ -69,9 +105,8 @@ export default function ProcessingPage() {
         {STEPS.map((step, index) => (
           <div
             key={step}
-            className={`proc-step ${
-              index === currentStep ? "active" : ""
-            }`}
+            className={`proc-step ${index === currentStep ? "active" : ""
+              }`}
           >
             {index === currentStep && (
               <div className="proc-step-loader">
