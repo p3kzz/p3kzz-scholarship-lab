@@ -181,3 +181,35 @@ exports.completeOnboarding = async (req, res) => {
 
     }
 }
+
+exports.getProfile = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const profile =
+            await prisma.profile.findUnique({
+
+                where: {
+                    userId:
+                        req.user.userId
+                }
+            })
+
+        return res.json(
+            profile
+        )
+
+    } catch (error) {
+
+        console.error(error)
+
+        return res.status(500).json({
+
+            message:
+                "Failed to get profile"
+        })
+    }
+}

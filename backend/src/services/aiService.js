@@ -1,4 +1,9 @@
 const axios = require("axios")
+const FormData = require("form-data")
+const fs = require("fs")
+const {
+    createObjectCsvWriter
+} = require("csv-writer")
 
 const aiApi = axios.create({
     baseURL: process.env.AI_API_URL,
@@ -24,6 +29,31 @@ exports.recommend = async (
             `/recommend?k=${k}`,
 
             payload
+        )
+
+    return data
+}
+
+exports.refresh = async (
+    csvPath
+) => {
+
+    const form =
+        new FormData()
+
+    form.append(
+        "csv_file",
+        fs.createReadStream(csvPath)
+    )
+
+    const { data } =
+        await aiApi.post(
+            "/refresh",
+            form,
+            {
+                headers:
+                    form.getHeaders()
+            }
         )
 
     return data

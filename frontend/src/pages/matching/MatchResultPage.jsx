@@ -1,14 +1,16 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Sidebar from "../../components/layout/Sidebar"
 import "../../styles/match-result.css"
+import { createFeedback, getFeedbackStatus } from "../../api/feedbackApi"
 
 export default function MatchResultPage() {
 
   const navigate = useNavigate()
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
-
+  const [profile, setProfile] = useState(null)
+  const [feedbackStatus, setFeedbackStatus] = useState(null)
   const recommendations =
     JSON.parse(
       localStorage.getItem(
@@ -21,6 +23,129 @@ export default function MatchResultPage() {
   const scholarships =
     recommendations.slice(1)
 
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem("token")
+
+        const response =
+          await fetch(
+            "http://localhost:3000/profile",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          )
+
+        const data =
+          await response.json()
+
+        setProfile(data)
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    fetchProfile()
+
+  }, [])
+
+  useEffect(() => {
+
+    const loadStatus = async () => {
+
+      if (
+        !bestMatch?.scholarship?.id
+      ) return
+
+      try {
+
+        const status =
+          await getFeedbackStatus(
+            bestMatch.scholarship.id
+          )
+
+        setFeedbackStatus(
+          status
+        )
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    loadStatus()
+
+  }, [bestMatch])
+
+  const academicFit =
+    Math.min(
+      100,
+      Math.round(
+        (
+          (bestMatch?.scholarship?.minReportCardAverage
+            ? 90 /
+            bestMatch.scholarship.minReportCardAverage
+            : 1) * 100
+        )
+      )
+    )
+
+  let leadershipFit = 40
+
+  if (
+    profile?.extracurricularText
+  ) {
+
+    leadershipFit += 30
+  }
+
+  if (
+    profile?.olympiadLevel
+  ) {
+
+    leadershipFit += 30
+  }
+
+  leadershipFit =
+    Math.min(
+      leadershipFit,
+      100
+    )
+
+  let languageFit = 100
+
+  if (
+    bestMatch?.scholarship
+      ?.languageRequirements?.length
+  ) {
+
+    languageFit = 60
+  }
+
+  if (
+    profile?.englishScore
+  ) {
+
+    languageFit += 20
+  }
+
+  languageFit =
+    Math.min(
+      languageFit,
+      100
+    )
   return (
     <div className="match-page">
 
@@ -118,13 +243,17 @@ export default function MatchResultPage() {
 
               <div className="match-progress-top">
                 <span>Academic Fit</span>
-                <span className="green">95%</span>
+                <span className="green">
+                  {academicFit}%
+                </span>
               </div>
 
               <div className="match-progress-bar">
                 <div
                   className="match-progress-fill green-fill"
-                  style={{ width: "95%" }}
+                  style={{
+                    width: `${academicFit}%`
+                  }}
                 ></div>
               </div>
 
@@ -134,13 +263,13 @@ export default function MatchResultPage() {
 
               <div className="match-progress-top">
                 <span>Leadership</span>
-                <span className="green">88%</span>
+                <span className="green">{leadershipFit}%</span>
               </div>
 
               <div className="match-progress-bar">
                 <div
                   className="match-progress-fill dark-fill"
-                  style={{ width: "88%" }}
+                  style={{ width: `${leadershipFit}%` }}
                 ></div>
               </div>
 
@@ -150,13 +279,13 @@ export default function MatchResultPage() {
 
               <div className="match-progress-top">
                 <span>Language</span>
-                <span className="green">76%</span>
+                <span className="green">{languageFit}%</span>
               </div>
 
               <div className="match-progress-bar">
                 <div
                   className="match-progress-fill red-fill"
-                  style={{ width: "76%" }}
+                  style={{ width: `${languageFit}%` }}
                 ></div>
               </div>
 
@@ -167,16 +296,78 @@ export default function MatchResultPage() {
 
               <button
                 className="match-detail-btn"
-                onClick={() => navigate("/gap-analysis")}
+                onClick={async () => {
+
+                  try {
+
+                    await createFeedback(
+                      bestMatch.scholarship.id,
+                      "click"
+                    )
+
+                  } catch (error) {
+
+                    console.error(error)
+
+                  }
+
+                  navigate("/gap-analysis")
+                }}
               >
                 View Analysis Details
               </button>
 
               <button
                 className="match-save-btn"
-                onClick={() => navigate("/dashboard")}
+                onClick={async () => {
+
+                  try {
+
+                    await createFeedback(
+                      bestMatch.scholarship.id,
+                      "apply"
+                    )
+
+                    const accepted =
+                      window.confirm(
+                        "Did you successfully apply for this scholarship?"
+                      )
+
+                    if (accepted) {
+
+                      await createFeedback(
+                        bestMatch.scholarship.id,
+                        "accepted"
+                      )
+                    }
+
+                    const status =
+                      await getFeedbackStatus(
+                        bestMatch.scholarship.id
+                      )
+
+                    setFeedbackStatus(
+                      status
+                    )
+
+                  } catch (error) {
+
+                    console.error(error)
+
+                  }
+                }}
               >
-                Save
+
+                {
+                  feedbackStatus?.accepted
+                    ? "Accepted "
+
+                    : feedbackStatus?.applied
+                      ? "Applied "
+
+                      : "Apply"
+                }
+
               </button>
 
             </div>
@@ -268,7 +459,21 @@ export default function MatchResultPage() {
 
                 <button
                   className="match-compare-btn"
-                  onClick={() =>
+                  onClick={async () => {
+
+                    try {
+
+                      await createFeedback(
+                        item.scholarship.id,
+                        "click"
+                      )
+
+                    } catch (error) {
+
+                      console.error(error)
+
+                    }
+
                     navigate(
                       "/gap-analysis",
                       {
@@ -277,7 +482,7 @@ export default function MatchResultPage() {
                         }
                       }
                     )
-                  }
+                  }}
                 >
                   Compare AI →
                 </button>
