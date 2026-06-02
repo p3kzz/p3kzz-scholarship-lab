@@ -1,34 +1,44 @@
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useProfile } from "../../context/ProfileContext"
 import "../../styles/editProfile.css"
 
 const PROVINCES = [
-  "Aceh","Bali","DKI Jakarta","Jawa Barat","Jawa Timur","Jawa Tengah",
-  "Kalimantan Timur","Maluku","Nusa Tenggara Timur","Papua","Papua Barat",
-  "Sulawesi Utara","Sulawesi Selatan","Sumatera Utara","Sumatera Barat",
-  "Sumatera Selatan","Riau","Kepulauan Riau","Lampung","Bengkulu",
-  "Jambi","Bangka Belitung","Kalimantan Barat","Kalimantan Selatan",
-  "Kalimantan Tengah","Kalimantan Utara","Sulawesi Tengah","Sulawesi Tenggara",
-  "Sulawesi Barat","Gorontalo","Maluku Utara","Nusa Tenggara Barat",
-  "Papua Selatan","Lainnya"
+  "Aceh", "Bali", "DKI Jakarta", "Jawa Barat", "Jawa Timur", "Jawa Tengah",
+  "Kalimantan Timur", "Maluku", "Nusa Tenggara Timur", "Papua", "Papua Barat",
+  "Sulawesi Utara", "Sulawesi Selatan", "Sumatera Utara", "Sumatera Barat",
+  "Sumatera Selatan", "Riau", "Kepulauan Riau", "Lampung", "Bengkulu",
+  "Jambi", "Bangka Belitung", "Kalimantan Barat", "Kalimantan Selatan",
+  "Kalimantan Tengah", "Kalimantan Utara", "Sulawesi Tengah", "Sulawesi Tenggara",
+  "Sulawesi Barat", "Gorontalo", "Maluku Utara", "Nusa Tenggara Barat",
+  "Papua Selatan", "Lainnya"
 ]
 
 const ECO_OPTIONS = [
-  "Very Low Income",
-  "Low Income",
-  "Middle Income",
-  "Upper Middle Income",
-  "High Income"
+  {
+    label: "Very Low Income",
+    value: "very_low"
+  },
+  {
+    label: "Low Income",
+    value: "low"
+  },
+  {
+    label: "Middle Income",
+    value: "middle"
+  },
+  {
+    label: "High Income",
+    value: "high"
+  }
 ]
 
 const MONTHS = [
-  "Jan","Feb","Mar","Apr","May","Jun",
-  "Jul","Aug","Sep","Oct","Nov","Dec"
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ]
 
 const DAYS_OF_WEEK = [
-  "Su","Mo","Tu","We","Th","Fr","Sa"
+  "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"
 ]
 
 function getDaysInMonth(month, year) {
@@ -42,57 +52,133 @@ function getFirstDayOfMonth(month, year) {
 export default function EditProfilePage() {
   const navigate = useNavigate()
 
-  const { profile, updateProfile } = useProfile()
+  const [activeTab, setActiveTab] =
+    useState("personal")
 
-  const personal = profile.personal || {}
+  const [fullName, setFullName] =
+    useState("")
 
-  const [activeTab, setActiveTab] = useState("personal")
+  const [province, setProvince] =
+    useState("Jawa Barat")
 
-  const [fullName, setFullName] = useState(
-    personal.fullName || ""
-  )
+  const [gender, setGender] =
+    useState("Male")
 
-  const [province, setProvince] = useState(
-    personal.province || "Jawa Barat"
-  )
+  const [economic, setEconomic] =
+    useState("middle")
 
-  const [gender, setGender] = useState(
-    personal.gender || "Female"
-  )
+  const [region3T, setRegion3T] =
+    useState(false)
 
-  const [economic, setEconomic] = useState(
-    personal.economicBackground || "Very Low Income"
-  )
+  const [photo, setPhoto] =
+    useState(null)
 
-  const [region3T, setRegion3T] = useState(
-    personal.fromUnderrepresentedRegion ?? true
-  )
+  const [dob, setDob] =
+    useState("")
 
-  const [photo, setPhoto] = useState(
-    personal.photo || null
-  )
+  const [provOpen, setProvOpen] =
+    useState(false)
 
-  const [dob, setDob] = useState(
-    personal.dateOfBirth || ""
-  )
+  const provRef =
+    useRef()
 
-  const [provOpen, setProvOpen] = useState(false)
-  const provRef = useRef()
+  const [calOpen, setCalOpen] =
+    useState(false)
 
-  const [calOpen, setCalOpen] = useState(false)
-  const calRef = useRef()
+  const calRef =
+    useRef()
 
-  const [calMonth, setCalMonth] = useState(
-    dob ? new Date(dob).getMonth() : 8
-  )
+  const [calMonth, setCalMonth] =
+    useState(8)
 
-  const [calYear, setCalYear] = useState(
-    dob ? new Date(dob).getFullYear() : 2004
-  )
+  const [calYear, setCalYear] =
+    useState(2004)
 
-  const [selDay, setSelDay] = useState(
-    dob ? new Date(dob).getDate() : 4
-  )
+  const [selDay, setSelDay] =
+    useState(4)
+
+
+  useEffect(() => {
+
+    const loadProfile = async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem(
+            "token"
+          )
+
+        const response =
+          await fetch(
+            "http://localhost:3000/profile",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          )
+
+        const data =
+          await response.json()
+
+        setFullName(
+          data.fullName || ""
+        )
+
+        setProvince(
+          data.province || "Jawa Barat"
+        )
+
+        setGender(
+          data.gender || "Male"
+        )
+
+        setEconomic(
+          data.familyIncomeCategory ||
+          "middle"
+        )
+
+        setRegion3T(
+          data.fromUnderrepresentedRegion ?? false
+        )
+
+        if (data.birthDate) {
+
+          const birth =
+            new Date(
+              data.birthDate
+            )
+
+          setDob(
+            data.birthDate
+              .split("T")[0]
+          )
+
+          setCalMonth(
+            birth.getMonth()
+          )
+
+          setCalYear(
+            birth.getFullYear()
+          )
+
+          setSelDay(
+            birth.getDate()
+          )
+        }
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    loadProfile()
+
+  }, [])
 
   useEffect(() => {
     const handler = (e) => {
@@ -119,10 +205,14 @@ export default function EditProfilePage() {
     }
   }, [])
 
-  const years = Array.from(
-    { length: 30 },
-    (_, i) => 2010 - i
-  )
+  const currentYear =
+    new Date().getFullYear()
+
+  const years =
+    Array.from(
+      { length: 60 },
+      (_, i) => currentYear - i
+    )
 
   const formatDob = () => {
     if (!selDay) return ""
@@ -193,9 +283,8 @@ export default function EditProfilePage() {
       cells.push(
         <div
           key={d}
-          className={`ep-cal-day ${
-            selDay === d ? "selected" : ""
-          }`}
+          className={`ep-cal-day ${selDay === d ? "selected" : ""
+            }`}
           onClick={() => handleSelectDay(d)}
         >
           {d}
@@ -219,18 +308,62 @@ export default function EditProfilePage() {
     return cells
   }
 
-  const handleSave = () => {
-    updateProfile("personal", {
-      fullName,
-      province,
-      gender,
-      economicBackground: economic,
-      dateOfBirth: dob,
-      fromUnderrepresentedRegion: region3T,
-      photo
-    })
+  const handleSave = async () => {
 
-    navigate("/profile")
+    try {
+
+      const token =
+        localStorage.getItem(
+          "token"
+        )
+
+      const response =
+        await fetch(
+          "http://localhost:3000/profile",
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+
+              fullName,
+
+              gender,
+
+              birthDate: dob,
+
+              province,
+
+              familyIncomeCategory:
+                economic,
+
+              fromUnderrepresentedRegion:
+                region3T
+            })
+          }
+        )
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed update profile"
+        )
+      }
+
+      navigate("/profile")
+
+    } catch (error) {
+
+      console.error(error)
+
+    }
   }
 
   const handlePhotoUpload = (e) => {
@@ -275,11 +408,10 @@ export default function EditProfilePage() {
       <div className="ep-tabs">
 
         <button
-          className={`ep-tab ${
-            activeTab === "personal"
-              ? "active"
-              : ""
-          }`}
+          className={`ep-tab ${activeTab === "personal"
+            ? "active"
+            : ""
+            }`}
           onClick={() => handleTabChange("personal")}
           type="button"
         >
@@ -287,11 +419,10 @@ export default function EditProfilePage() {
         </button>
 
         <button
-          className={`ep-tab ${
-            activeTab === "academic"
-              ? "active"
-              : ""
-          }`}
+          className={`ep-tab ${activeTab === "academic"
+            ? "active"
+            : ""
+            }`}
           onClick={() => handleTabChange("academic")}
           type="button"
         >
@@ -299,11 +430,10 @@ export default function EditProfilePage() {
         </button>
 
         <button
-          className={`ep-tab ${
-            activeTab === "skills"
-              ? "active"
-              : ""
-          }`}
+          className={`ep-tab ${activeTab === "skills"
+            ? "active"
+            : ""
+            }`}
           onClick={() => handleTabChange("skills")}
           type="button"
         >
@@ -406,9 +536,8 @@ export default function EditProfilePage() {
           >
 
             <div
-              className={`ep-dropdown-trigger ${
-                provOpen ? "open" : ""
-              }`}
+              className={`ep-dropdown-trigger ${provOpen ? "open" : ""
+                }`}
               onClick={() =>
                 setProvOpen((o) => !o)
               }
@@ -423,11 +552,10 @@ export default function EditProfilePage() {
                 {PROVINCES.map((item) => (
                   <div
                     key={item}
-                    className={`ep-dropdown-item ${
-                      province === item
-                        ? "selected"
-                        : ""
-                    }`}
+                    className={`ep-dropdown-item ${province === item
+                      ? "selected"
+                      : ""
+                      }`}
                     onClick={() => {
                       setProvince(item)
                       setProvOpen(false)
@@ -461,11 +589,10 @@ export default function EditProfilePage() {
               <button
                 key={item}
                 type="button"
-                className={`ep-toggle-btn ${
-                  gender === item
-                    ? "active"
-                    : ""
-                }`}
+                className={`ep-toggle-btn ${gender === item
+                  ? "active"
+                  : ""
+                  }`}
                 onClick={() =>
                   setGender(item)
                 }
@@ -489,19 +616,19 @@ export default function EditProfilePage() {
 
             {ECO_OPTIONS.map((item) => (
               <div
-                key={item}
-                className={`ep-eco-item ${
-                  economic === item
+                key={item.value}
+                className={`ep-eco-item ${economic === item.value
                     ? "selected"
                     : ""
-                }`}
+                  }`}
                 onClick={() =>
-                  setEconomic(item)
+                  setEconomic(
+                    item.value
+                  )
                 }
               >
                 <span className="ep-eco-dot" />
-
-                {item}
+                {item.label}
               </div>
             ))}
 
@@ -522,9 +649,8 @@ export default function EditProfilePage() {
           >
 
             <div
-              className={`ep-date-trigger ${
-                calOpen ? "open" : ""
-              }`}
+              className={`ep-date-trigger ${calOpen ? "open" : ""
+                }`}
               onClick={() =>
                 setCalOpen((o) => !o)
               }
@@ -646,11 +772,10 @@ export default function EditProfilePage() {
               <button
                 key={String(item)}
                 type="button"
-                className={`ep-toggle-btn ${
-                  region3T === item
-                    ? "active"
-                    : ""
-                }`}
+                className={`ep-toggle-btn ${region3T === item
+                  ? "active"
+                  : ""
+                  }`}
                 onClick={() =>
                   setRegion3T(item)
                 }

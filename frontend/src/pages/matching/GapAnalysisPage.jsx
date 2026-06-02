@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom"
 import { useState } from "react"
+import { useEffect } from "react"
 import {
   BookOpen,
   Mail,
@@ -8,78 +9,384 @@ import {
   Menu,
 } from "lucide-react"
 
+
 import Sidebar from "../../components/layout/Sidebar"
 
 import "../../styles/gap-analysis.css"
 
 export default function GapAnalysisPage() {
+  function calculateAge(
+    birthDate
+  ) {
 
+    if (!birthDate)
+      return null
+
+    const today =
+      new Date()
+
+    const birth =
+      new Date(birthDate)
+
+    let age =
+      today.getFullYear() -
+      birth.getFullYear()
+
+    const monthDiff =
+      today.getMonth() -
+      birth.getMonth()
+
+    if (
+      monthDiff < 0 ||
+      (
+        monthDiff === 0 &&
+        today.getDate() <
+        birth.getDate()
+      )
+    ) {
+      age--
+    }
+
+    return age
+  }
   const navigate = useNavigate()
+  const [profile, setProfile] = useState(null)
+  useEffect(() => {
+
+    const fetchProfile = async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem("token")
+
+        const response =
+          await fetch(
+            "http://localhost:3000/profile",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          )
+
+        const user =
+          await response.json()
+
+        console.log(
+          "PROFILE RESPONSE",
+          user
+        )
+
+        setProfile(
+          user
+        )
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    fetchProfile()
+
+  }, [])
   const location = useLocation()
 
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const scholarship = location.state?.scholarship
+  const recommendation =
+    location.state?.scholarship
 
-  const eligibility = [
-    {
-      title:"Academic Excellence",
-      desc:"Your GPA meets GKS standards",
-      type:"success"
-    },
-    {
-      title:"Citizenship Requirement",
-      desc:"Eligible as Indonesian applicant",
-      type:"success"
-    },
-    {
-      title:"TOPIK / English Test",
-      desc:"Language certificate missing",
-      type:"warning"
-    },
-    {
-      title:"Leadership Potential",
-      desc:"Strong extracurricular background",
-      type:"success"
-    },
-  ]
+  const scholarship =
+    recommendation?.scholarship
 
-  const documents = [
-    {
-      name:"Personal Statement",
-      icon:<BookOpen size={22} strokeWidth={2}/>
-    },
-    {
-      name:"Letter of Recommendation",
-      icon:<Mail size={22} strokeWidth={2}/>
-    },
-    {
-      name:"Academic Transcript",
-      icon:<FileText size={22} strokeWidth={2}/>
-    },
-    {
-      name:"TOPIK / IELTS Certificate",
-      icon:<GraduationCap size={22} strokeWidth={2}/>
-    },
-  ]
+  if (!recommendation) {
 
-  const timeline = [
-    {
-      title:"Application Opens",
-      date:"September 1, 2026",
-      active:false
-    },
-    {
-      title:"Document Screening",
-      date:"October 14, 2026",
-      active:true
-    },
-    {
-      title:"Final Interview",
-      date:"November 28, 2026",
-      active:true
-    },
-  ]
+    return (
+      <div className="gap-page">
+
+        <div className="gap-main">
+
+          <h2>
+            No scholarship selected
+          </h2>
+
+          <button
+            onClick={() =>
+              navigate("/match")
+            }
+          >
+            Back to Matching
+          </button>
+
+        </div>
+
+      </div>
+    )
+  }
+
+
+  const eligibility = []
+  const optimizations = []
+
+  if (
+    profile &&
+    scholarship
+  ) {
+
+    // Academic
+
+    if (
+      profile.reportAverage <
+      scholarship.minReportCardAverage
+    ) {
+
+      optimizations.push(
+        `Increase your academic score to at least ${scholarship.minReportCardAverage}`
+      )
+    }
+
+    // Language
+
+    if (
+      scholarship.languageRequirements?.length
+    ) {
+
+      optimizations.push(
+        "Upload IELTS / TOEFL certificate to strengthen your application"
+      )
+    }
+
+    // Leadership
+
+    if (
+      !profile.extracurricularText
+    ) {
+
+      optimizations.push(
+        "Add extracurricular and leadership experiences"
+      )
+    }
+
+    // Personal Statement
+
+    if (
+      !profile.personalStatement
+    ) {
+
+      optimizations.push(
+        "Complete your personal statement"
+      )
+    }
+
+    // Future Goals
+
+    if (
+      !profile.futureGoals
+    ) {
+
+      optimizations.push(
+        "Describe your future academic and career goals"
+      )
+    }
+    if (
+      optimizations.length === 0
+    ) {
+
+      optimizations.push(
+        "Your profile already matches most scholarship requirements."
+      )
+    }
+  }
+
+  if (
+    profile &&
+    scholarship
+  ) {
+
+    // Academic
+
+    const academicMatch =
+      Number(profile.reportAverage || 0) >=
+      Number(
+        scholarship.minReportCardAverage || 0
+      )
+
+    eligibility.push({
+
+      title:
+        "Academic Requirement",
+
+      desc:
+        academicMatch
+
+          ? `Your score (${profile.reportAverage}) meets the requirement`
+
+          : `Minimum score required is ${scholarship.minReportCardAverage}`,
+
+      type:
+        academicMatch
+          ? "success"
+          : "warning"
+    })
+
+    // Nationality
+
+    const nationalityMatch =
+      scholarship
+        .eligibleNationalities
+        ?.includes(
+          profile.nationality
+            ?.toLowerCase()
+        )
+
+    eligibility.push({
+
+      title:
+        "Nationality Requirement",
+
+      desc:
+        nationalityMatch
+
+          ? "Your nationality is eligible"
+
+          : "Nationality not eligible",
+
+      type:
+        nationalityMatch
+          ? "success"
+          : "warning"
+    })
+
+    // Age
+
+    const age =
+      calculateAge(
+        profile.birthDate
+      )
+
+    if (age === null) {
+
+      eligibility.push({
+
+        title:
+          "Age Requirement",
+
+        desc:
+          "Birth date has not been filled in your profile",
+
+        type:
+          "warning"
+      })
+
+    } else {
+
+      const ageMatch =
+        age >= scholarship.minAge &&
+        age <= scholarship.maxAge
+
+      eligibility.push({
+
+        title:
+          "Age Requirement",
+
+        desc:
+          ageMatch
+
+            ? `Age ${age} is within allowed range`
+
+            : `Required age: ${scholarship.minAge}-${scholarship.maxAge}`,
+
+        type:
+          ageMatch
+            ? "success"
+            : "warning"
+      })
+    }
+
+    // High School Track
+
+    const normalizedTrack =
+      profile.highSchoolTrack
+        ?.toLowerCase()
+
+    const trackMatch =
+      scholarship
+        .eligibleHighSchoolTracks
+        ?.some(track =>
+          normalizedTrack?.includes(
+            track.toLowerCase()
+          )
+        )
+
+    eligibility.push({
+
+      title:
+        "High School Track",
+
+      desc:
+        trackMatch
+
+          ? "Your track matches"
+
+          : "Track does not match",
+
+      type:
+        trackMatch
+          ? "success"
+          : "warning"
+    })
+
+  }
+
+  const documents = []
+
+  documents.push({
+    name: "Academic Transcript",
+    icon: <FileText size={22} strokeWidth={2} />,
+    completed: !!profile?.reportAverage
+  })
+
+  if (
+    scholarship?.missionStatement
+  ) {
+
+    documents.push({
+      name: "Personal Statement",
+      icon: <BookOpen size={22} strokeWidth={2} />,
+      completed: !!profile?.personalStatement
+    })
+  }
+
+  documents.push({
+    name: "Letter of Recommendation",
+    icon: <Mail size={22} strokeWidth={2} />,
+    completed: !!profile?.extracurricularText
+  })
+
+  if (
+    scholarship?.languageRequirements?.length
+  ) {
+
+    const tests =
+      scholarship.languageRequirements
+        .map(
+          item =>
+            item.test_type?.toUpperCase()
+        )
+        .join(" / ")
+
+    documents.push({
+      name: `${tests} Certificate`,
+      icon: <GraduationCap size={22} strokeWidth={2} />,
+      completed: false
+    })
+  }
+
+  const timeline = []
 
   return (
 
@@ -136,11 +443,18 @@ export default function GapAnalysisPage() {
             </div>
 
             <h1 className="gap-title">
-              {scholarship?.name || "GKS Korea Scholarship"}
+              {scholarship?.name}
             </h1>
 
             <p className="gap-desc">
-              {scholarship?.country || "Study in Korea • Full Funding"}
+              {recommendation?.metadata?.host_country}
+              {" • "}
+              {
+                recommendation?.metadata
+                  ?.funding_is_full_funding
+                  ? "FULL FUNDING"
+                  : "PARTIAL FUNDING"
+              }
             </p>
 
           </div>
@@ -149,7 +463,11 @@ export default function GapAnalysisPage() {
           <div className="gap-score-circle">
 
             <h2>
-              {scholarship?.percent || "92%"}
+              {
+                Math.round(
+                  (recommendation?.score || 0) * 100
+                )
+              }%
             </h2>
 
             <p>MATCH</p>
@@ -232,8 +550,20 @@ export default function GapAnalysisPage() {
 
                     </div>
 
-                    <div className="gap-required">
-                      REQUIRED
+                    <div
+                      className={
+                        doc.completed
+                          ? "gap-complete"
+                          : "gap-required"
+                      }
+                    >
+
+                      {
+                        doc.completed
+                          ? "READY"
+                          : "REQUIRED"
+                      }
+
                     </div>
 
                   </div>
@@ -261,26 +591,42 @@ export default function GapAnalysisPage() {
                 To increase your{" "}
 
                 <span>
-                  {scholarship?.percent || "92%"} Match
+                  {
+                    Math.round(
+                      (recommendation?.score || 0) * 100
+                    )
+                  }% Match
                 </span>{" "}
 
-                to <span>98%</span>
+                to <span>
+                  {
+                    Math.min(
+                      Math.round(
+                        (recommendation?.score || 0) * 100
+                      ) + 10,
+                      100
+                    )
+                  }%
+                </span>
 
               </p>
 
               <div className="gap-ai-list">
 
-                <div className="gap-ai-item">
-                  Upload TOPIK or IELTS certification results.
-                </div>
+                {
+                  optimizations.map(
+                    (item, index) => (
 
-                <div className="gap-ai-item">
-                  Add international leadership experiences.
-                </div>
+                      <div
+                        key={index}
+                        className="gap-ai-item"
+                      >
+                        {item}
+                      </div>
 
-                <div className="gap-ai-item">
-                  Highlight interest in Korean global innovation programs.
-                </div>
+                    )
+                  )
+                }
 
               </div>
 
@@ -302,42 +648,56 @@ export default function GapAnalysisPage() {
 
               <div className="gap-timeline-list">
 
-                {timeline.map((item, i) => (
+                {
+                  timeline.length === 0 ? (
 
-                  <div
-                    key={item.title}
-                    className="gap-timeline-item"
-                  >
+                    <div className="gap-empty-state">
 
-                    <div className="gap-timeline-left">
+                      Timeline information is not available
+                      for this scholarship.
+
+                    </div>
+
+                  ) : (
+
+                    timeline.map((item, i) => (
 
                       <div
-                        className={`gap-timeline-dot${
-                          item.active ? " active" : ""
-                        }`}
-                      />
+                        key={item.title}
+                        className="gap-timeline-item"
+                      >
 
-                      {i < timeline.length - 1 && (
-                        <div className="gap-timeline-line" />
-                      )}
+                        <div className="gap-timeline-left">
 
-                    </div>
+                          <div
+                            className={`gap-timeline-dot${item.active ? " active" : ""
+                              }`}
+                          />
 
-                    <div>
+                          {i < timeline.length - 1 && (
+                            <div className="gap-timeline-line" />
+                          )}
 
-                      <div className="gap-timeline-item-title">
-                        {item.title}
+                        </div>
+
+                        <div>
+
+                          <div className="gap-timeline-item-title">
+                            {item.title}
+                          </div>
+
+                          <div className="gap-timeline-date">
+                            {item.date}
+                          </div>
+
+                        </div>
+
                       </div>
 
-                      <div className="gap-timeline-date">
-                        {item.date}
-                      </div>
+                    ))
 
-                    </div>
-
-                  </div>
-
-                ))}
+                  )
+                }
 
               </div>
 

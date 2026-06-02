@@ -1,6 +1,5 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useProfile } from "../../context/ProfileContext"
 import "../../styles/editProfile.css"
 
 function TagSection({
@@ -114,34 +113,83 @@ export default function EditProfileSkills() {
 
   const navigate = useNavigate()
 
-  const { profile, updateProfile } =
-    useProfile()
-
-  const skills = profile.skills || {}
-
   const [hardSkills, setHardSkills] =
-    useState(
-      skills.hardSkills || [
-        "Accounting",
-        "UI/UX Design",
-        "Programming",
-      ]
-    )
+    useState([])
 
   const [softSkills, setSoftSkills] =
-    useState(
-      skills.softSkills || [
-        "Leadership",
-        "Public speaking",
-      ]
-    )
+    useState([])
 
-  const [
-    languageSkills,
-    setLanguageSkills,
-  ] = useState(
-    skills.languageSkills || []
-  )
+  const [languageSkills, setLanguageSkills] =
+    useState([])
+
+  useEffect(() => {
+
+    const loadSkills = async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem(
+            "token"
+          )
+
+        const response =
+          await fetch(
+            "http://localhost:3000/profile",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          )
+
+        const profile =
+          await response.json()
+
+        const skills =
+          profile.skills || []
+
+        setHardSkills(
+          skills
+            .filter(
+              s => s.type === "HARD"
+            )
+            .map(
+              s => s.name
+            )
+        )
+
+        setSoftSkills(
+          skills
+            .filter(
+              s => s.type === "SOFT"
+            )
+            .map(
+              s => s.name
+            )
+        )
+
+        setLanguageSkills(
+          skills
+            .filter(
+              s => s.type === "LANGUAGE"
+            )
+            .map(
+              s => s.name
+            )
+        )
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    loadSkills()
+
+  }, [])
 
   const totalSkills =
     hardSkills.length +
@@ -167,15 +215,55 @@ export default function EditProfileSkills() {
     }
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
 
-    updateProfile("skills", {
-      hardSkills,
-      softSkills,
-      languageSkills,
-    })
+    try {
 
-    navigate("/profile")
+      const token =
+        localStorage.getItem(
+          "token"
+        )
+
+      const response =
+        await fetch(
+          "http://localhost:3000/profile/skills",
+          {
+            method: "PUT",
+
+            headers: {
+
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+
+              hardSkills,
+
+              softSkills,
+
+              languageSkills
+            })
+          }
+        )
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed update skills"
+        )
+      }
+
+      navigate("/profile")
+
+    } catch (error) {
+
+      console.error(error)
+
+    }
   }
 
   return (
@@ -279,8 +367,7 @@ export default function EditProfileSkills() {
       >
 
         <div className="ep-summary-text">
-          Personal info — Arunika,
-          Female, Jawa Barat
+          Personal Information
         </div>
 
         <div className="ep-summary-edit">
@@ -297,8 +384,7 @@ export default function EditProfileSkills() {
       >
 
         <div className="ep-summary-text">
-          Academic — SMA Grade 12,
-          IPA, avg. 90
+          Academic Information
         </div>
 
         <div className="ep-summary-edit">

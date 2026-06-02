@@ -13,32 +13,28 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  name      String
-  email     String   @unique
-  password  String
+  name     String
+  email    String @unique
+  password String
 
-  profile   Profile?
+  profile Profile?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  feedbacks Feedback[]
+
+  recommendations Recommendation[]
 }
 
 model Profile {
   id Int @id @default(autoincrement())
 
-  // =========================
-  // RELATION
-  // =========================
-
   userId Int @unique
 
   user User @relation(fields: [userId], references: [id])
-
-  // =========================
-  // PERSONAL INFORMATION
-  // =========================
 
   fullName String?
 
@@ -46,7 +42,6 @@ model Profile {
 
   birthDate DateTime?
 
-  // otomatis "Indonesia"
   nationality String? @default("Indonesia")
 
   province String?
@@ -54,10 +49,6 @@ model Profile {
   familyIncomeCategory String?
 
   fromUnderrepresentedRegion Boolean?
-
-  // =========================
-  // ACADEMIC
-  // =========================
 
   currentDegreeLevel String?
   // example:
@@ -83,10 +74,6 @@ model Profile {
 
   expectedGraduationYear Int?
 
-  // =========================
-  // ACADEMIC SCORES
-  // =========================
-
   reportAverage Float?
 
   mathScore Float?
@@ -94,10 +81,6 @@ model Profile {
   englishScore Float?
 
   majorSubjectAverage Float?
-
-  // =========================
-  // ACHIEVEMENTS
-  // =========================
 
   extracurricularText String? @db.Text
 
@@ -107,10 +90,6 @@ model Profile {
   // province
   // national
   // international
-
-  // =========================
-  // CAREER & GOALS
-  // =========================
 
   intendedCareerTrack String?
   // example:
@@ -127,7 +106,7 @@ model Profile {
   // =========================
 
   cvParsed Boolean @default(false)
-  
+
   cvUrl String? @db.Text
 
   cvParsedText String? @db.LongText
@@ -142,25 +121,19 @@ model Profile {
 
   futureGoals String? @db.Text
 
-  // =========================
-  // STATUS
-  // =========================
+  personalStatement String? @db.Text
+
+  achievementsNarrative String? @db.Text
+
+  futureGoals String? @db.Text
 
   isCompleted Boolean @default(false)
-
-  // =========================
-  // RELATIONS
-  // =========================
 
   skills Skill[]
 
   targetCountries TargetCountry[]
 
   languageCertificates LanguageCertificate[]
-
-  // =========================
-  // TIMESTAMPS
-  // =========================
 
   createdAt DateTime @default(now())
 
@@ -192,7 +165,7 @@ model TargetCountry {
 
   profileId Int
 
- profile Profile @relation(fields: [profileId], references: [id])
+  profile Profile @relation(fields: [profileId], references: [id])
 
   country String
 
@@ -213,4 +186,114 @@ model LanguageCertificate {
   // 7.5 / 550 / Level 3
 
   createdAt DateTime @default(now())
+}
+
+model Scholarship {
+  id Int @id @default(autoincrement())
+
+  scholarshipId String @unique
+
+  name String
+
+  link String?
+
+  eligibleNationalities Json?
+
+  eligibleDegreeLevels Json?
+
+  eligibleHighSchoolTracks Json?
+
+  eligibleFields Json?
+
+  preferredSchoolTier String?
+
+  minAge Int?
+  maxAge Int?
+
+  minReportCardAverage   Float?
+  minMajorSubjectAverage Float?
+
+  languageRequirements Json?
+
+  requiresFinancialNeed Boolean @default(false)
+
+  maxFamilyIncomeCategory String?
+
+  hostCountry String?
+  hostRegion  String?
+
+  selectionCriteria Json?
+
+  careerTrackPreference String?
+
+  requiresReturnHomeCountry Boolean @default(false)
+
+  missionStatement String? @db.Text
+
+  targetRecipientProfile String? @db.Text
+
+  fundingCoversTuition   Boolean @default(false)
+  fundingCoversLiving    Boolean @default(false)
+  fundingCoversAirfare   Boolean @default(false)
+  fundingCoversInsurance Boolean @default(false)
+
+  fundingMonthlyStipend Float?
+
+  fundingIsFullFunding Boolean @default(false)
+
+  fundingCoverageCount Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  feedbacks Feedback[]
+
+  recommendations Recommendation[]
+}
+
+enum FeedbackType {
+  click
+  apply
+  accepted
+}
+
+model Feedback {
+  id Int @id @default(autoincrement())
+
+  userId        Int
+  scholarshipId Int
+
+  feedbackType FeedbackType
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId, feedbackType])
+  @@index([userId])
+  @@index([scholarshipId])
+}
+
+model Recommendation {
+  id Int @id @default(autoincrement())
+
+  userId Int
+
+  scholarshipId Int
+
+  rank Int
+
+  score Float
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId])
+  @@index([userId])
+  @@index([scholarshipId])
 }
