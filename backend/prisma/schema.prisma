@@ -101,6 +101,26 @@ model Profile {
 
   needsFullFunding Boolean?
 
+  // =========================
+  // CV
+  // =========================
+
+  cvParsed Boolean @default(false)
+
+  cvUrl String? @db.Text
+
+  cvParsedText String? @db.LongText
+
+  // =========================
+  // AI TEXT FIELDS
+  // =========================
+
+  personalStatement String? @db.Text
+
+  achievementsNarrative String? @db.Text
+
+  futureGoals String? @db.Text
+
   personalStatement String? @db.Text
 
   achievementsNarrative String? @db.Text

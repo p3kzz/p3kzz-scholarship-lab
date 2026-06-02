@@ -7,10 +7,13 @@ const cors = require('cors');
 const prisma = require('./lib/prisma');
 const authController = require('./controllers/authController');
 const profileController = require('./controllers/profileController')
+const uploadCV = require('./middleware/uploadCV');
+
 const feedbackController = require('./controllers/feedbackController')
 const aiController = require('./controllers/aiController')
 const recommendationController = require('./controllers/recommendationController')
 const dashboardController = require('./controllers/dashboardController')
+
 const authMiddleware = require('./middleware/auth');
 
 
@@ -18,6 +21,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
     res.send('API Running');
@@ -78,6 +83,18 @@ app.post('/ai/refresh', aiController.refresh)
 app.post('/ai/retrain', aiController.retrain)
 
 
+app.post(
+  '/profile/upload-cv',
+  authMiddleware,
+  uploadCV.single('cv'),
+  profileController.uploadCV
+);
+
+app.get(
+  '/profile/parse-cv',
+  authMiddleware,
+  profileController.parseCV
+);
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');
