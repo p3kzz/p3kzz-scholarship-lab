@@ -4,6 +4,9 @@ const path = require("path")
 const prisma = require("../lib/prisma")
 const { createObjectCsvWriter } = require("csv-writer")
 
+const retrainDatasetService = require("../services/retrainDatasetService")
+
+
 exports.health = async (
     req,
     res
@@ -217,4 +220,45 @@ exports.refresh = async (
         })
     }
 }
+
+exports.retrain =
+    async (req, res) => {
+
+        try {
+
+            const {
+
+                studentsPath,
+
+                scholarshipsPath,
+
+                feedbackPath
+
+            } =
+                await retrainDatasetService
+                    .generateDatasets()
+
+            const result =
+                await aiService.retrain(
+
+                    studentsPath,
+
+                    scholarshipsPath,
+
+                    feedbackPath
+                )
+
+            return res.json(result)
+
+        } catch (error) {
+
+            console.error(error)
+
+            return res.status(500).json({
+
+                message:
+                    "Failed to start retraining"
+            })
+        }
+    }
 

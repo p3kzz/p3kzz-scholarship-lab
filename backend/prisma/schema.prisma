@@ -25,6 +25,8 @@ model User {
   updatedAt DateTime @updatedAt
 
   feedbacks Feedback[]
+
+  recommendations Recommendation[]
 }
 
 model Profile {
@@ -225,6 +227,8 @@ model Scholarship {
   updatedAt DateTime @updatedAt
 
   feedbacks Feedback[]
+
+  recommendations Recommendation[]
 }
 
 enum FeedbackType {
@@ -248,6 +252,28 @@ model Feedback {
   scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
 
   @@unique([userId, scholarshipId, feedbackType])
+  @@index([userId])
+  @@index([scholarshipId])
+}
+
+model Recommendation {
+  id Int @id @default(autoincrement())
+
+  userId Int
+
+  scholarshipId Int
+
+  rank Int
+
+  score Float
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  scholarship Scholarship @relation(fields: [scholarshipId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, scholarshipId])
   @@index([userId])
   @@index([scholarshipId])
 }

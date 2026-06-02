@@ -1,15 +1,39 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { useProfile } from "../../context/ProfileContext"
 import "../../styles/profile.css"
 
 export default function ProfilePage() {
+  const [profile, setProfile] = useState(null)
   const navigate = useNavigate()
-  const { profile } = useProfile()
 
-  const p = profile.personal || {}
-  const a = profile.academic || {}
-  const s = profile.skills || {}
+  const p = profile || {}
+
+  const hardSkills =
+    p.skills
+      ?.filter(
+        skill => skill.type === "HARD"
+      )
+      .map(
+        skill => skill.name
+      ) || []
+
+  const softSkills =
+    p.skills
+      ?.filter(
+        skill => skill.type === "SOFT"
+      )
+      .map(
+        skill => skill.name
+      ) || []
+
+  const langSkills =
+    p.skills
+      ?.filter(
+        skill => skill.type === "LANGUAGE"
+      )
+      .map(
+        skill => skill.name
+      ) || []
 
   const [cvFile, setCvFile] = useState({
     name: "CV_Arunika.pdf",
@@ -44,17 +68,88 @@ export default function ProfilePage() {
     })
   }
 
+  useEffect(() => {
+
+    const loadProfile = async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem("token")
+
+        const response =
+          await fetch(
+            "http://localhost:3000/profile",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          )
+
+        const data =
+          await response.json()
+
+        setProfile(data)
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    loadProfile()
+
+  }, [])
+
+  const completionFields = [
+
+    p.fullName,
+    p.gender,
+    p.birthDate,
+    p.province,
+    p.familyIncomeCategory,
+
+    p.currentDegreeLevel,
+    p.highSchoolTrack,
+    p.schoolName,
+
+    p.reportAverage,
+    p.mathScore,
+    p.englishScore,
+
+    p.extracurricularText,
+    p.intendedCareerTrack,
+  ]
+
+  const filledFields =
+    completionFields.filter(
+      value =>
+        value !== null &&
+        value !== undefined &&
+        value !== ""
+    ).length
+
+  const profileCompletion =
+    Math.round(
+      (filledFields /
+        completionFields.length) *
+      100
+    )
+
   return (
     <div className="pf-wrap">
 
       {/* top actions */}
       <div className="pf-topbar">
         <button
-  className="pf-top-btn"
-  onClick={() => navigate("/dashboard")}
->
-  Back to dashboard
-</button>
+          className="pf-top-btn"
+          onClick={() => navigate("/dashboard")}
+        >
+          Back to dashboard
+        </button>
 
         <button
           className="pf-top-btn"
@@ -82,15 +177,15 @@ export default function ProfilePage() {
 
           <div className="pf-badges">
             <span className="pf-badge">
-              {a.schoolLevel || "SMA"}/{a.grade || "Grade 12"}
+              {p.currentDegreeLevel || "SMA"}
             </span>
 
             <span className="pf-badge">
-              Avg {a.overallGrade || 90}
+              Avg {p.reportAverage || 0}
             </span>
 
             <span className="pf-badge">
-              {p.economicBackground || "Low income"}
+              {p.familyIncomeCategory || "-"}
             </span>
           </div>
         </div>
@@ -107,12 +202,14 @@ export default function ProfilePage() {
           <div className="pf-progress-bar">
             <div
               className="pf-progress-fill"
-              style={{ width: "70%" }}
+              style={{
+                width: `${profileCompletion}%`
+              }}
             />
           </div>
 
           <span className="pf-progress-text">
-            70%
+            {profileCompletion}% Complete
           </span>
         </div>
       </div>
@@ -137,7 +234,7 @@ export default function ProfilePage() {
 
             <div className="pf-row">
               <span>Date of birth</span>
-              <span>{formatDob(p.dateOfBirth) || "4 September 2004"}</span>
+              <span>{formatDob(p.birthDate)}</span>
             </div>
 
             <div className="pf-row">
@@ -147,7 +244,9 @@ export default function ProfilePage() {
 
             <div className="pf-row">
               <span>Economic</span>
-              <span>{p.economicBackground || "Very Low income"}</span>
+              <span>
+                {p.familyIncomeCategory || "-"}
+              </span>
             </div>
 
             <div className="pf-row">
@@ -166,27 +265,27 @@ export default function ProfilePage() {
 
             <div className="pf-row">
               <span>School level</span>
-              <span>{a.schoolLevel || "SMA"}/{a.grade || "Grade 12"}</span>
+              <span>{p.currentDegreeLevel || "-"}</span>
             </div>
 
             <div className="pf-row">
               <span>Major</span>
-              <span>{a.major || "IPA (science)"}</span>
+              <span>{p.highSchoolTrack || "-"}</span>
             </div>
 
             <div className="pf-row">
               <span>Avg. grade</span>
-              <span>{a.overallGrade || 90}/100</span>
+              <span>{p.reportAverage || "-"} / 100</span>
             </div>
 
             <div className="pf-row">
               <span>School</span>
-              <span>{a.schoolName || "SMAN 10 Kota Bandung"}</span>
+              <span>{p.schoolName || "-"}</span>
             </div>
 
             <div className="pf-row">
               <span>Career Track</span>
-              <span>{a.intendedCareerTrack || "Industry / Tech"}</span>
+              <span>{p.intendedCareerTrack || "-"}</span>
             </div>
 
             <div className="pf-divider" />
@@ -196,8 +295,7 @@ export default function ProfilePage() {
             </div>
 
             <p className="pf-achievement">
-              {a.extracurricular ||
-                "Ketua OSIS 2024–2025, Juara 1 OSN Matematika tingkat kota, anggota Paskibra, peserta LKIR tingkat provinsi"}
+              {p.extracurricularText || "-"}
             </p>
 
           </div>
@@ -215,8 +313,8 @@ export default function ProfilePage() {
             </div>
 
             <div className="pf-tags">
-              {s.hardSkills?.length ? (
-                s.hardSkills.map((item) => (
+              {hardSkills?.length ? (
+                hardSkills.map((item) => (
                   <span key={item} className="pf-tag">
                     {item}
                   </span>
@@ -235,8 +333,8 @@ export default function ProfilePage() {
             </div>
 
             <div className="pf-tags">
-              {s.softSkills?.length ? (
-                s.softSkills.map((item) => (
+              {softSkills?.length ? (
+                softSkills.map((item) => (
                   <span key={item} className="pf-tag">
                     {item}
                   </span>
@@ -253,9 +351,9 @@ export default function ProfilePage() {
               LANGUAGE SKILLS
             </div>
 
-            {s.langSkills?.length ? (
+            {langSkills?.length ? (
               <div className="pf-tags">
-                {s.langSkills.map((item) => (
+                {langSkills.map((item) => (
                   <span key={item} className="pf-tag">
                     {item}
                   </span>

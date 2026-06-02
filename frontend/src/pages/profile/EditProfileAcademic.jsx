@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useProfile } from "../../context/ProfileContext"
 import "../../styles/editProfile.css"
 
 const SCHOOL_LEVELS = ["SMA", "SMK", "MA"]
@@ -116,9 +115,8 @@ function EPDropdown({
             {options.map((opt) => (
               <div
                 key={opt}
-                className={`ep-dropdown-item ${
-                  value === opt ? "selected" : ""
-                }`}
+                className={`ep-dropdown-item ${value === opt ? "selected" : ""
+                  }`}
                 onClick={() => {
                   onChange(opt)
                   setOpen(false)
@@ -279,61 +277,131 @@ export default function EditProfileAcademic() {
 
   const navigate = useNavigate()
 
-  const {
-    profile,
-    updateProfile
-  } = useProfile()
-
-  const academic = profile.academic || {}
-
   const [schoolLevel, setSchoolLevel] =
-    useState(academic.schoolLevel || "SMA")
+    useState("SMA")
 
   const [major, setMajor] =
-    useState(academic.major || "IPA (science)")
+    useState("IPA (science)")
 
   const [grade, setGrade] =
-    useState(academic.grade || "Grade 12")
+    useState("Grade 12")
 
   const [schoolName, setSchoolName] =
-    useState(academic.schoolName || "SMAN 10 Kota Bandung")
+    useState("")
 
   const [schoolTier, setSchoolTier] =
-    useState(
-      academic.schoolTier ||
-      "Public School - Accredited A"
-    )
+    useState("")
 
   const [gradYear, setGradYear] =
-    useState(academic.graduationYear || "2026")
+    useState("")
 
   const [avgGrade, setAvgGrade] =
-    useState(academic.avgGrade ?? 90)
+    useState(0)
 
   const [mathScore, setMathScore] =
-    useState(academic.mathScore ?? 80)
+    useState(0)
 
   const [englishScore, setEnglishScore] =
-    useState(academic.englishScore ?? 90)
+    useState(0)
 
   const [majorSubjAvg, setMajorSubjAvg] =
-    useState(academic.majorSubjectAvg ?? 80)
+    useState(0)
 
   const [extracurricular, setExtracurricular] =
-    useState(
-      academic.extracurricular ||
-      "Ketua OSIS 2024–2025, Juara 1 OSN Matematika tingkat kota, anggota Paskibra, peserta LKIR tingkat provinsi"
-    )
+    useState("")
 
   const [olympiadLevel, setOlympiadLevel] =
-    useState(
-      academic.olympiadLevel || "City / District"
-    )
+    useState("")
 
   const [careerTrack, setCareerTrack] =
-    useState(
-      academic.careerTrack || "Industry / Tech"
-    )
+    useState("")
+
+  useEffect(() => {
+
+    const loadProfile = async () => {
+
+      try {
+
+        const token =
+          localStorage.getItem(
+            "token"
+          )
+
+        const response =
+          await fetch(
+            "http://localhost:3000/profile",
+            {
+              headers: {
+                Authorization:
+                  `Bearer ${token}`
+              }
+            }
+          )
+
+        const data =
+          await response.json()
+
+        setSchoolLevel(
+          data.currentDegreeLevel ||
+          "SMA"
+        )
+
+        setMajor(
+          data.highSchoolTrack ||
+          "IPA (science)"
+        )
+
+        setSchoolName(
+          data.schoolName || ""
+        )
+
+        setSchoolTier(
+          data.schoolTier || ""
+        )
+
+        setGradYear(
+          data.expectedGraduationYear?.toString() ||
+          ""
+        )
+
+        setAvgGrade(
+          data.reportAverage || 0
+        )
+
+        setMathScore(
+          data.mathScore || 0
+        )
+
+        setEnglishScore(
+          data.englishScore || 0
+        )
+
+        setMajorSubjAvg(
+          data.majorSubjectAverage || 0
+        )
+
+        setExtracurricular(
+          data.extracurricularText || ""
+        )
+
+        setOlympiadLevel(
+          data.olympiadLevel || ""
+        )
+
+        setCareerTrack(
+          data.intendedCareerTrack || ""
+        )
+
+      } catch (error) {
+
+        console.error(error)
+
+      }
+    }
+
+    loadProfile()
+
+  }, [])
 
   const handleTabChange = (tab) => {
 
@@ -351,25 +419,81 @@ export default function EditProfileAcademic() {
     })
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
 
-    updateProfile("academic", {
-      schoolLevel,
-      major,
-      grade,
-      schoolName,
-      schoolTier,
-      graduationYear: gradYear,
-      avgGrade,
-      mathScore,
-      englishScore,
-      majorSubjectAvg: majorSubjAvg,
-      extracurricular,
-      olympiadLevel,
-      careerTrack,
-    })
+    try {
 
-    navigate("/profile")
+      const token =
+        localStorage.getItem(
+          "token"
+        )
+
+      const response =
+        await fetch(
+          "http://localhost:3000/profile",
+          {
+            method: "PUT",
+
+            headers: {
+              "Content-Type":
+                "application/json",
+
+              Authorization:
+                `Bearer ${token}`
+            },
+
+            body: JSON.stringify({
+
+              currentDegreeLevel:
+                schoolLevel,
+
+              highSchoolTrack:
+                major,
+
+              schoolName,
+
+              schoolTier,
+
+              expectedGraduationYear:
+                gradYear
+                  ? Number(gradYear)
+                  : null,
+
+              reportAverage:
+                avgGrade,
+
+              mathScore,
+
+              englishScore,
+
+              majorSubjectAverage:
+                majorSubjAvg,
+
+              extracurricularText:
+                extracurricular,
+
+              olympiadLevel,
+
+              intendedCareerTrack:
+                careerTrack
+            })
+          }
+        )
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Failed update academic profile"
+        )
+      }
+
+      navigate("/profile")
+
+    } catch (error) {
+
+      console.error(error)
+
+    }
   }
 
   return (
@@ -638,7 +762,7 @@ export default function EditProfileAcademic() {
       >
 
         <span>
-          Personal info — Arunika, Female, Jawa Barat
+          Personal information
         </span>
 
         <button type="button">
@@ -654,7 +778,7 @@ export default function EditProfileAcademic() {
       >
 
         <span>
-          Skills — 6 selected
+          Skills Information
         </span>
 
         <button type="button">
@@ -682,7 +806,7 @@ export default function EditProfileAcademic() {
           className="ep-save-btn"
           onClick={handleSave}
         >
-          Save Canges
+          Save Changes
         </button>
 
       </div>

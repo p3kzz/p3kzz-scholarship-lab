@@ -58,3 +58,46 @@ exports.refresh = async (
 
     return data
 }
+
+exports.retrain = async (
+    studentsPath,
+    scholarshipsPath,
+    feedbackPath
+) => {
+
+    const form =
+        new FormData()
+
+    form.append(
+        "students",
+        fs.createReadStream(
+            studentsPath
+        )
+    )
+
+    form.append(
+        "scholarships",
+        fs.createReadStream(
+            scholarshipsPath
+        )
+    )
+
+    form.append(
+        "feedbacks",
+        fs.createReadStream(
+            feedbackPath
+        )
+    )
+
+    const { data } =
+        await aiApi.post(
+            "/retrain",
+            form,
+            {
+                headers:
+                    form.getHeaders()
+            }
+        )
+
+    return data
+}

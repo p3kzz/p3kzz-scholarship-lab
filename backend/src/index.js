@@ -57,13 +57,25 @@ app.get('/me', authMiddleware, async (req, res) => {
 })
 
 app.post('/onboarding', authMiddleware, profileController.completeOnboarding)
-app.get("/profile", authMiddleware, profileController.getProfile)
+app.get('/profile', authMiddleware, profileController.getProfile)
+app.put(
+    '/profile',
+    authMiddleware,
+    profileController.updateProfile
+)
+app.put(
+    '/profile/skills',
+    authMiddleware,
+    profileController.updateSkills
+)
 app.post('/feedback', authMiddleware, feedbackController.createFeedback)
 app.get('/feedback/status/:scholarshipId', authMiddleware, feedbackController.getFeedbackStatus)
 app.get('/recommendations', authMiddleware, recommendationController.getRecommendations)
-app.get("/dashboard/stats", authMiddleware, dashboardController.getStats)
+app.get('/recommendation', authMiddleware, recommendationController.getSavedRecommendations)
+app.get('/dashboard/stats', authMiddleware, dashboardController.getStats)
 app.get('/ai/health', aiController.health)
 app.post('/ai/refresh', aiController.refresh)
+app.post('/ai/retrain', aiController.retrain)
 
 
 

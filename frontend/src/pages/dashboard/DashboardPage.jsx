@@ -37,10 +37,7 @@ export default function DashboardPage() {
               "token"
             )
 
-          // =====================
           // DASHBOARD STATS
-          // =====================
-
           const statsResponse =
             await fetch(
               "http://localhost:3000/dashboard/stats",
@@ -59,10 +56,7 @@ export default function DashboardPage() {
             statsData
           )
 
-          // =====================
           // PROFILE
-          // =====================
-
           const profileResponse =
             await fetch(
               "http://localhost:3000/profile",
@@ -81,19 +75,23 @@ export default function DashboardPage() {
             profileData
           )
 
-          // =====================
           // RECOMMENDATIONS
-          // =====================
+          const recommendationResponse =
+            await fetch(
+              "http://localhost:3000/recommendation",
+              {
+                headers: {
+                  Authorization:
+                    `Bearer ${token}`
+                }
+              }
+            )
 
-          const recs =
-            JSON.parse(
-              localStorage.getItem(
-                "recommendations"
-              )
-            ) || []
+          const recommendationData =
+            await recommendationResponse.json()
 
           setRecommendations(
-            recs
+            recommendationData.recommendations || []
           )
 
         } catch (error) {
@@ -112,87 +110,36 @@ export default function DashboardPage() {
   const strengths = []
   const actions = []
 
-  if (profile) {
+  if (profile?.reportAverage >= 85) {
+    strengths.push("High Academic Score")
+  }
 
-    // =====================
-    // STRENGTHS
-    // =====================
+  if (profile?.extracurricularText) {
+    strengths.push("Leadership Experience")
+  }
 
-    if (
-      profile.reportAverage >= 85
-    ) {
+  if (profile?.olympiadLevel) {
+    strengths.push("Olympiad Achievement")
+  }
 
-      strengths.push(
-        "High Academic Score"
-      )
-    }
+  if (profile?.intendedCareerTrack) {
+    strengths.push("Career Path Defined")
+  }
 
-    if (
-      profile.extracurricularText
-    ) {
+  if (!profile?.englishScore) {
+    actions.push("Upload IELTS / TOEFL Score")
+  }
 
-      strengths.push(
-        "Leadership Experience"
-      )
-    }
+  if (!profile?.personalStatement) {
+    actions.push("Complete Personal Statement")
+  }
 
-    if (
-      profile.olympiadLevel
-    ) {
+  if (!profile?.futureGoals) {
+    actions.push("Add Future Goals")
+  }
 
-      strengths.push(
-        "Olympiad Achievement"
-      )
-    }
-
-    if (
-      profile.intendedCareerTrack
-    ) {
-
-      strengths.push(
-        "Career Path Defined"
-      )
-    }
-
-    // =====================
-    // ACTION NEEDED
-    // =====================
-
-    if (
-      !profile.englishScore
-    ) {
-
-      actions.push(
-        "Upload IELTS / TOEFL Score"
-      )
-    }
-
-    if (
-      !profile.personalStatement
-    ) {
-
-      actions.push(
-        "Complete Personal Statement"
-      )
-    }
-
-    if (
-      !profile.futureGoals
-    ) {
-
-      actions.push(
-        "Add Future Goals"
-      )
-    }
-
-    if (
-      !profile.schoolTier
-    ) {
-
-      actions.push(
-        "Complete School Information"
-      )
-    }
+  if (!profile?.schoolTier) {
+    actions.push("Complete School Information")
   }
 
   const profileFields = [
@@ -374,7 +321,7 @@ export default function DashboardPage() {
                 .map(item => (
 
                   <div
-                    key={item.scholarship_id}
+                    key={item.id}
                     className="db-rec-card"
                   >
 
@@ -400,11 +347,11 @@ export default function DashboardPage() {
 
                         <div className="db-rec-sub">
                           {
-                            item.metadata?.host_country
+                            item.scholarship?.hostCountry
                           }
                           {" • "}
                           {
-                            item.metadata?.host_region
+                            item.scholarship?.hostRegion
                           }
                         </div>
 

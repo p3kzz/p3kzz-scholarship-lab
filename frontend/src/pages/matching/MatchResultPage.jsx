@@ -2,30 +2,65 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import Sidebar from "../../components/layout/Sidebar"
 import "../../styles/match-result.css"
-import { createFeedback, getFeedbackStatus } from "../../api/feedbackApi"
+import {
+  createFeedback,
+  getFeedbackStatus
+} from "../../api/feedbackApi"
 
 export default function MatchResultPage() {
 
   const navigate = useNavigate()
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [profile, setProfile] = useState(null)
-  const [feedbackStatus, setFeedbackStatus] = useState(null)
-  const recommendations =
-    JSON.parse(
-      localStorage.getItem(
-        "recommendations"
-      )
-    ) || []
+  const [sidebarOpen, setSidebarOpen] =
+    useState(false)
 
-  const bestMatch = recommendations[0]
+  const [profile, setProfile] =
+    useState(null)
+
+  const [feedbackStatus, setFeedbackStatus] =
+    useState(null)
+
+  const [recommendations, setRecommendations] =
+    useState([])
+
+  const bestMatch =
+    recommendations[0]
 
   const scholarships =
     recommendations.slice(1)
 
-  useEffect(() => {
+  const fetchProfile = async () => {
 
-    const fetchProfile = async () => {
+    try {
+
+      const token =
+        localStorage.getItem("token")
+
+      const response =
+        await fetch(
+          "http://localhost:3000/profile",
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`
+            }
+          }
+        )
+
+      const data =
+        await response.json()
+
+      setProfile(data)
+
+    } catch (error) {
+
+      console.error(error)
+
+    }
+  }
+
+  const fetchRecommendations =
+    async () => {
 
       try {
 
@@ -34,7 +69,7 @@ export default function MatchResultPage() {
 
         const response =
           await fetch(
-            "http://localhost:3000/profile",
+            "http://localhost:3000/recommendation",
             {
               headers: {
                 Authorization:
@@ -46,36 +81,8 @@ export default function MatchResultPage() {
         const data =
           await response.json()
 
-        setProfile(data)
-
-      } catch (error) {
-
-        console.error(error)
-
-      }
-    }
-
-    fetchProfile()
-
-  }, [])
-
-  useEffect(() => {
-
-    const loadStatus = async () => {
-
-      if (
-        !bestMatch?.scholarship?.id
-      ) return
-
-      try {
-
-        const status =
-          await getFeedbackStatus(
-            bestMatch.scholarship.id
-          )
-
-        setFeedbackStatus(
-          status
+        setRecommendations(
+          data.recommendations || []
         )
 
       } catch (error) {
@@ -85,19 +92,78 @@ export default function MatchResultPage() {
       }
     }
 
+  useEffect(() => {
+
+    const loadData =
+      async () => {
+
+        await fetchProfile()
+
+        await fetchRecommendations()
+      }
+
+    loadData()
+
+  }, [])
+
+  useEffect(() => {
+
+    const loadStatus =
+      async () => {
+
+        if (
+          !bestMatch?.scholarship?.id
+        ) return
+
+        try {
+
+          const status =
+            await getFeedbackStatus(
+              bestMatch.scholarship.id
+            )
+
+          setFeedbackStatus(
+            status
+          )
+
+        } catch (error) {
+
+          console.error(error)
+
+        }
+      }
+
     loadStatus()
 
   }, [bestMatch])
+
+  if (!recommendations.length) {
+
+    return (
+
+      <div className="match-page">
+
+        <div className="match-main">
+
+          Loading recommendations...
+
+        </div>
+
+      </div>
+    )
+  }
 
   const academicFit =
     Math.min(
       100,
       Math.round(
         (
-          (bestMatch?.scholarship?.minReportCardAverage
-            ? 90 /
-            bestMatch.scholarship.minReportCardAverage
-            : 1) * 100
+          (
+            bestMatch?.scholarship?.minReportCardAverage
+              ? 90 /
+              bestMatch.scholarship.minReportCardAverage
+              : 1
+          ) * 100
         )
       )
     )
@@ -107,14 +173,12 @@ export default function MatchResultPage() {
   if (
     profile?.extracurricularText
   ) {
-
     leadershipFit += 30
   }
 
   if (
     profile?.olympiadLevel
   ) {
-
     leadershipFit += 30
   }
 
@@ -130,14 +194,12 @@ export default function MatchResultPage() {
     bestMatch?.scholarship
       ?.languageRequirements?.length
   ) {
-
     languageFit = 60
   }
 
   if (
     profile?.englishScore
   ) {
-
     languageFit += 20
   }
 
@@ -226,9 +288,9 @@ export default function MatchResultPage() {
 
             <p className="match-scholarship-desc">
 
-              {bestMatch?.metadata?.host_country}
+              {bestMatch?.scholarship?.hostCountry}
               {" • "}
-              {bestMatch?.metadata?.funding_is_full_funding
+              {bestMatch?.scholarship?.fundingIsFullFunding
                 ? "FULL FUNDING"
                 : "PARTIAL FUNDING"}
 
@@ -311,7 +373,14 @@ export default function MatchResultPage() {
 
                   }
 
-                  navigate("/gap-analysis")
+                  navigate(
+                    "/gap-analysis",
+                    {
+                      state: {
+                        scholarship: bestMatch
+                      }
+                    }
+                  )
                 }}
               >
                 View Analysis Details
@@ -411,7 +480,7 @@ export default function MatchResultPage() {
           {scholarships.map((item) => (
 
             <div
-              key={item.scholarship_id}
+              key={item.id}
               className="match-small-card"
             >
 
@@ -424,7 +493,7 @@ export default function MatchResultPage() {
                   </h3>
 
                   <p className="match-small-country">
-                    {item.metadata?.host_country}
+                    {item.scholarship?.hostCountry}
                   </p>
 
                 </div>
@@ -438,13 +507,13 @@ export default function MatchResultPage() {
               <div className="match-small-tags">
 
                 <div className="match-small-tag">
-                  {item.metadata?.funding_is_full_funding
+                  {item.scholarship?.fundingIsFullFunding
                     ? "FULL FUNDING"
                     : "PARTIAL"}
                 </div>
 
                 <div className="match-small-tag">
-                  {item.metadata?.host_region?.toUpperCase()}
+                  {item.scholarship?.hostRegion?.toUpperCase()}
                 </div>
 
               </div>

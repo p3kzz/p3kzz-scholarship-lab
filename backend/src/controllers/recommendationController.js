@@ -189,6 +189,40 @@ exports.getRecommendations =
                     }
                 )
 
+            await prisma.recommendation.deleteMany({
+
+                where: {
+                    userId
+                }
+            })
+
+            await prisma.recommendation.createMany({
+
+                data:
+
+                    merged
+
+                        .filter(
+                            item => item.scholarship
+                        )
+
+                        .map(
+                            item => ({
+
+                                userId,
+
+                                scholarshipId:
+                                    item.scholarship.id,
+
+                                rank:
+                                    item.rank,
+
+                                score:
+                                    item.score
+                            })
+                        )
+            })
+
             console.log(
                 "MERGED",
                 JSON.stringify(
@@ -216,6 +250,45 @@ exports.getRecommendations =
             return res.status(500).json({
                 message:
                     "Failed to generate recommendations",
+            })
+        }
+    }
+
+exports.getSavedRecommendations =
+    async (req, res) => {
+
+        try {
+
+            const userId =
+                req.user.userId
+
+            const recommendations =
+                await prisma.recommendation.findMany({
+
+                    where: {
+                        userId
+                    },
+
+                    include: {
+                        scholarship: true
+                    },
+
+                    orderBy: {
+                        rank: "asc"
+                    }
+                })
+
+            return res.json({
+                recommendations
+            })
+
+        } catch (error) {
+
+            console.error(error)
+
+            return res.status(500).json({
+                message:
+                    "Failed to fetch recommendations"
             })
         }
     }
