@@ -4,7 +4,10 @@ const recommendationService =
         "../services/recommendationService"
     )
 
-exports.completeOnboarding = async (req, res) => {{
+const fs = require("fs");
+const FormData = require("form-data");
+
+exports.completeOnboarding = async (req, res) => {
     try {
 
         const userId = req.user.userId
@@ -64,7 +67,7 @@ exports.completeOnboarding = async (req, res) => {{
         } = req.body
 
         // CREATE PROFILE
-        const profile = await prisma.profile.upsert({
+        const profile = await prisma.profile.upsert( {
 
             where: {
                 userId,
@@ -185,70 +188,6 @@ exports.completeOnboarding = async (req, res) => {{
 
     }
 };
-
-exports.uploadCV = async (req, res) => {
-  try {
-
-    if (!req.file) {
-      return res.status(400).json({
-        message: "Upload CV",
-      });
-    }
-
-    const profile = await prisma.profile.update({
-      where: {
-        userId: req.user.userId,
-      },
-
-      data: {
-        cvUrl: `/uploads/cv/${req.file.filename}`,
-        cvParsed: false,
-      },
-    });
-
-    return res.json({
-      success: true,
-      profile,
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      message: error.message,
-    });
-
-  }
-};
-
-exports.parseCV = async (req, res) => {
-
-  try {
-
-    const profile =
-      await prisma.profile.findUnique({
-        where: {
-          userId: req.user.userId,
-        },
-      });
-
-    return res.json({
-      success: true,
-      message: "Menunggu endpoint parser AI",
-      cvUrl: profile.cvUrl,
-    });
-
-  } catch (error) {
-
-    return res.status(500).json({
-      message: error.message,
-    });
-
-  }
-
-};
-}
 
 exports.getProfile = async (
     req,
@@ -569,4 +508,105 @@ exports.updateSkills = async (
         message:
             "Skills updated"
     })
+}
+
+exports.uploadCV = async (req, res) => {
+  try {
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Upload CV",
+      });
+    }
+
+    const profile = await prisma.profile.update({
+      where: {
+        userId: req.user.userId,
+      },
+
+      data: {
+        cvUrl: `/uploads/cv/${req.file.filename}`,
+        cvParsed: false,
+      },
+    });
+
+    return res.json({
+      success: true,
+      profile,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      message: error.message,
+    });
+
+  }
+};
+
+exports.parseCV = async (req, res) => {
+
+  try {
+
+    const profile =
+      await prisma.profile.findUnique({
+        where: {
+          userId: req.user.userId,
+        },
+      });
+
+    if (!profile?.cvUrl) {
+      return res.status(400).json({
+        message: "CV belum diupload",
+      });
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+      "file",
+      fs.createReadStream(
+        "." + profile.cvUrl
+      )
+    );
+
+    const response = await fetch(
+      `${process.env.AI_API_URL}/parse-cv`,
+      {
+        method: "POST",
+        body: formData,
+        headers: formData.getHeaders(),
+      }
+    );
+
+    const result = await response.json();
+
+    await prisma.profile.update({
+      where: {
+        userId: req.user.userId,
+      },
+
+      data: {
+        cvParsed: true,
+        cvParsedText: JSON.stringify(result),
+      },
+    });
+
+    return res.json({
+      success: true,
+      data: result,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
 };
