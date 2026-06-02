@@ -180,4 +180,67 @@ exports.completeOnboarding = async (req, res) => {
         })
 
     }
-}
+};
+
+exports.uploadCV = async (req, res) => {
+  try {
+
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Upload CV",
+      });
+    }
+
+    const profile = await prisma.profile.update({
+      where: {
+        userId: req.user.userId,
+      },
+
+      data: {
+        cvUrl: `/uploads/cv/${req.file.filename}`,
+        cvParsed: false,
+      },
+    });
+
+    return res.json({
+      success: true,
+      profile,
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    return res.status(500).json({
+      message: error.message,
+    });
+
+  }
+};
+
+exports.parseCV = async (req, res) => {
+
+  try {
+
+    const profile =
+      await prisma.profile.findUnique({
+        where: {
+          userId: req.user.userId,
+        },
+      });
+
+    return res.json({
+      success: true,
+      message: "Menunggu endpoint parser AI",
+      cvUrl: profile.cvUrl,
+    });
+
+  } catch (error) {
+
+    return res.status(500).json({
+      message: error.message,
+    });
+
+  }
+
+};

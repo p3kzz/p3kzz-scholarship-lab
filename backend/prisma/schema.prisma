@@ -123,6 +123,16 @@ model Profile {
   needsFullFunding Boolean?
 
   // =========================
+  // CV
+  // =========================
+
+  cvParsed Boolean @default(false)
+  
+  cvUrl String? @db.Text
+
+  cvParsedText String? @db.LongText
+
+  // =========================
   // AI TEXT FIELDS
   // =========================
 
