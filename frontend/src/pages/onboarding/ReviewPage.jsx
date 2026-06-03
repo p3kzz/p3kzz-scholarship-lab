@@ -80,6 +80,10 @@ export default function ReviewPage() {
       // REFRESH USER STATE
       await refreshUser()
 
+      localStorage.removeItem(
+       "parsedCV"
+    )
+
       navigate("/onboarding/processing")
 
     } catch (error) {

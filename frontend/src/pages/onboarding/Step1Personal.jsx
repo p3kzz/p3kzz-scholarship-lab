@@ -110,6 +110,48 @@ export default function Step1Personal() {
 
   const years = Array.from({ length: 30 }, (_, i) => 2010 - i)
 
+  useEffect(() => {
+
+  const parsedCV =
+    JSON.parse(
+      localStorage.getItem(
+        "parsedCV"
+      )
+    )
+
+  if (!parsedCV) return
+
+  const p =
+    parsedCV.personal
+
+  if (!p) return
+
+  setFullName(
+    p.full_name || ""
+  )
+
+  setProvince(
+    p.province || ""
+  )
+
+  setGender(
+    p.gender || ""
+  )
+
+  setEco(
+    p.economic_background || ""
+  )
+
+  setDob(
+    p.date_of_birth || ""
+  )
+
+  setRegion3T(
+    p.from_underrepresented_region
+  )
+
+}, [])
+
   return (
     <div className="step-wrap">
       <div className="step-badge">Step 1 of 3</div>

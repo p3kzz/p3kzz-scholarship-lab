@@ -93,6 +93,84 @@ export default function Step2Academic() {
     navigate("/onboarding/step3")
   }
 
+useEffect(() => {
+
+  const parsedCV =
+    JSON.parse(
+      localStorage.getItem(
+        "parsedCV"
+      )
+    )
+
+  if (!parsedCV) return
+
+  const a =
+    parsedCV.academic
+
+  if (!a) return
+
+  setSchoolLevel(
+    a.school_level || ""
+  )
+
+  setMajor(
+    a.major_program || ""
+  )
+
+  setGrade(
+    a.grade_class || ""
+  )
+
+  setSchoolName(
+    a.school_name || ""
+  )
+
+  setSchoolTier(
+    a.school_tier_accreditation || ""
+  )
+
+  setGradYear(
+    a.expected_graduation_year || ""
+  )
+
+  setGpa(
+    a.average_grade || 0
+  )
+
+  setMath(
+    a.math_score || 0
+  )
+
+  setEnglish(
+    a.english_score || 0
+  )
+
+  setMajorAvg(
+    a.major_subject_average || 0
+  )
+
+  setExtra(
+    a.extracurricular_achievements || ""
+  )
+
+  setOlympiad(
+    a.olympiad_level || ""
+  )
+
+  setCareer(
+    a.intended_career_track || ""
+  )
+
+  setReturnHome(
+    a.willing_to_return_home
+  )
+
+  setFullFunding(
+    a.needs_full_funding
+  )
+
+}, [])
+
   return (
     <div className="s2-wrap">
       <div className="s2-badge">Step 2 of 3</div>
