@@ -121,12 +121,6 @@ model Profile {
 
   futureGoals String? @db.Text
 
-  personalStatement String? @db.Text
-
-  achievementsNarrative String? @db.Text
-
-  futureGoals String? @db.Text
-
   isCompleted Boolean @default(false)
 
   skills Skill[]
