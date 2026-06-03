@@ -10,6 +10,8 @@ COPY . .
 
 RUN npx prisma generate
 
+RUN mkdir -p uploads/cv
+
 EXPOSE 3000
 
 CMD ["node", "src/index.js"]
