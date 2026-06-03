@@ -84,16 +84,16 @@ app.post('/ai/retrain', aiController.retrain)
 
 
 app.post(
-  '/profile/upload-cv',
-  authMiddleware,
-  uploadCV.single('cv'),
-  profileController.uploadCV
+    '/profile/upload-cv',
+    authMiddleware,
+    uploadCV.single('cv'),
+    profileController.uploadCV
 );
 
 app.get(
-  '/profile/parse-cv',
-  authMiddleware,
-  profileController.parseCV
+    '/profile/parse-cv',
+    authMiddleware,
+    profileController.parseCV
 );
 
 const fs = require('fs');
@@ -104,4 +104,8 @@ if (!fs.existsSync('uploads/cv')) {
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
