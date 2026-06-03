@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useProfile } from "../../context/ProfileContext"
 
@@ -197,6 +197,44 @@ export default function Step3Skills() {
 
     navigate("/onboarding/review")
   }
+
+  useEffect(() => {
+
+  const parsedCV =
+    JSON.parse(
+      localStorage.getItem(
+        "parsedCV"
+      )
+    )
+
+  if (!parsedCV) return
+
+  const s =
+    parsedCV.skills
+
+  if (!s) return
+
+  setHardSkills(
+    s.hard_skills || []
+  )
+
+  setSoftSkills(
+    s.soft_skills || []
+  )
+
+  setLangSkills(
+    s.languages || []
+  )
+
+  setCerts(
+    s.language_certificates || []
+  )
+
+  setCountries(
+    s.target_countries || []
+  )
+
+}, [])
 
   return (
 

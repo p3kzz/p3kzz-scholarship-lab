@@ -1,6 +1,7 @@
 import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import "../../styles/onboarding.css"
+import { uploadCV, parseCV } from "../../api/cvApi"
 
 export default function CVUpload() {
   const navigate = useNavigate()
@@ -9,16 +10,31 @@ export default function CVUpload() {
   const [loading, setLoading] = useState(false)
   const [dragover, setDragover] = useState(false)
 
-  const handleFile = (f) => {
-    if (!f) return
+  const handleFile = async (f) => {
+  if (!f) return
+
+  try {
     setFile(f)
     setLoading(true)
-    // simulate reading CV — 2.5 seconds then go to step1
-    setTimeout(() => {
-      setLoading(false)
-      navigate("/onboarding/step1")
-    }, 2500)
+
+    const token = localStorage.getItem("token") // sesuaikan dengan key token kamu
+
+    // Step 1: Upload CV
+    await uploadCV(f, token)
+
+    // Step 2: Parse CV
+    const result = await parseCV(token)
+
+    localStorage.setItem("parsedCV", JSON.stringify(result))
+    navigate("/onboarding/step1")
+
+  } catch (error) {
+    console.error(error)
+    alert("Failed to parse CV")
+  } finally {
+    setLoading(false)
   }
+}
 
   const handleDrop = (e) => {
     e.preventDefault()
