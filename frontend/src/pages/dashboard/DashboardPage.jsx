@@ -4,6 +4,7 @@ import { Menu } from "lucide-react"
 import Sidebar from "../../components/layout/Sidebar"
 import "../../styles/dashboard.css"
 
+const API_URL = import.meta.env.VITE_API_URL
 const STRENGTHS = ["Leadership Experience", "High Score (90+)", "Active Organization"]
 
 export default function DashboardPage() {
@@ -40,7 +41,7 @@ export default function DashboardPage() {
           // DASHBOARD STATS
           const statsResponse =
             await fetch(
-              "http://localhost:3000/dashboard/stats",
+              `${API_URL}/dashboard/stats`,
               {
                 headers: {
                   Authorization:
@@ -59,7 +60,7 @@ export default function DashboardPage() {
           // PROFILE
           const profileResponse =
             await fetch(
-              "http://localhost:3000/profile",
+              `${API_URL}/profile`,
               {
                 headers: {
                   Authorization:
@@ -78,7 +79,7 @@ export default function DashboardPage() {
           // RECOMMENDATIONS
           const recommendationResponse =
             await fetch(
-              "http://localhost:3000/recommendation",
+              `${API_URL}/recommendations/saved`,
               {
                 headers: {
                   Authorization:

@@ -1,7 +1,6 @@
 import axios from "axios"
 
-const API_URL =
-    "http://localhost:3000"
+const API_URL = import.meta.env.VITE_API_URL
 
 export async function createFeedback(
     scholarshipId,
@@ -38,7 +37,7 @@ export async function getFeedbackStatus(
 
     const response =
         await fetch(
-            `http://localhost:3000/feedback/status/${scholarshipId}`,
+            `${API_URL}/feedback/status/${scholarshipId}`,
             {
                 headers: {
                     Authorization:

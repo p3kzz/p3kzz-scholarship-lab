@@ -2,39 +2,56 @@ import { useState, useRef } from "react"
 import { useNavigate } from "react-router-dom"
 import "../../styles/onboarding.css"
 import { uploadCV, parseCV } from "../../api/cvApi"
+import { useAuth } from "../../context/AuthContext"
 
 export default function CVUpload() {
   const navigate = useNavigate()
+  const { token } = useAuth()
   const fileRef = useRef()
   const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false)
   const [dragover, setDragover] = useState(false)
 
   const handleFile = async (f) => {
-  if (!f) return
+    if (!f) return
 
-  try {
-    setFile(f)
-    setLoading(true)
+    try {
+      if (!token) {
+        navigate("/login")
+        throw new Error("Silakan login terlebih dahulu")
+      }
 
-    const token = localStorage.getItem("token") // sesuaikan dengan key token kamu
+      setFile(f)
+      setLoading(true)
 
-    // Step 1: Upload CV
-    await uploadCV(f, token)
+      // Step 1: Upload CV
+      // Step 1: Upload CV
+      await uploadCV(f, token)
 
-    // Step 2: Parse CV
-    const result = await parseCV(token)
+      // Step 2: Parse CV (optional)
+      try {
+        const result =
+          await parseCV(f)
 
-    localStorage.setItem("parsedCV", JSON.stringify(result))
-    navigate("/onboarding/step1")
+        localStorage.setItem(
+          "parsedCV",
+          JSON.stringify(result)
+        )
 
-  } catch (error) {
-    console.error(error)
-    alert("Failed to parse CV")
-  } finally {
-    setLoading(false)
+      } catch (error) {
+        alert(error.message)
+      }
+
+      // Tetap lanjut onboarding
+      navigate("/onboarding/step1")
+
+    } catch (error) {
+      alert(error.message);
+
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
   const handleDrop = (e) => {
     e.preventDefault()

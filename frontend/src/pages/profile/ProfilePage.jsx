@@ -2,6 +2,8 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import "../../styles/profile.css"
 
+const API_URL = import.meta.env.VITE_API_URL
+
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null)
   const navigate = useNavigate()
@@ -79,7 +81,7 @@ export default function ProfilePage() {
 
         const response =
           await fetch(
-            "http://localhost:3000/profile",
+            `${API_URL}/profile`,
             {
               headers: {
                 Authorization:

@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL
 
 export const registerUser = async (formData) => {
-    const response = await fetch("http://localhost:3000/register", {
+    const response = await fetch(`${API_URL}/register`, {
         method: "POST",
 
         headers: {
@@ -34,7 +34,7 @@ export const loginUser = async (data) => {
 
 export const googleLogin = async (credential) => {
     const response = await fetch(
-        "http://localhost:3000/auth/google",
+        `${API_URL}/auth/google`,
         {
             method: "POST",
 

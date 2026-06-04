@@ -7,6 +7,8 @@ import {
   getFeedbackStatus
 } from "../../api/feedbackApi"
 
+const API_URL = import.meta.env.VITE_API_URL
+
 export default function MatchResultPage() {
 
   const navigate = useNavigate()
@@ -38,7 +40,7 @@ export default function MatchResultPage() {
 
       const response =
         await fetch(
-          "http://localhost:3000/profile",
+          `${API_URL}/profile`,
           {
             headers: {
               Authorization:
@@ -59,17 +61,20 @@ export default function MatchResultPage() {
     }
   }
 
-  const fetchRecommendations =
-    async () => {
 
-      try {
+  useEffect(() => {
+
+    const loadData =
+      async () => {
 
         const token =
           localStorage.getItem("token")
 
+        await fetchProfile()
+
         const response =
           await fetch(
-            "http://localhost:3000/recommendation",
+            `${API_URL}/recommendations/saved`,
             {
               headers: {
                 Authorization:
@@ -84,22 +89,6 @@ export default function MatchResultPage() {
         setRecommendations(
           data.recommendations || []
         )
-
-      } catch (error) {
-
-        console.error(error)
-
-      }
-    }
-
-  useEffect(() => {
-
-    const loadData =
-      async () => {
-
-        await fetchProfile()
-
-        await fetchRecommendations()
       }
 
     loadData()
@@ -480,7 +469,7 @@ export default function MatchResultPage() {
           {scholarships.map((item) => (
 
             <div
-              key={item.id}
+              key={`${item.rank}-${item.scholarship?.id}`}
               className="match-small-card"
             >
 

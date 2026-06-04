@@ -108,6 +108,7 @@ function TagSection({
     </div>
   )
 }
+const API_URL = import.meta.env.VITE_API_URL
 
 export default function EditProfileSkills() {
 
@@ -135,7 +136,7 @@ export default function EditProfileSkills() {
 
         const response =
           await fetch(
-            "http://localhost:3000/profile",
+            `${API_URL}/profile`,
             {
               headers: {
                 Authorization:
@@ -226,7 +227,7 @@ export default function EditProfileSkills() {
 
       const response =
         await fetch(
-          "http://localhost:3000/profile/skills",
+          `${API_URL}/profile/skills`,
           {
             method: "PUT",
 

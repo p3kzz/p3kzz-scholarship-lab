@@ -22,11 +22,8 @@ export default function ReviewPage() {
         // PERSONAL
         fullName: p.fullName,
         gender: p.gender,
-
         birthDate: p.dateOfBirth,
-
         nationality: "Indonesia",
-
         province: p.province,
 
         familyIncomeCategory:
@@ -45,14 +42,38 @@ export default function ReviewPage() {
         highSchoolTrack:
           a.major,
 
+        schoolTier:
+          a.schoolTier,
+
+        expectedGraduationYear:
+          Number(a.expectedGraduationYear),
+
         reportAverage:
           Number(a.overallGrade),
+
+        mathScore:
+          Number(a.mathScore),
+
+        englishScore:
+          Number(a.englishScore),
+
+        majorSubjectAverage:
+          Number(a.majorSubjectAverage),
 
         extracurricularText:
           a.extracurricular,
 
+        olympiadLevel:
+          a.olympiadLevel,
+
         intendedCareerTrack:
           a.intendedCareerTrack,
+
+        willingReturnHome:
+          a.willingToReturnHome,
+
+        needsFullFunding:
+          a.needsFullFunding,
 
         // SKILLS
         hardSkills:
@@ -81,8 +102,8 @@ export default function ReviewPage() {
       await refreshUser()
 
       localStorage.removeItem(
-       "parsedCV"
-    )
+        "parsedCV"
+      )
 
       navigate("/onboarding/processing")
 

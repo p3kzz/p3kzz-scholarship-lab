@@ -1,10 +1,12 @@
+const API_URL = import.meta.env.VITE_API_URL
+
 export const completeOnboarding = async (
     token,
     formData
 ) => {
 
     const response = await fetch(
-        "http://localhost:3000/onboarding",
+        `${API_URL}/onboarding`,
         {
             method: "POST",
 

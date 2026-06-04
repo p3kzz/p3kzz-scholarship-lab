@@ -14,6 +14,8 @@ import Sidebar from "../../components/layout/Sidebar"
 
 import "../../styles/gap-analysis.css"
 
+const API_URL = import.meta.env.VITE_API_URL
+
 export default function GapAnalysisPage() {
   function calculateAge(
     birthDate
@@ -62,7 +64,7 @@ export default function GapAnalysisPage() {
 
         const response =
           await fetch(
-            "http://localhost:3000/profile",
+            `${API_URL}/profile`,
             {
               headers: {
                 Authorization:
@@ -156,7 +158,7 @@ export default function GapAnalysisPage() {
     ) {
 
       optimizations.push(
-        "Upload IELTS / TOEFL certificate to strengthen your application"
+        `Upload IELTS / TOEFL certificate to strengthen your application`
       )
     }
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "../../styles/review.css"
 import { getRecommendations } from "../../api/recommendationApi"
+import { useRef } from "react"
 
 const STEPS = [
   "Profile saved",
@@ -17,11 +18,17 @@ const recommendations =
   ) || []
 console.log(recommendations)
 
+
 export default function ProcessingPage() {
+  const hasRun = useRef(false)
   const navigate = useNavigate()
   const [currentStep, setCurrentStep] = useState(0)
 
   useEffect(() => {
+
+    if (hasRun.current) return
+
+    hasRun.current = true
 
     async function processRecommendation() {
 
@@ -42,9 +49,7 @@ export default function ProcessingPage() {
         )
 
         setTimeout(() => {
-
           navigate("/match")
-
         }, 1000)
 
       } catch (error) {
@@ -52,12 +57,13 @@ export default function ProcessingPage() {
         console.error(error)
 
       }
+
     }
 
     processRecommendation()
 
   }, [navigate])
-
+console.log("BEFORE RESPONSE");
   return (
     <div className="proc-wrap">
       {/* BIG SPINNER */}

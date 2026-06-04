@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "../../styles/editProfile.css"
 
+const API_URL = import.meta.env.VITE_API_URL
+
 const PROVINCES = [
   "Aceh", "Bali", "DKI Jakarta", "Jawa Barat", "Jawa Timur", "Jawa Tengah",
   "Kalimantan Timur", "Maluku", "Nusa Tenggara Timur", "Papua", "Papua Barat",
@@ -111,7 +113,7 @@ export default function EditProfilePage() {
 
         const response =
           await fetch(
-            "http://localhost:3000/profile",
+            `${API_URL}/profile`,
             {
               headers: {
                 Authorization:
@@ -319,7 +321,7 @@ export default function EditProfilePage() {
 
       const response =
         await fetch(
-          "http://localhost:3000/profile",
+          `${API_URL}/profile`,
           {
             method: "PUT",
 
@@ -618,8 +620,8 @@ export default function EditProfilePage() {
               <div
                 key={item.value}
                 className={`ep-eco-item ${economic === item.value
-                    ? "selected"
-                    : ""
+                  ? "selected"
+                  : ""
                   }`}
                 onClick={() =>
                   setEconomic(
