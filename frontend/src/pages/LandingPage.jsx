@@ -626,7 +626,6 @@ function LPScholarships() {
   )
 }
 
-export default LPScholarships
 
 
 // ─────────────────────────────────────────────
