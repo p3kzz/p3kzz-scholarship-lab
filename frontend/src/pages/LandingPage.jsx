@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Navbar from "../components/layout/Navbar"
 import Footer from "../components/layout/Footer"
@@ -201,7 +201,7 @@ function LPAbout() {
 // SCHOLARSHIPS
 // ─────────────────────────────────────────────
 
-import { useEffect, useState } from "react"
+
 
 const API_URL = import.meta.env.VITE_API_URL
 
