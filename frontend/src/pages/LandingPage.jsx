@@ -43,29 +43,29 @@ function LPHero() {
 
           <div className="lp-hero-buttons">
 
-  <button
-    className="lp-browse-btn"
-    onClick={() =>
-      document
-        .getElementById("scholarships")
-        ?.scrollIntoView({ behavior: "smooth" })
-    }
-  >
-    Browse Scholarships
-  </button>
+            <button
+              className="lp-browse-btn"
+              onClick={() =>
+                document
+                  .getElementById("scholarships")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              Browse Scholarships
+            </button>
 
-  <button
-    className="lp-works-btn"
-    onClick={() =>
-      document
-        .getElementById("how")
-        ?.scrollIntoView({ behavior: "smooth" })
-    }
-  >
-    How It Works
-  </button>
+            <button
+              className="lp-works-btn"
+              onClick={() =>
+                document
+                  .getElementById("how")
+                  ?.scrollIntoView({ behavior: "smooth" })
+              }
+            >
+              How It Works
+            </button>
 
-</div>
+          </div>
 
         </div>
 
@@ -153,10 +153,10 @@ function LPAbout() {
             </div>
 
             <h2 className="lp-about-title">
-  A place to <em>discover.</em>
-  <br />
-  A path to your <em>future.</em>
-</h2>
+              A place to <em>discover.</em>
+              <br />
+              A path to your <em>future.</em>
+            </h2>
 
           </div>
 
@@ -201,55 +201,14 @@ function LPAbout() {
 // SCHOLARSHIPS
 // ─────────────────────────────────────────────
 
+import { useEffect, useState } from "react"
+
+const API_URL = import.meta.env.VITE_API_URL
+
 function LPScholarships() {
 
-  const scholarships = [
-  {
-    title: "CIMB ASEAN Scholarship",
-    desc:
-      "Full tuition, living allowance, and a guaranteed career path with CIMB Group across ASEAN. One of the most prestigious corporate scholarships available to Indonesian students.",
-    region: "ASEAN",
-    funding: "Fully Funded",
-    large: true,
-    link: "https://www.cimb.com/en/careers/students/cimb-asean-scholarship.html?gad_source=1&gad_campaignid=23684085540&gbraid=0AAAAAqpBZ5PwKTAvlX1gxfjGOkP78tAHs&gclid=CjwKCAjwnN3OBhA8EiwAfpTYet9MUK_4AzN_jfOpMu5pUzhHDW3Bbi29LoK6nqmyou6k7-f_NYY5IRoC7wQQAvD_BwE#Indonesia",
-  },
-
-  {
-    title: "Lund University Scholarship",
-    desc:
-      "Merit-based scholarship at one of Europe's top-ranked universities, open to international applicants.",
-    region: "SWEDEN",
-    funding: "Tuition Waiver",
-    link: "https://www.lunduniversity.lu.se/study/admission-degree-studies/entry-requirements",
-  },
-
-  {
-    title: "ASEAN Scholarship for Indonesia",
-    desc:
-      "Singapore MOE scholarship for Indonesian students on the Secondary 3 pathway to top universities.",
-    region: "SINGAPORE",
-    funding: "Government Funded",
-    link: "https://www.moe.gov.sg/financial-matters/awards-scholarships/asean-scholarship/indonesia",
-  },
-
-  {
-    title: "BJUT Chinese Government Scholarship",
-    desc:
-      "Beijing University of Technology full tuition, housing & stipend by the Chinese Government.",
-    region: "CHINA",
-    funding: "Fully Funded",
-    link: "https://isa.bjut.edu.cn/en/info/1024/2473.htm",
-  },
-
-  {
-    title: "GKS Global Korea Scholarship",
-    desc:
-      "Korean Government scholarship covering tuition, airfare, monthly stipend, and a language year.",
-    region: "KOREA",
-    funding: "Fully Funded",
-    link: "https://www.studyinkorea.go.kr/ko/plan/scholarship.do?tab=gks-tab1",
-  },
-]
+  const [scholarships, setScholarships] =
+    useState([])
 
   const [regionOpen, setRegionOpen] =
     useState(false)
@@ -263,37 +222,80 @@ function LPScholarships() {
   const [selectedFunding, setSelectedFunding] =
     useState("All Funding")
 
+  useEffect(() => {
+
+    async function fetchScholarships() {
+
+      try {
+
+        const response =
+          await fetch(
+            `${API_URL}/scholarships`
+          )
+
+        const data =
+          await response.json()
+
+        setScholarships(
+          data.scholarships || []
+        )
+
+      } catch (error) {
+
+        console.error(
+          "Failed to fetch scholarships",
+          error
+        )
+
+      }
+
+    }
+
+    fetchScholarships()
+
+  }, [])
+
   const regionOptions = [
     "All Region",
-    "ASEAN",
-    "SWEDEN",
-    "SINGAPORE",
-    "CHINA",
-    "KOREA",
+    "ASIA",
+    "EUROPE"
   ]
 
   const fundingOptions = [
     "All Funding",
     "Fully Funded",
-    "Tuition Waiver",
-    "Government Funded",
+    "Partial Funding"
   ]
 
   const filteredScholarships =
     scholarships.filter((item) => {
 
       const regionMatch =
-        selectedRegion === "All Region"
-        || item.region === selectedRegion
+        selectedRegion === "All Region" ||
+        item.hostRegion?.toUpperCase() ===
+        selectedRegion
 
       const fundingMatch =
-        selectedFunding === "All Funding"
-        || item.funding === selectedFunding
 
-      return regionMatch && fundingMatch
+        selectedFunding === "All Funding" ||
+
+        (
+          selectedFunding ===
+            "Fully Funded"
+
+            ? item.fundingIsFullFunding
+
+            : !item.fundingIsFullFunding
+        )
+
+      return (
+        regionMatch &&
+        fundingMatch
+      )
     })
 
   return (
+
     <section
       id="scholarships"
       className="lp-scholarships"
@@ -301,7 +303,6 @@ function LPScholarships() {
 
       <div className="lp-scholarships-container">
 
-        {/* top */}
         <div className="lp-scholarships-top">
 
           <div>
@@ -311,43 +312,54 @@ function LPScholarships() {
             </div>
 
             <h2 className="lp-scholarships-title">
+
               Five doors to
               <br />
               the <em>world.</em>
+
             </h2>
 
           </div>
 
           <p className="lp-scholarships-description">
-            Explore curated scholarships for Indonesian
-            students. Tap any card to view details and visit the
-            official page.
+
+            Explore curated scholarships
+            for Indonesian students.
+            Tap any card to view details
+            and visit the official page.
+
           </p>
 
         </div>
 
-        {/* line */}
         <div className="lp-scholarships-line"></div>
 
-        {/* filters */}
+        {/* FILTER */}
+
         <div className="lp-scholarships-filters">
 
           {/* REGION */}
+
           <div className="lp-filter-group">
 
             <button className="lp-filter-label-btn">
               REGION
             </button>
 
-            <div
-              className="lp-filter-dropdown-wrapper"
-            >
+            <div className="lp-filter-dropdown-wrapper">
 
               <div
                 className="lp-filter-dropdown"
                 onClick={() => {
-                  setRegionOpen(!regionOpen)
-                  setFundingOpen(false)
+
+                  setRegionOpen(
+                    !regionOpen
+                  )
+
+                  setFundingOpen(
+                    false
+                  )
+
                 }}
               >
 
@@ -373,24 +385,35 @@ function LPScholarships() {
               </div>
 
               {regionOpen && (
+
                 <div className="lp-filter-menu">
 
-                  {regionOptions.map((region) => (
+                  {regionOptions.map(
+                    (region) => (
 
-                    <button
-                      key={region}
-                      className="lp-filter-item"
-                      onClick={() => {
-                        setSelectedRegion(region)
-                        setRegionOpen(false)
-                      }}
-                    >
-                      {region}
-                    </button>
+                      <button
+                        key={region}
+                        className="lp-filter-item"
+                        onClick={() => {
 
-                  ))}
+                          setSelectedRegion(
+                            region
+                          )
+
+                          setRegionOpen(
+                            false
+                          )
+
+                        }}
+                      >
+                        {region}
+                      </button>
+
+                    )
+                  )}
 
                 </div>
+
               )}
 
             </div>
@@ -400,21 +423,27 @@ function LPScholarships() {
           <div className="lp-filter-divider"></div>
 
           {/* FUNDING */}
+
           <div className="lp-filter-group">
 
             <button className="lp-filter-label-btn">
               FUNDING
             </button>
 
-            <div
-              className="lp-filter-dropdown-wrapper"
-            >
+            <div className="lp-filter-dropdown-wrapper">
 
               <div
                 className="lp-filter-dropdown"
                 onClick={() => {
-                  setFundingOpen(!fundingOpen)
-                  setRegionOpen(false)
+
+                  setFundingOpen(
+                    !fundingOpen
+                  )
+
+                  setRegionOpen(
+                    false
+                  )
+
                 }}
               >
 
@@ -440,24 +469,35 @@ function LPScholarships() {
               </div>
 
               {fundingOpen && (
+
                 <div className="lp-filter-menu">
 
-                  {fundingOptions.map((funding) => (
+                  {fundingOptions.map(
+                    (funding) => (
 
-                    <button
-                      key={funding}
-                      className="lp-filter-item"
-                      onClick={() => {
-                        setSelectedFunding(funding)
-                        setFundingOpen(false)
-                      }}
-                    >
-                      {funding}
-                    </button>
+                      <button
+                        key={funding}
+                        className="lp-filter-item"
+                        onClick={() => {
 
-                  ))}
+                          setSelectedFunding(
+                            funding
+                          )
+
+                          setFundingOpen(
+                            false
+                          )
+
+                        }}
+                      >
+                        {funding}
+                      </button>
+
+                    )
+                  )}
 
                 </div>
+
               )}
 
             </div>
@@ -466,59 +506,112 @@ function LPScholarships() {
 
         </div>
 
-        {/* cards */}
+        {/* CARDS */}
+
         <div className="lp-scholarships-grid">
 
-          {filteredScholarships.length > 0 ? (
+          {filteredScholarships.length >
 
-            filteredScholarships.map((item, index) => (
+            0 ? (
 
-              <a
-  key={index}
-  href={item.link}
-  target="_blank"
-  rel="noopener noreferrer"
-  className={`lp-scholarship-card ${
-    item.large
-      ? "lp-scholarship-card-large"
-      : ""
-  }`}
->
+            filteredScholarships.map(
+              (item) => (
 
-                <div className="lp-scholarship-region">
-                  {item.region}
-                </div>
+                <a
+                  key={item.id}
+                  href={
+                    item.link || "#"
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="lp-scholarship-card"
+                  onClick={(e) => {
 
-                <h3 className="lp-scholarship-card-title">
-                  {item.title}
-                </h3>
+                    if (!item.link) {
 
-                <p className="lp-scholarship-card-desc">
-                  {item.desc}
-                </p>
+                      e.preventDefault()
 
-                <div className="lp-scholarship-bottom">
+                      alert(
+                        "Official scholarship link is not available yet."
+                      )
+                    }
 
-                  <div className="lp-scholarship-funding">
-                    ✦ {item.funding}
+                  }}
+                >
+
+                  <div className="lp-scholarship-region">
+
+                    {
+                      item.hostCountry?.toUpperCase()
+                    }
+
                   </div>
 
-                  <div className="lp-scholarship-arrow">
-                    →
+                  <h3 className="lp-scholarship-card-title">
+
+                    {item.name}
+
+                  </h3>
+
+                  <p className="lp-scholarship-card-desc">
+
+                    {
+
+                      item.missionStatement
+
+                        ? item
+                          .missionStatement
+                          .length > 150
+
+                          ? item
+                            .missionStatement
+                            .slice(
+                              0,
+                              150
+                            ) + "..."
+
+                          : item
+                            .missionStatement
+
+                        : "Scholarship opportunity for international students."
+
+                    }
+
+                  </p>
+
+                  <div className="lp-scholarship-bottom">
+
+                    <div className="lp-scholarship-funding">
+
+                      ✦ {
+
+                        item.fundingIsFullFunding
+
+                          ? "FULL FUNDING"
+
+                          : "PARTIAL FUNDING"
+
+                      }
+
+                    </div>
+
+                    <div className="lp-scholarship-arrow">
+                      →
+                    </div>
+
                   </div>
 
-                </div>
+                </a>
 
-              </a>
-
-            ))
+              )
+            )
 
           ) : (
 
             <div className="lp-no-results">
 
-              No scholarships match your filter.
-              Try a different combination.
+              No scholarships match
+              your filter.
 
             </div>
 
@@ -529,8 +622,11 @@ function LPScholarships() {
       </div>
 
     </section>
+
   )
 }
+
+export default LPScholarships
 
 
 // ─────────────────────────────────────────────
