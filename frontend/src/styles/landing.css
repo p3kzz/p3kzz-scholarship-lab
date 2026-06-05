@@ -671,31 +671,15 @@
 
 .lp-scholarship-card {
   position: relative;
+
   display: flex;
   flex-direction: column;
-  min-height: 390px;
 
-  padding:
-    42px 34px 28px;
+  height: 460px;
+
+  padding: 42px 34px 28px;
 
   border-radius: 38px;
-
-  background:
-    rgba(26, 46, 26, 0.10);
-
-  border:
-    1px solid rgba(85, 85, 85, 0.50);
-
-  box-shadow:
-    0 8px 18px rgba(0, 0, 0, 0.15);
-
-  text-decoration: none;
-
-  cursor: pointer;
-
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease;
 }
 
 .lp-scholarship-card:hover {
@@ -754,40 +738,28 @@
 }
 
 .lp-scholarship-card-desc {
-  max-width: 580px;
-
-  font-family: 'DM Sans', sans-serif;
-
-  font-size: 20px;
-  line-height: 1.4;
-  font-weight: 700;
-
-  color: #4A6650;
   flex: 1;
+
+  margin-bottom: 20px;
 
   overflow: hidden;
 
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
 .lp-scholarship-bottom {
-  position: absolute;
+  margin-top: auto;
 
-  left: 34px;
-  right: 34px;
-  bottom: 28px;
-
-   margin-top: auto;
+  padding-top: 16px;
 
   border-top:
     1px solid rgba(85, 85, 85, 0.30);
 
   display: flex;
-
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
 .lp-scholarship-funding {
