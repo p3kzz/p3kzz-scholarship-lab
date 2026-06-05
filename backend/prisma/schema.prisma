@@ -29,89 +29,34 @@ model Profile {
   province                   String?
   familyIncomeCategory       String?
   fromUnderrepresentedRegion Boolean?
-
-  currentDegreeLevel String?
-  // example:
-  // high_school
-  // diploma
-  // bachelors
-
-  // future use
-  targetDegreeLevel String?
-
-  schoolName String?
-
-  highSchoolTrack String?
-  // example:
-  // science
-  // social
-  // language
-
-  schoolTier String?
-  // example:
-  // public_a
-  // private_b
-
-  expectedGraduationYear Int?
-
-  reportAverage Float?
-
-  mathScore Float?
-
-  englishScore Float?
-
-  majorSubjectAverage Float?
-
-  extracurricularText String? @db.Text
-
-  olympiadLevel String?
-  // example:
-  // city
-  // province
-  // national
-  // international
-
-  intendedCareerTrack String?
-  // example:
-  // tech
-  // healthcare
-  // business
-
-  willingReturnHome Boolean?
-
-  needsFullFunding Boolean?
-
-  // =========================
-  // CV
-  // =========================
-
-  cvParsed Boolean @default(false)
-
-  cvUrl String? @db.Text
-
-  cvParsedText String? @db.LongText
-
-  // =========================
-  // AI TEXT FIELDS
-  // =========================
-
-  personalStatement String? @db.Text
-
-  achievementsNarrative String? @db.Text
-
-  futureGoals String? @db.Text
-
-  isCompleted Boolean @default(false)
-
-  skills Skill[]
-
-  targetCountries TargetCountry[]
-
-  languageCertificates LanguageCertificate[]
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
+  currentDegreeLevel         String?
+  targetDegreeLevel          String?
+  schoolName                 String?
+  highSchoolTrack            String?
+  schoolTier                 String?
+  expectedGraduationYear     Int?
+  reportAverage              Float?
+  mathScore                  Float?
+  englishScore               Float?
+  majorSubjectAverage        Float?
+  extracurricularText        String?               @db.Text
+  olympiadLevel              String?
+  intendedCareerTrack        String?
+  willingReturnHome          Boolean?
+  needsFullFunding           Boolean?
+  personalStatement          String?               @db.Text
+  achievementsNarrative      String?               @db.Text
+  futureGoals                String?               @db.Text
+  isCompleted                Boolean               @default(false)
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  cvParsedText               String?               @db.LongText
+  cvUrl                      String?               @db.Text
+  cvParsed                   Boolean               @default(false)
+  languageCertificates       LanguageCertificate[]
+  user                       User                  @relation(fields: [userId], references: [id])
+  skills                     Skill[]
+  targetCountries            TargetCountry[]
 }
 
 model Skill {

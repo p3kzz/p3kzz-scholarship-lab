@@ -6,15 +6,17 @@ const recommendationService =
 
 const fs = require("fs");
 const FormData = require("form-data");
+const axios = require("axios");
 
 exports.completeOnboarding = async (req, res) => {
+
     try {
 
         const userId = req.user.userId
 
         const {
 
-            // IDENTITAS
+            // PERSONAL
             fullName,
             gender,
             birthDate,
@@ -24,7 +26,7 @@ exports.completeOnboarding = async (req, res) => {
             familyIncomeCategory,
             fromUnderrepresentedRegion,
 
-            // AKADEMIK
+            // ACADEMIC
             currentDegreeLevel,
             targetDegreeLevel,
 
@@ -43,6 +45,7 @@ exports.completeOnboarding = async (req, res) => {
 
             // ACHIEVEMENT
             olympiadLevel,
+
             leadershipCount,
             volunteerCount,
             competitionCount,
@@ -57,7 +60,7 @@ exports.completeOnboarding = async (req, res) => {
             achievementsNarrative,
             futureGoals,
 
-            // RELATIONAL
+            // RELATIONS
             hardSkills,
             softSkills,
             langSkills,
@@ -66,8 +69,7 @@ exports.completeOnboarding = async (req, res) => {
 
         } = req.body
 
-        // CREATE PROFILE
-        const profile = await prisma.profile.upsert( {
+        const profile = await prisma.profile.upsert({
 
             where: {
                 userId,
@@ -106,6 +108,7 @@ exports.completeOnboarding = async (req, res) => {
                 extracurricularText,
 
                 olympiadLevel,
+
                 leadershipCount,
                 volunteerCount,
                 competitionCount,
@@ -156,6 +159,7 @@ exports.completeOnboarding = async (req, res) => {
                 extracurricularText,
 
                 olympiadLevel,
+
                 leadershipCount,
                 volunteerCount,
                 competitionCount,
@@ -172,10 +176,119 @@ exports.completeOnboarding = async (req, res) => {
             },
         })
 
+        // DELETE OLD RELATIONAL DATA
+
+        await prisma.$transaction([
+
+            prisma.skill.deleteMany({
+                where: {
+                    profileId: profile.id
+                }
+            }),
+
+            prisma.targetCountry.deleteMany({
+                where: {
+                    profileId: profile.id
+                }
+            }),
+
+            prisma.languageCertificate.deleteMany({
+                where: {
+                    profileId: profile.id
+                }
+            })
+
+        ])
+
+        // HARD SKILLS
+
+        if (hardSkills?.length) {
+
+            await prisma.skill.createMany({
+
+                data: hardSkills.map(skill => ({
+                    profileId: profile.id,
+                    name: skill,
+                    type: "HARD"
+                }))
+
+            })
+
+        }
+
+        // SOFT SKILLS
+
+        if (softSkills?.length) {
+
+            await prisma.skill.createMany({
+
+                data: softSkills.map(skill => ({
+                    profileId: profile.id,
+                    name: skill,
+                    type: "SOFT"
+                }))
+
+            })
+
+        }
+
+        // LANGUAGE SKILLS
+
+        if (langSkills?.length) {
+
+            await prisma.skill.createMany({
+
+                data: langSkills.map(skill => ({
+                    profileId: profile.id,
+                    name: skill,
+                    type: "LANGUAGE"
+                }))
+
+            })
+
+        }
+
+        // TARGET COUNTRIES
+
+        if (targetCountries?.length) {
+
+            await prisma.targetCountry.createMany({
+
+                data: targetCountries.map(country => ({
+                    profileId: profile.id,
+                    country
+                }))
+
+            })
+
+        }
+
+        // LANGUAGE CERTIFICATES
+
+        if (langCerts?.length) {
+
+            await prisma.languageCertificate.createMany({
+
+                data: langCerts.map(cert => ({
+
+                    profileId: profile.id,
+
+                    name: cert.testType,
+
+                    score: String(cert.score)
+
+                }))
+
+            })
+
+        }
+
         return res.status(201).json({
+
             message: "Onboarding completed",
 
-            profile,
+            profile
+
         })
 
     } catch (error) {
@@ -183,11 +296,14 @@ exports.completeOnboarding = async (req, res) => {
         console.error(error)
 
         return res.status(500).json({
-            message: "Failed to complete onboarding",
+
+            message: "Failed to complete onboarding"
+
         })
 
     }
-};
+
+}
 
 exports.getProfile = async (
     req,
@@ -511,102 +627,147 @@ exports.updateSkills = async (
 }
 
 exports.uploadCV = async (req, res) => {
-  try {
+    try {
 
-    if (!req.file) {
-      return res.status(400).json({
-        message: "Upload CV",
-      });
+        if (!req.file) {
+            return res.status(400).json({
+                message: "Upload CV",
+            });
+        }
+
+        const profile = await prisma.profile.upsert({
+            where: {
+                userId: req.user.userId,
+            },
+
+            update: {
+                cvUrl: `/uploads/cv/${req.file.filename}`,
+                cvParsed: false,
+                cvParsedText: null,
+            },
+
+            create: {
+                userId: req.user.userId,
+                cvUrl: `/uploads/cv/${req.file.filename}`,
+                cvParsed: false,
+                cvParsedText: null,
+                isCompleted: false,
+            },
+        });
+
+        return res.json({
+            success: true,
+            profile,
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+            message: error.message,
+        });
+
     }
-
-    const profile = await prisma.profile.update({
-      where: {
-        userId: req.user.userId,
-      },
-
-      data: {
-        cvUrl: `/uploads/cv/${req.file.filename}`,
-        cvParsed: false,
-      },
-    });
-
-    return res.json({
-      success: true,
-      profile,
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      message: error.message,
-    });
-
-  }
 };
 
 exports.parseCV = async (req, res) => {
 
-  try {
+    try {
 
-    const profile =
-      await prisma.profile.findUnique({
-        where: {
-          userId: req.user.userId,
-        },
-      });
+        const profile =
+            await prisma.profile.findUnique({
+                where: {
+                    userId: req.user.userId,
+                },
+            });
 
-    if (!profile?.cvUrl) {
-      return res.status(400).json({
-        message: "CV belum diupload",
-      });
+        if (!profile?.cvUrl) {
+            return res.status(400).json({
+                message: "CV belum diupload",
+            });
+        }
+
+        const formData = new FormData();
+        const filePath = "." + profile.cvUrl;
+
+        console.log("FILE PATH:", filePath);
+        console.log("FILE EXISTS:", fs.existsSync(filePath));
+        formData.append(
+            "file",
+            fs.createReadStream(
+                "." + profile.cvUrl
+            )
+        );
+        console.log(
+            "FORM HEADERS:",
+            formData.getHeaders()
+        );
+        console.log(
+            "AI URL:",
+            `${process.env.AI_API_URL}/parse-cv`
+        );
+        console.log(
+            "FINAL URL:",
+            `${process.env.AI_API_URL}/parse-cv`
+        );
+        const response = await axios.post(
+            `${process.env.AI_API_URL}/parse-cv`,
+            formData,
+            {
+                headers: {
+                    ...formData.getHeaders(),
+                },
+                maxBodyLength: Infinity,
+                maxContentLength: Infinity,
+            }
+        );
+
+        const result = response.data;
+
+        console.log("AI RESPONSE:", result);
+        console.log("AI STATUS:", response.status);
+
+        if (!result) {
+            return res.status(500).json({
+                success: false,
+                message: "AI parser tidak mengembalikan data",
+            });
+        }
+
+        return res.json({
+            success: true,
+            data: result,
+        });
+    } catch (error) {
+        if (error.response?.status === 429) {
+            return res.status(503).json({
+                success: false,
+                code: "AI_RATE_LIMIT",
+                message:
+                    "Layanan AI sedang sibuk atau terkena rate limit. Silakan coba beberapa menit lagi atau isi data secara manual."
+            });
+        }
+        console.error(error);
+
+        if (error.response) {
+
+            console.error(
+                "AI ERROR STATUS:",
+                error.response.status
+            );
+
+            console.error(
+                "AI ERROR DATA:",
+                error.response.data
+            );
+
+        }
+
+        return res.status(500).json({
+            message: error.message,
+        });
+
     }
-
-    const formData = new FormData();
-
-    formData.append(
-      "file",
-      fs.createReadStream(
-        "." + profile.cvUrl
-      )
-    );
-
-    const response = await fetch(
-      `${process.env.AI_API_URL}/parse-cv`,
-      {
-        method: "POST",
-        body: formData,
-        headers: formData.getHeaders(),
-      }
-    );
-
-    const result = await response.json();
-
-    await prisma.profile.update({
-      where: {
-        userId: req.user.userId,
-      },
-
-      data: {
-        cvParsed: true,
-        cvParsedText: JSON.stringify(result),
-      },
-    });
-
-    return res.json({
-      success: true,
-      data: result,
-    });
-
-  } catch (error) {
-
-    console.error(error);
-
-    return res.status(500).json({
-      message: error.message,
-    });
-
-  }
 
 };

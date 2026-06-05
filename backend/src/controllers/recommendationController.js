@@ -232,25 +232,34 @@ exports.getRecommendations =
                 )
             )
 
-            return res.json({
-                recommendations:
-                    merged,
-            })
+            console.log("BEFORE RESPONSE");
+
+            res.json({
+                recommendations: merged,
+            });
+
+            console.log("AFTER RESPONSE");
 
         } catch (error) {
 
-            console.error(
-                JSON.stringify(
-                    error.response?.data,
-                    null,
-                    2
-                )
-            )
+            console.error("========== ERROR ==========");
+
+            console.error("MESSAGE:");
+            console.error(error.message);
+
+            console.error("CODE:");
+            console.error(error.code);
+
+            console.error("STACK:");
+            console.error(error.stack);
+
+            console.error("RESPONSE:");
+            console.error(error.response?.data);
 
             return res.status(500).json({
                 message:
                     "Failed to generate recommendations",
-            })
+            });
         }
     }
 
