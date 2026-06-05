@@ -556,25 +556,8 @@ function LPScholarships() {
                   <p className="lp-scholarship-card-desc">
 
                     {
-
-                      item.missionStatement
-
-                        ? item
-                          .missionStatement
-                          .length > 150
-
-                          ? item
-                            .missionStatement
-                            .slice(
-                              0,
-                              150
-                            ) + "..."
-
-                          : item
-                            .missionStatement
-
-                        : "Scholarship opportunity for international students."
-
+                      item.missionStatement ||
+                      "Scholarship opportunity for international students."
                     }
 
                   </p>
